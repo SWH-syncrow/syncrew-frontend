@@ -13,11 +13,7 @@ export default async function RootLayout({
       <head>
         <link rel="shortcut icon" href="/favicon.png" />
         <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-        <script
-          type="text/javascript"
-          src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_JS_KEY}`}
-        ></script>
-        <title>BBangSoon</title>
+        <title>syncrow</title>
       </head>
       <body>
         <ReactQueryProvider>
