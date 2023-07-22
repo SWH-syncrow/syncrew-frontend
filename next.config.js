@@ -24,6 +24,9 @@ const nextConfig = {
       { hostname: "*", protocol: "https" },
     ],
   },
+  experimental: {
+    serverActions: true,
+  },
 };
 
 module.exports = nextConfig;
