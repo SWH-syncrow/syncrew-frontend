@@ -15,7 +15,7 @@ const getToken = async (queryString: string) => {
     return res;
   } catch (error) {
     console.error(error);
-    return { attributes: undefined };
+    return error;
   }
 };
 
