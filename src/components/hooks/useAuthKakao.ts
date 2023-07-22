@@ -1,4 +1,6 @@
+import { setRefreshTokenToCookie } from "@components/serverAuth";
 import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { KakaoAuth } from "src/lib/apis/KakaoAuth";
@@ -32,12 +34,14 @@ const useAuthKakao = () => {
   });
 
   const getAuthFromServer = useMutation({
-    mutationFn: async (token: string) => {
+    mutationFn: async (kakao_access_token: string) => {
       return;
     },
-    onSuccess: (res: any) => {
-      const { access_token, refresh_token } = res.data;
-      //토큰 쿠키 저장
+    onSuccess: ({ data }) => {
+      const { access_token, refresh_token } = data;
+      axios.defaults.headers.common["Authorization"] = `${access_token}`;
+      setRefreshTokenToCookie(refresh_token);
+      // user 정보 저장
     },
   });
 

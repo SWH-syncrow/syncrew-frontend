@@ -1,7 +1,9 @@
 import React from "react";
-import "src/styles/globals.css";
+
 import RootStyleRegistry from "./RootStyleRegistry";
 import ReactQueryProvider from "./ReactQueryProvider";
+import GlobalProvider from "./GlobalProvider";
+import "src/styles/globals.css";
 
 export default async function RootLayout({
   children,
@@ -17,7 +19,9 @@ export default async function RootLayout({
       </head>
       <body>
         <ReactQueryProvider>
-          <RootStyleRegistry>{children}</RootStyleRegistry>
+          <RootStyleRegistry>
+            <GlobalProvider>{children}</GlobalProvider>
+          </RootStyleRegistry>
         </ReactQueryProvider>
       </body>
     </html>
