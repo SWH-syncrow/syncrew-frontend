@@ -28,7 +28,12 @@ const ChatSection = () => {
   const { messages } = useFirebaseMessage(channelID);
 
   return (
-    <div className="w-full flex flex-col gap-8 p-4">
+    <div
+      className={clsx(
+        channelID === "" ? "hidden" : "visible",
+        "flex-1 flex flex-col gap-8 p-4"
+      )}
+    >
       <div className="flex flex-col justify-end flex-1 gap-2">
         {messages.map((message) => (
           <Message
