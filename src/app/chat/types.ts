@@ -7,6 +7,8 @@ export interface Channel {
 export interface ChatUser {
   id: string;
   userName: string;
+  profileURL?: string;
+  temp: number;
 }
 
 export interface Message {

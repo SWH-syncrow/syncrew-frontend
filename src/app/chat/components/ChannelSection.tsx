@@ -7,10 +7,13 @@ const ChannelSection = () => {
 
   return (
     <div className="w-[400px] border-x border-gray-300">
+      <div className="pt-[107px] pb-[27px] pl-8 text-lg border-b-4">
+        전체 대화
+      </div>
       {channels.map((channel) => (
         <div
           key={channel.id}
-          className="flex flex-col"
+          className="flex flex-col py-8 px-7"
           onClick={() => {
             router.push(`/chat?channel=${channel.id}`);
           }}

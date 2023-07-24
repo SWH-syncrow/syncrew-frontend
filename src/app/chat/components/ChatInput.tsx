@@ -71,7 +71,7 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
     setNewMessage("");
   };
   return (
-    <div className="relative">
+    <div className="relative px-8">
       {imgSrc && (
         <div className="w-[400px] absolute bottom-[100%] bg-gray-100">
           <button

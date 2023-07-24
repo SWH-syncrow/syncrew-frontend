@@ -23,6 +23,7 @@ const Message = ({ message, isMine }: MessageProps) => {
   );
 };
 const ChatSection = () => {
+  const chatUser = { userName: "김그루", profileURL: "", temp: 36.5 };
   const messageEndRef = useRef<HTMLDivElement | null>(null);
   const searchParams = useSearchParams();
   const channelID = searchParams?.get("channel") || "";
@@ -38,10 +39,14 @@ const ChatSection = () => {
     <div
       className={clsx(
         channelID === "" ? "hidden" : "visible",
-        "flex-1 flex flex-col py-4"
+        "flex-1 flex flex-col py-[50px] pt-[104px]"
       )}
     >
-      <div className="flex flex-col flex-1 gap-2 overflow-y-scroll px-4">
+      <div className="flex items-center gap-1 px-[45px]">
+        <span className="text-lg">{chatUser.userName}</span>
+        <span className="text-[14px]">{chatUser.temp}</span>
+      </div>
+      <div className="flex flex-col flex-1 gap-2 overflow-y-scroll px-8">
         {messages.map((message) => (
           <Message
             key={message.id}
