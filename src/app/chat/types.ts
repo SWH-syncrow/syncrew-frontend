@@ -14,4 +14,5 @@ export interface Message {
   text: string;
   userName: string;
   userId: string;
+  photoURL?: string;
 }
