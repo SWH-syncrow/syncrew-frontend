@@ -1,4 +1,4 @@
-import { Channel, ChatUser } from "@app/chat/types";
+import { Channel, ChatUser } from "@app/search/chat/types";
 import {
   collection,
   doc,

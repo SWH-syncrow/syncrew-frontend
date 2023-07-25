@@ -1,4 +1,4 @@
-import { Message } from "@app/chat/types";
+import { Message } from "@app/search/chat/types";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "src/lib/firebase";
