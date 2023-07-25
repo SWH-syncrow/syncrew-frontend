@@ -15,9 +15,10 @@ export default async function RootLayout({
       <head>
         <link rel="shortcut icon" href="/favicon.png" />
         <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-        <title>syncrow</title>
+        <title>syncrew</title>
       </head>
       <body>
+        <div id="modal-root" className="absolute"></div>
         <ReactQueryProvider>
           <RootStyleRegistry>
             <GlobalProvider>{children}</GlobalProvider>
