@@ -23,7 +23,7 @@ const GroupCard = ({ id, name, memberCount, postCount }: CardProps) => {
         </div>
         <div className="flex justify-between gap-1.5">
           <Link
-            href={`/search/group?id=${id}`}
+            href={`/group?id=${id}`}
             className="text-center flex-1 text-sm"
           >
             입장

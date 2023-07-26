@@ -2,7 +2,7 @@
 
 import PageContent from "./PageContent";
 
-const Page = () => {
+const Home = () => {
   return (
     <div className="w-full flex flex-col items-center">
       <PageContent />
@@ -10,4 +10,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Home;

@@ -4,6 +4,7 @@ import RootStyleRegistry from "./RootStyleRegistry";
 import ReactQueryProvider from "./ReactQueryProvider";
 import GlobalProvider from "./GlobalProvider";
 import "src/styles/globals.css";
+import GNB from "./components/GNB";
 
 export default async function RootLayout({
   children,
@@ -20,7 +21,12 @@ export default async function RootLayout({
       <body>
         <ReactQueryProvider>
           <RootStyleRegistry>
-            <GlobalProvider>{children}</GlobalProvider>
+            <GlobalProvider>
+              <main className="flex w-full h-screen overflow-scroll">
+                <GNB />
+                {children}
+              </main>
+            </GlobalProvider>
           </RootStyleRegistry>
         </ReactQueryProvider>
       </body>
