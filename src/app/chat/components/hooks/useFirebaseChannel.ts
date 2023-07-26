@@ -10,7 +10,7 @@ import {
   where,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { db } from "src/lib/firebase";
+import { db } from "src/lib/firebase/firebase";
 
 const useFirebaseChannel = () => {
   const [channels, setChannels] = useState<Channel[]>([]);
