@@ -1,6 +1,6 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import CreatePostModal from "./components/CreatePostModal";
+import CreatePostModal from "../../components/modal/CreatePostModal";
 import PostCard from "./components/PostCard";
 
 const PageContent = () => {
