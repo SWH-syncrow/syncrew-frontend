@@ -40,22 +40,26 @@ const PageContent = () => {
     <>
       <CreatePostModal groupId={groupId} groupName={groupInfo.name} />
       <div className="flex flex-col h-screen">
-        <div className="border-b border-grey-100 flex justify-center mt-[77px]">
-          <div className="w-[816px] flex flex-col gap-5">
+        <div className="border-b border-grey-50 flex justify-center mt-[77px]">
+          <div className="w-[816px] flex flex-col gap-5 pb-14">
             <span className="text-xl font-medium">
-              <span className="text-2xl font-semibold">{groupInfo.name}</span>에
-              입장했어요
+              <span className="text-2xl font-semibold text-orange-400">
+                {groupInfo.name}{" "}
+              </span>
+              에 입장했어요
             </span>
             <div className="flex justify-between items-center">
               <div className="flex gap-2.5 mb-[25px]">
-                <div className="text-xs border border-grey-100 leading-4 py-0.5 px-2.5 rounded-3xl">
+                <div className="text-xs btn-grey-border leading-4 py-0.5 px-2.5 rounded-full">
                   참여 {groupInfo.memeberCount}
                 </div>
-                <div className="text-xs border border-grey-100 leading-4 py-0.5 px-2.5 rounded-3xl">
+                <div className="text-xs btn-grey-border leading-4 py-0.5 px-2.5 rounded-full">
                   신청글 {groupInfo.postCount}
                 </div>
               </div>
-              {posts.length > 0 && <CreatePostModal.Trigger />}
+              {posts.length > 0 && (
+                <CreatePostModal.Trigger className="h-9 w-[126px] !py-0 " />
+              )}
             </div>
           </div>
         </div>
