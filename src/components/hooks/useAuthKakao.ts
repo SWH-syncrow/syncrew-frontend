@@ -37,8 +37,8 @@ const useAuthKakao = () => {
     mutationFn: async (kakao_access_token: string) => {
       return;
     },
-    onSuccess: ({ data }) => {
-      const { access_token, refresh_token } = data;
+    onSuccess: (res: any) => {
+      const { access_token, refresh_token } = res.data;
       axios.defaults.headers.common["Authorization"] = `${access_token}`;
       setRefreshTokenToCookie(refresh_token);
       // user 정보 저장
