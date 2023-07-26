@@ -1,7 +1,7 @@
 import { Message } from "@app/chat/types";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { db } from "src/lib/firebase";
+import { db } from "src/lib/firebase/firebase";
 
 const useFirebaseMessage = (channelID: string) => {
   const [messages, setMessages] = useState<Message[] | []>([]);

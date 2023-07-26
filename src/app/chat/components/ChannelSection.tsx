@@ -10,6 +10,11 @@ const ChannelSection = () => {
       <div className="pt-[107px] pb-[27px] pl-8 text-lg border-b-4">
         전체 대화
       </div>
+      {channels.length === 0 && (
+        <div className="flex w-full flex-col items-center">
+          <span>아직 나의 매칭 친구가 없어요</span>
+        </div>
+      )}
       {channels.map((channel) => (
         <div
           key={channel.id}

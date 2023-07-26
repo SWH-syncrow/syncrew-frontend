@@ -1,3 +1,57 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  width:100%;
+  height:100%;
+  font-synthesis: none;
+}
+
+@layer base {
+  [data-nextjs-scroll-focus-boundary] {
+    display: contents;
+  }
+}
+
+@layer components {
+  .btn-white {
+    @apply duration-300 py-2 px-4 border-gray-1000 text-gray-300 border rounded-md hover:shadow
+  }
+  .btn-orange {
+    @apply duration-300 py-2 px-4 border-gray-300 text-gray-300 border rounded-md bg-violet-3 disabled:cursor-not-allowed disabled:bg-gray-1000 disabled:text-gray-100 hover:shadow
+  }
+}
+
+@layer base {
+  /* *::-webkit-scrollbar {
+    width: 5px;
+  }
+
+
+  *::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-2xl
+  }
+
+  *::-webkit-scrollbar-track {
+    @apply bg-transparent
+  } */
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  outline-color: #FC773E;
+  box-sizing: border-box;
+}
+
+input, textarea {
+  outline-width: 1px;
+}

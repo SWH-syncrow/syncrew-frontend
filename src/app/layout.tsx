@@ -4,6 +4,7 @@ import RootStyleRegistry from "./RootStyleRegistry";
 import ReactQueryProvider from "./ReactQueryProvider";
 import GlobalProvider from "./GlobalProvider";
 import "src/styles/globals.css";
+import GNB from "./components/GNB";
 
 export default async function RootLayout({
   children,
@@ -15,12 +16,17 @@ export default async function RootLayout({
       <head>
         <link rel="shortcut icon" href="/favicon.png" />
         <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-        <title>syncrow</title>
+        <title>syncrew</title>
       </head>
       <body>
         <ReactQueryProvider>
           <RootStyleRegistry>
-            <GlobalProvider>{children}</GlobalProvider>
+            <GlobalProvider>
+              <main className="flex w-full">
+                <GNB />
+                {children}
+              </main>
+            </GlobalProvider>
           </RootStyleRegistry>
         </ReactQueryProvider>
       </body>

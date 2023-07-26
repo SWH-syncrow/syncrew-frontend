@@ -1,7 +1,7 @@
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import { db, storage } from "src/lib/firebase";
+import { db, storage } from "src/lib/firebase/firebase";
 
 interface ChatInput {
   userId: string;
