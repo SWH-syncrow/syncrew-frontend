@@ -19,11 +19,14 @@ body {
 }
 
 @layer components {
-  .btn-white {
-    @apply duration-300 py-2 px-4 border-gray-1000 text-gray-300 border rounded-md hover:shadow
+  .btn-grey-border {
+    @apply duration-300 py-2 px-4 border-grey-200 text-grey-300 border rounded-md hover:shadow
   }
   .btn-orange {
-    @apply duration-300 py-2 px-4 border-gray-300 text-gray-300 border rounded-md bg-violet-3 disabled:cursor-not-allowed disabled:bg-gray-1000 disabled:text-gray-100 hover:shadow
+    @apply duration-300 py-2 px-4 bg-orange-500 text-white rounded-md disabled:cursor-not-allowed hover:shadow
+  }
+  .btn-orange-border {
+    @apply duration-300 py-2 px-4 border-orange-400 text-orange-500 border rounded-md disabled:cursor-not-allowed hover:shadow
   }
 }
 
