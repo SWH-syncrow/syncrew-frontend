@@ -73,7 +73,7 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
   return (
     <div className="relative px-8">
       {imgSrc && (
-        <div className="w-[400px] absolute bottom-[100%] bg-gray-100">
+        <div className="w-[400px] absolute bottom-[100%] bg-grey-100">
           <button
             onClick={() => {
               setImg(undefined);
@@ -103,12 +103,12 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="메시지를 입력해봐요."
-          className="flex-1 bg-transparent bg-gray-200 rounded-md px-4 py-2"
+          className="flex-1 bg-transparent bg-grey-200 rounded-md px-4 py-2"
         />
         <button
           type="submit"
           disabled={!newMessage}
-          className="uppercase font-semibold text-sm tracking-wider text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+          className="uppercase font-semibold text-sm tracking-wider text-grey-500 hover:text-grey-900 dark:hover:text-white transition-colors"
         >
           전송
         </button>

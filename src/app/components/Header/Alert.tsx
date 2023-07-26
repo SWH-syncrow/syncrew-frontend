@@ -132,7 +132,7 @@ const Alert = () => {
           {alertList.map((alert) => (
             <div
               key={alert.id}
-              className="flex flex-col w-full pt-6 border-t border-gray-100 first:border-none first:pt-0"
+              className="flex flex-col w-full pt-6 border-t border-grey-100 first:border-none first:pt-0"
             >
               <span className="font-medium">싱크루 알림</span>
               {getAlertElement(alert)}

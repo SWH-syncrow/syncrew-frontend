@@ -13,7 +13,7 @@ const Message = ({ message, isMine }: MessageProps) => {
   return (
     <div
       className={clsx(
-        isMine ? "self-end bg-gray-200" : "self-start border border-gray-200",
+        isMine ? "self-end bg-grey-200" : "self-start border border-grey-200",
         "py-2 px-4 rounded-3xl first:mt-auto"
       )}
     >

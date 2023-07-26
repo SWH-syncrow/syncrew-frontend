@@ -6,7 +6,7 @@ const ChannelSection = () => {
   const { channels } = useFirebaseChannel();
 
   return (
-    <div className="w-[400px] border-x border-gray-300">
+    <div className="w-[400px] border-x border-grey-300">
       <div className="pt-[107px] pb-[27px] pl-8 text-lg border-b-4">
         전체 대화
       </div>

@@ -21,7 +21,7 @@ const CreatePostModal = ({ groupId, groupName }: CreatePostModalProps) => {
             type="text"
             name="title"
             placeholder="고민 제목을 입력해주세요."
-            className="border-b-2 border-gray-100 pb-4 mb-4 text-xl"
+            className="border-b-2 border-grey-100 pb-4 mb-4 text-xl"
           />
           <TextArea
             name="content"

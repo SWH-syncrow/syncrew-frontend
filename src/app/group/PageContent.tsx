@@ -40,7 +40,7 @@ const PageContent = () => {
     <>
       <CreatePostModal groupId={groupId} groupName={groupInfo.name} />
       <div className="flex flex-col h-screen">
-        <div className="border-b border-gray-100 flex justify-center mt-[77px]">
+        <div className="border-b border-grey-100 flex justify-center mt-[77px]">
           <div className="w-[816px] flex flex-col gap-5">
             <span className="text-xl font-medium">
               <span className="text-2xl font-semibold">{groupInfo.name}</span>에
@@ -48,10 +48,10 @@ const PageContent = () => {
             </span>
             <div className="flex justify-between items-center">
               <div className="flex gap-2.5 mb-[25px]">
-                <div className="text-xs border border-gray-100 leading-4 py-0.5 px-2.5 rounded-3xl">
+                <div className="text-xs border border-grey-100 leading-4 py-0.5 px-2.5 rounded-3xl">
                   참여 {groupInfo.memeberCount}
                 </div>
-                <div className="text-xs border border-gray-100 leading-4 py-0.5 px-2.5 rounded-3xl">
+                <div className="text-xs border border-grey-100 leading-4 py-0.5 px-2.5 rounded-3xl">
                   신청글 {groupInfo.postCount}
                 </div>
               </div>
