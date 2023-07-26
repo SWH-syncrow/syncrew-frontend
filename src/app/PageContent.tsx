@@ -44,9 +44,9 @@ const PageContent = () => {
   });
 
   return (
-    <div className="w-[918px]">
+    <div className="w-[1118px] px-[100px]">
       <div className="w-full h-[237px] bg-grey-100 rounded-xl mb-[53px]"></div>
-      <div className="text-[23px] font-medium leading-8">
+      <div className="text-[23px] leading-[30px] font-medium">
         디지털 정보 교환을 위해
         <br /> 친구 신청 글쓰기를 시작해볼까요?
       </div>
@@ -55,8 +55,8 @@ const PageContent = () => {
           {CATEGORIES.map((category) => (
             <Button
               className={clsx(
-                "py-3 w-[110px] border border-grey-200 rounded-3xl flex justify-center text-[14px] font-medium",
-                selectedCategory === category.key && ""
+                selectedCategory === category.key && "btn-orange-border",
+                "btn-grey-border py-2.5 w-[110px] flex justify-center font-medium !rounded-full"
               )}
               key={category.key}
               onClick={() => setSelectedCategory(category.key)}

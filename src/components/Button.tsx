@@ -8,7 +8,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         {...props}
-        className={clsx("rounded-md py-1 px-4", className)}
+        className={clsx("py-2 px-4", className)}
         ref={ButtonRef}
       >
         {children}
