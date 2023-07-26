@@ -8,7 +8,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
     return (
       <textarea
         className={clsx(
-          "rounded-md py-1 px-4 text-sm active:outline-violet-3 resize-none",
+          "rounded-md py-1 px-4 text-sm active:outline-orange resize-none duration-300",
           className
         )}
         {...props}
