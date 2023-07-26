@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import GroupCard from "./components/GroupCard";
 import { Button } from "src/components/Button";
+import { useQuery } from "@tanstack/react-query";
+import clsx from "clsx";
 
-const CATEGORIES = ["전체", "스마트폰", "파워포인트", "영상편집", "포토샵"];
+const CATEGORIES = [
+  { key: "ALL", text: "전체" },
+  { key: "SMARTPHONE", text: "스마트폰" },
+  { key: "PPT", text: "파워포인트" },
+  { key: "VIDEO", text: "영상편집" },
+  { key: "PS", text: "포토샵" },
+];
 
 interface Group {
   id: number;
@@ -26,6 +34,14 @@ const mock = [
 ];
 const PageContent = () => {
   const [groups, setGroups] = useState<Group[]>(mock);
+  const [selectedCategory, setSelectedCategory] = useState("ALL");
+
+  useQuery(["getGroup"], {
+    queryFn: (selectedCategory) => {},
+    onSuccess: () => {
+      //setGroups
+    },
+  });
 
   return (
     <div className="w-[918px]">
@@ -38,10 +54,14 @@ const PageContent = () => {
         <div className="flex justify-center gap-3 mb-[50px]">
           {CATEGORIES.map((category) => (
             <Button
-              className="py-3 w-[110px] border border-gray-200 rounded-3xl flex justify-center text-[14px] font-medium"
-              key={category}
+              className={clsx(
+                "py-3 w-[110px] border border-gray-200 rounded-3xl flex justify-center text-[14px] font-medium",
+                selectedCategory === category.key && ""
+              )}
+              key={category.key}
+              onClick={() => setSelectedCategory(category.key)}
             >
-              {category}
+              {category.text}
             </Button>
           ))}
         </div>
