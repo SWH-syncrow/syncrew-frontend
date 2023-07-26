@@ -42,7 +42,7 @@ const ModalContent = ({
 }: PropsWithChildren<Dialog.DialogContentProps>) => {
   return (
     <Dialog.Portal>
-      <Dialog.Overlay className="fixed inset-0 opacity-20 transition-opacity bg-gray-500" />
+      <Dialog.Overlay className="fixed inset-0 opacity-20 transition-opacity bg-grey-500" />
       <Dialog.Content
         {...props}
         className={clsx(

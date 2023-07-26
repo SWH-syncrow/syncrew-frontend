@@ -20,7 +20,7 @@ const Page = () => {
           </span>
           <span className="text-sm mb-4">먼저 로그인이 필요해요 :)</span>
           <Link
-            className="font-semibold bg-gray-300 w-full py-2"
+            className="font-semibold bg-grey-300 w-full py-2"
             href={`https://kauth.kakao.com/oauth/authorize?client_id=${
               process.env.NEXT_PUBLIC_KAKAO_REST_KEY
             }&redirect_uri=${
@@ -32,7 +32,7 @@ const Page = () => {
             카카오로 3초 만에 시작하기
           </Link>
         </div>
-        <div className="border-t border-gray-300 text-gray-500 pt-4">
+        <div className="border-t border-grey-300 text-grey-500 pt-4">
           회원가입 시 syncrew의
           <br /> 서비스 이용 약관과 개인정보 보호정책에 동의하게 됩니다
         </div>

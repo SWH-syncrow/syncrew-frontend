@@ -5,6 +5,12 @@ import ReactQueryProvider from "./ReactQueryProvider";
 import GlobalProvider from "./GlobalProvider";
 import "src/styles/globals.css";
 import GNB from "./components/GNB";
+import localFont from "next/font/local";
+
+const pretendard = localFont({
+  src: "../../public/font/PretendardVariable.woff2",
+  display: "swap",
+});
 
 export default async function RootLayout({
   children,
@@ -12,7 +18,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={pretendard.className}>
       <head>
         <link rel="shortcut icon" href="/favicon.png" />
         <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
