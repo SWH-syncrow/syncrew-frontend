@@ -22,6 +22,7 @@ module.exports = {
       },
       grey: {
         DEFAULT: "#434343",
+        0: "#F3F3F3",
         50: "#ECECEC",
         100: "#C5C5C5",
         200: "#A9A9A9",
