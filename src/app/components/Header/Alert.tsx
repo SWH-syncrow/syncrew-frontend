@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { db } from "src/lib/firebase/firebase";
 import { firebaseUtils } from "src/lib/firebase/utils";
+import Bell from "public/assets/icons/알림_inactive.svg";
 
 const mock = [
   {
@@ -95,24 +96,37 @@ const Alert = () => {
       case "RECEIVED":
         return (
           <>
-            <span>{`${alert.friendName}님이 친구요청을 보냈어요`}</span>
-            <div className="flex justify-between">
-              <Button>거절하기</Button>
-              <Button onClick={() => onAcceptHandler(alert)}>수락하기</Button>
+            <span className="text-grey-300 leading-8 mb-[14px]">{`${alert.friendName}님이 친구요청을 보냈어요`}</span>
+            <div className="flex justify-between gap-3">
+              <Button className="btn-orange-border flex-1 text-xs py-2 !rounded-xl">
+                거절하기
+              </Button>
+              <Button
+                onClick={() => onAcceptHandler(alert)}
+                className="btn-orange flex-1 text-xs py-2 !rounded-xl"
+              >
+                수락하기
+              </Button>
             </div>
           </>
         );
       case "REQUESTED":
-        return <span>{`${alert.friendName}님에게 친구요청을 보냈어요`}</span>;
+        return (
+          <span className="text-grey-300 leading-8">{`${alert.friendName}님에게 친구요청을 보냈어요`}</span>
+        );
       case "MATCHED":
         return (
           <>
-            <span>{`${alert.friendName}님과 친구가 매칭되었어요`}</span>
-            <Link href={"/chat"}>싱크루 채팅으로 이동하기</Link>
+            <span className="text-grey-300 leading-8 mb-[14px]">{`${alert.friendName}님과 친구가 매칭되었어요`}</span>
+            <Link className="btn-orange text-xs !rounded-xl text-center" href={"/chat"}>
+              싱크루 채팅으로 이동하기
+            </Link>
           </>
         );
       case "REJECTED":
-        return <span>{`${alert.friendName}님이 친구요청을 거절했어요`}</span>;
+        return (
+          <span className="text-grey-300 leading-8">{`${alert.friendName}님이 친구요청을 거절했어요`}</span>
+        );
     }
   };
   return (
@@ -123,7 +137,9 @@ const Alert = () => {
           /* read */
         }}
       >
-        <Dialog.Trigger ref={alertRef}>알림</Dialog.Trigger>
+        <Dialog.Trigger ref={alertRef}>
+          <Bell />
+        </Dialog.Trigger>
         <Dialog.Content
           className={
             "absolute right-0 translate-x-8 top-[100%] translate-y-4 flex flex-col bg-white shadow-lg w-[340px] rounded-2xl p-8 gap-6"
