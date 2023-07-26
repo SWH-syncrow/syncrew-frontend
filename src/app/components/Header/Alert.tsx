@@ -117,7 +117,12 @@ const Alert = () => {
   };
   return (
     <div className="relative">
-      <Dialog.Root modal={false}>
+      <Dialog.Root
+        modal={false}
+        onOpenChange={() => {
+          /* read */
+        }}
+      >
         <Dialog.Trigger ref={alertRef}>알림</Dialog.Trigger>
         <Dialog.Content
           className={
