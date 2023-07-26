@@ -1,6 +1,8 @@
+import { isLoggedInAtom, userAtom } from "@app/GlobalProvider";
 import { setRefreshTokenToCookie } from "@components/serverAuth";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { useSetAtom } from "jotai";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { KakaoAuth } from "src/lib/apis/KakaoAuth";
@@ -8,6 +10,8 @@ import { KakaoAuth } from "src/lib/apis/KakaoAuth";
 const useAuthKakao = () => {
   const searchParams = useSearchParams();
   const query = searchParams?.get("code");
+  const setUserAtom = useSetAtom(userAtom);
+  const setIsLoggedInAtom = useSetAtom(isLoggedInAtom);
 
   const getKakaoToken = useMutation({
     mutationFn: async (code: string) => {
@@ -29,6 +33,14 @@ const useAuthKakao = () => {
     },
     onSuccess: (res: any) => {
       // getAuthFromServer.mutate(res.data.access_token);
+      //임시
+      setUserAtom({
+        id: 1,
+        username: "김지현",
+        email: "test@example.com",
+        temp: 36.5,
+      });
+      setIsLoggedInAtom(true);
     },
     retry: false,
   });
