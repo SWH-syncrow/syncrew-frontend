@@ -18,7 +18,6 @@ export default async function RootLayout({
         <title>syncrew</title>
       </head>
       <body>
-        <div id="modal-root" className="absolute"></div>
         <ReactQueryProvider>
           <RootStyleRegistry>
             <GlobalProvider>{children}</GlobalProvider>

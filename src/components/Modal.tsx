@@ -1,67 +1,58 @@
 import clsx from "clsx";
-import { atom, useAtom, useSetAtom } from "jotai";
-import { PropsWithChildren, useEffect, useRef } from "react";
-import ReactDom from "react-dom";
+import React, { PropsWithChildren } from "react";
 import { Button } from "./Button";
+import { Dialog, DialogProps } from "./Dialog";
 
-const modalOpenAtom = atom<boolean>(false);
+const ModalTrigger = React.forwardRef<HTMLButtonElement, PropsWithChildren>(
+  ({ children }, ref) => {
+    return (
+      <Dialog.Trigger asChild ref={ref}>
+        {children}
+      </Dialog.Trigger>
+    );
+  }
+);
+ModalTrigger.displayName = "ModalTrigger";
 
 const ModalClose = ({
   children,
   className,
 }: PropsWithChildren<{ className?: string }>) => {
-  const setOpenAtom = useSetAtom(modalOpenAtom);
   return (
-    <Button onClick={() => setOpenAtom(false)} {...{ className }}>
+    <Dialog.Close asChild {...{ className }}>
       {children}
-    </Button>
+    </Dialog.Close>
   );
 };
-const ModalTrigger = ({ children }: PropsWithChildren) => {
-  const setOpenAtom = useSetAtom(modalOpenAtom);
-  return <Button onClick={() => setOpenAtom(true)}>{children}</Button>;
-};
 
-const ModalTitle = ({ children }: PropsWithChildren) => {
-  return <div className="w-full text-center text-xl">{children}</div>;
+const ModalTitle = ({
+  children,
+}: PropsWithChildren<{ step?: string; totalStep?: string }>) => {
+  return (
+    <Dialog.Title className="relative flex flex-col text-xl">
+      {children}
+    </Dialog.Title>
+  );
 };
 
 const ModalContent = ({
   children,
   className,
   ...props
-}: PropsWithChildren<{ className?: string }>) => {
-  const [openAtom, setOpenAtom] = useAtom(modalOpenAtom);
-  const modalCotent = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const handleOutsideClose = (e: MouseEvent) => {
-      if (openAtom && !modalCotent.current?.contains(e.target as Node))
-        setOpenAtom(false);
-    };
-    document.addEventListener("click", handleOutsideClose);
-
-    return () => document.removeEventListener("click", handleOutsideClose);
-  }, [openAtom]);
-
+}: PropsWithChildren<Dialog.DialogContentProps>) => {
   return (
-    <>
-      {openAtom && (
-        <div className="relative w-screen h-screen">
-          <div className="fixed w-screen h-screen opacity-20 bg-gray-500" />
-          <div
-            {...props}
-            className={clsx(
-              "fixed left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-modal",
-              className
-            )}
-            ref={modalCotent}
-          >
-            {children}
-          </div>
-        </div>
-      )}
-    </>
+    <Dialog.Portal>
+      <Dialog.Overlay className="fixed inset-0 opacity-20 transition-opacity bg-gray-500" />
+      <Dialog.Content
+        {...props}
+        className={clsx(
+          "fixed left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6",
+          className
+        )}
+      >
+        {children}
+      </Dialog.Content>
+    </Dialog.Portal>
   );
 };
 
@@ -86,29 +77,8 @@ const ModalFooter = ({
   );
 };
 
-interface ModalProps {
-  children?: React.ReactNode;
-  open?: boolean;
-  onOpenChange?(open: boolean): void;
-  id?: string;
-}
-const Modal = ({
-  children,
-  open,
-  onOpenChange,
-}: PropsWithChildren<ModalProps>) => {
-  const el = document.getElementById("modal-root");
-  const [openAtom, setOpenAtom] = useAtom(modalOpenAtom);
-
-  useEffect(() => {
-    setOpenAtom(!!open);
-  }, [open]);
-
-  useEffect(() => {
-    onOpenChange && onOpenChange(openAtom);
-  }, [openAtom]);
-
-  return <>{el && ReactDom.createPortal(children, el)}</>;
+const Modal = ({ children, ...props }: PropsWithChildren<DialogProps>) => {
+  return <Dialog.Root {...props}>{children}</Dialog.Root>;
 };
 
 Modal.Close = ModalClose;

@@ -1,4 +1,4 @@
-import { atom, useAtom } from "jotai";
+import { atom, useAtom, useSetAtom } from "jotai";
 import { Button } from "src/components/Button";
 import { Input } from "src/components/Input";
 import Modal from "src/components/Modal";
@@ -12,7 +12,7 @@ const modalOpenAtom = atom<boolean>(false);
 const CreatePostModal = ({ groupId, groupName }: CreatePostModalProps) => {
   const [openAtom, setOpenAtom] = useAtom(modalOpenAtom);
   return (
-    <Modal open={openAtom} onOpenChange={(isOpen) => setOpenAtom(isOpen)}>
+    <Modal open={openAtom} onOpenChange={setOpenAtom}>
       <Modal.Content className="w-[550px] h-[70%] flex flex-col">
         <Modal.Close className="absolute">{`<`}</Modal.Close>
         <Modal.Title>{groupName} 친구 신청</Modal.Title>
@@ -44,7 +44,8 @@ const CreatePostModal = ({ groupId, groupName }: CreatePostModalProps) => {
   );
 };
 const CreatePostModalTrigger = () => {
-  return <Modal.Trigger>신청 글쓰기</Modal.Trigger>;
+  const setOpenAtom = useSetAtom(modalOpenAtom);
+  return <Button onClick={() => setOpenAtom(true)}>신청 글쓰기</Button>;
 };
 CreatePostModal.Trigger = CreatePostModalTrigger;
 export default CreatePostModal;
