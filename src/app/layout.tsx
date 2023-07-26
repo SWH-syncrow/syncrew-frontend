@@ -22,7 +22,7 @@ export default async function RootLayout({
         <ReactQueryProvider>
           <RootStyleRegistry>
             <GlobalProvider>
-              <main className="flex w-full h-screen overflow-scroll">
+              <main className="flex w-full">
                 <GNB />
                 {children}
               </main>

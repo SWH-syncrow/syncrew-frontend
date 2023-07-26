@@ -6,10 +6,7 @@ const GNB = () => {
   const pathname = usePathname();
   return (
     pathname !== "/login" && (
-      <div className="flex flex-col items-center gap-[51px] h-screen min-w-[248px] py-8 border-r border-gray-100">
-        <Link href={"/"}>
-          <LOGO />
-        </Link>
+      <div className="flex flex-col justify-between items-center gap-[51px] h-screen min-w-[248px] py-8 border-r border-gray-100 sticky top-0">
         <div className="flex flex-col gap-3 px-8">
           <Link
             href={"/"}
@@ -31,6 +28,9 @@ const GNB = () => {
             마이페이지
           </Link>
         </div>
+        <Link href={"/"}>
+          <LOGO />
+        </Link>
       </div>
     )
   );

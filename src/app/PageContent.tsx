@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import GroupCard from "./components/GroupCard";
-import { Button } from "src/components/Button";
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
+import { useState } from "react";
+import { Button } from "src/components/Button";
+import GroupCard from "./components/GroupCard";
 
 const CATEGORIES = [
   { key: "ALL", text: "전체" },

@@ -12,10 +12,6 @@ body {
   font-synthesis: none;
 }
 
-html {
-  overflow-y: scroll;
-}
-
 @layer base {
   [data-nextjs-scroll-focus-boundary] {
     display: contents;
