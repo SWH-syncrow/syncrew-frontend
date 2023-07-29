@@ -20,13 +20,13 @@ body {
 
 @layer components {
   .btn-grey-border {
-    @apply duration-300 py-2 px-4 border-grey-200 text-grey-300 border rounded-xl hover:shadow
+    @apply duration-300 py-2 px-4 border-grey-200 text-grey-300 border rounded-xl hover:shadow-normal active:border active:border-grey-400 disabled:opacity-50
   }
   .btn-orange {
-    @apply duration-300 py-2 px-4 bg-orange-400 text-white rounded-xl disabled:cursor-not-allowed hover:shadow
+    @apply duration-300 py-2 px-4 bg-orange-400 text-white rounded-xl disabled:cursor-not-allowed hover:shadow-normal active:border active:border-orange-500 disabled:opacity-50
   }
   .btn-orange-border {
-    @apply duration-300 py-2 px-4 border-orange-400 text-orange-500 border rounded-xl disabled:cursor-not-allowed hover:shadow
+    @apply duration-300 py-2 px-4 border-orange-400 text-orange-500 border rounded-xl disabled:cursor-not-allowed hover:shadow-normal active:border-orange-500 disabled:opacity-50
   }
 }
 

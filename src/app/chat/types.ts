@@ -6,15 +6,15 @@ export interface Channel {
 
 export interface ChatUser {
   id: string;
-  userName: string;
-  profileURL?: string;
+  username: string;
+  profileImage?: string;
   temp: number;
 }
 
 export interface Message {
   id: string;
   text: string;
-  userName: string;
+  username: string;
   userId: string;
   photoURL?: string;
 }

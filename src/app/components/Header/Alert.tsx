@@ -13,6 +13,9 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { db } from "src/lib/firebase/firebase";
 import { firebaseUtils } from "src/lib/firebase/utils";
+import Bell from "public/assets/icons/알림_inactive.svg";
+import { useAtomValue } from "jotai";
+import { userAtom } from "@app/GlobalProvider";
 
 const mock = [
   {
@@ -25,6 +28,22 @@ const mock = [
   },
   {
     id: 2,
+    friendRequestId: 1,
+    friendName: "김그루",
+    friendId: 2,
+    status: "MATCHED" as ALERT_STATUS,
+    read: true,
+  },
+  {
+    id: 3,
+    friendRequestId: 1,
+    friendName: "김그루",
+    friendId: 2,
+    status: "MATCHED" as ALERT_STATUS,
+    read: true,
+  },
+  {
+    id: 4,
     friendRequestId: 1,
     friendName: "김그루",
     friendId: 2,
@@ -45,6 +64,7 @@ interface Alert {
 const Alert = () => {
   const alertRef = useRef<HTMLButtonElement | null>(null);
   const [alertList, setAlertList] = useState(mock);
+  const userAtomValue = useAtomValue(userAtom);
   // useQuery(["getAlert"], {
   //   queryFn: () => {
   //     return;
@@ -60,13 +80,13 @@ const Alert = () => {
     });
 
     Promise.all([
-      setDoc(channelDoc, {
+      setDoc(doc(channelDoc, "users", alert.friendId.toString()), {
         username: alert.friendName,
         profileImage: "",
         temp: 36.5,
       }),
-      setDoc(channelDoc, {
-        username: "김지현",
+      setDoc(doc(channelDoc, "users", userAtomValue.id.toString()), {
+        username: userAtomValue.username,
         profileImage: "",
         temp: 36.5,
       }),
@@ -76,16 +96,13 @@ const Alert = () => {
           channels: [],
         }
       ),
-      await firebaseUtils.createDocIfNotExists(
-        doc(db, "channelsOfUser", "test"),
-        {
-          channels: [],
-        }
-      ),
+      await firebaseUtils.createDocIfNotExists(doc(db, "channelsOfUser", "1"), {
+        channels: [],
+      }),
       updateDoc(doc(db, "channelsOfUser", alert.friendId.toString()), {
         channels: arrayUnion(channelDoc.id),
       }),
-      updateDoc(doc(db, "channelsOfUser", "test"), {
+      updateDoc(doc(db, "channelsOfUser", userAtomValue.id.toString()), {
         channels: arrayUnion(channelDoc.id),
       }),
     ]);
@@ -95,49 +112,80 @@ const Alert = () => {
       case "RECEIVED":
         return (
           <>
-            <span>{`${alert.friendName}님이 친구요청을 보냈어요`}</span>
-            <div className="flex justify-between">
-              <Button>거절하기</Button>
-              <Button onClick={() => onAcceptHandler(alert)}>수락하기</Button>
+            <span className="text-grey-300 leading-8 mb-[14px]">{`${alert.friendName}님이 친구요청을 보냈어요`}</span>
+            <div className="flex justify-between gap-3">
+              <Button className="btn-orange-border flex-1 text-xs py-2 !rounded-xl">
+                거절하기
+              </Button>
+              <Button
+                onClick={() => onAcceptHandler(alert)}
+                className="btn-orange flex-1 text-xs py-2 !rounded-xl"
+              >
+                수락하기
+              </Button>
             </div>
           </>
         );
       case "REQUESTED":
-        return <span>{`${alert.friendName}님에게 친구요청을 보냈어요`}</span>;
+        return (
+          <span className="text-grey-300 leading-8">{`${alert.friendName}님에게 친구요청을 보냈어요`}</span>
+        );
       case "MATCHED":
         return (
           <>
-            <span>{`${alert.friendName}님과 친구가 매칭되었어요`}</span>
-            <Link href={"/chat"}>싱크루 채팅으로 이동하기</Link>
+            <span className="text-grey-300 leading-8 mb-[14px]">{`${alert.friendName}님과 친구가 매칭되었어요`}</span>
+            <Link
+              className="btn-orange text-xs !rounded-xl text-center"
+              href={"/chat"}
+            >
+              싱크루 채팅으로 이동하기
+            </Link>
           </>
         );
       case "REJECTED":
-        return <span>{`${alert.friendName}님이 친구요청을 거절했어요`}</span>;
+        return (
+          <span className="text-grey-300 leading-8">{`${alert.friendName}님이 친구요청을 거절했어요`}</span>
+        );
     }
   };
+  const bellRef = useRef<HTMLElement | undefined>();
   return (
     <div className="relative">
       <Dialog.Root
         modal={false}
-        onOpenChange={() => {
+        onOpenChange={(open) => {
           /* read */
+          if (open) {
+            alertRef.current?.classList.add("bg-orange");
+            alertRef.current?.classList.add("[&_svg_path]:fill-white");
+          } else {
+            alertRef.current?.classList.remove("bg-orange");
+            alertRef.current?.classList.remove("[&_svg_path]:fill-white");
+          }
         }}
       >
-        <Dialog.Trigger ref={alertRef}>알림</Dialog.Trigger>
+        <Dialog.Trigger
+          ref={alertRef}
+          className="duration-300 rounded-full p-1"
+        >
+          <Bell ref={bellRef} className="[&_path]:duration-300" />
+        </Dialog.Trigger>
         <Dialog.Content
           className={
-            "absolute right-0 translate-x-8 top-[100%] translate-y-4 flex flex-col bg-white shadow-lg w-[340px] rounded-2xl p-8 gap-6"
+            "absolute right-0 translate-x-8 top-[100%] translate-y-4  bg-white shadow-normal w-[340px] rounded-2xl py-8 "
           }
         >
-          {alertList.map((alert) => (
-            <div
-              key={alert.id}
-              className="flex flex-col w-full pt-6 border-t border-grey-100 first:border-none first:pt-0"
-            >
-              <span className="font-medium">싱크루 알림</span>
-              {getAlertElement(alert)}
-            </div>
-          ))}
+          <div className="max-h-[500px] overflow-auto flex flex-col gap-6 px-8">
+            {alertList.map((alert) => (
+              <div
+                key={alert.id}
+                className="flex flex-col w-full pt-6 border-t border-grey-100 first:border-none first:pt-0"
+              >
+                <span className="font-medium">싱크루 알림</span>
+                {getAlertElement(alert)}
+              </div>
+            ))}
+          </div>
         </Dialog.Content>
       </Dialog.Root>
     </div>

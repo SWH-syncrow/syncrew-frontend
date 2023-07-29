@@ -8,7 +8,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <input
         {...props}
-        className={clsx("rounded-md py-1 px-4", className)}
+        className={clsx("rounded-md py-1 px-4 duration-300", className)}
         ref={inputRef}
       />
     );
