@@ -1,10 +1,23 @@
-import { Message } from "@app/chat/types";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { userAtom } from "@app/GlobalProvider";
+import { ChatUser, Message } from "@app/chat/types";
+import {
+  collection,
+  documentId,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
+import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import { db } from "src/lib/firebase/firebase";
 
 const useFirebaseMessage = (channelID: string) => {
+  const { id: userId } = useAtomValue(userAtom);
   const [messages, setMessages] = useState<Message[] | []>([]);
+  const [chatUser, setChatUser] = useState<ChatUser>();
 
   const getChat = async () => {
     const getMSGQuery = query(
@@ -22,11 +35,24 @@ const useFirebaseMessage = (channelID: string) => {
     return unsubscribe;
   };
 
-  useEffect(() => {
-    channelID !== "" && getChat();
-  }, [channelID]);
+  const getChatUser = async () => {
+    const fbChatUser = await getDocs(
+      query(
+        collection(db, "channel", channelID, "users"),
+        where(documentId(), "!=", userId.toString())
+      )
+    );
+    setChatUser(fbChatUser.docs[0].data() as ChatUser);
+  };
 
-  return { messages };
+  useEffect(() => {
+    if (channelID && userId != -1) {
+      getChat();
+      getChatUser();
+    }
+  }, [channelID, userId]);
+
+  return { messages, chatUser };
 };
 
 export default useFirebaseMessage;

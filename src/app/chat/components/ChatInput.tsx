@@ -1,7 +1,12 @@
+import { Input } from "@components/Input";
+import TextArea from "@components/TextArea";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { db, storage } from "src/lib/firebase/firebase";
+import Photo from "public/assets/icons/image.svg";
+import Send from "public/assets/icons/send.svg";
+import { Button } from "@components/Button";
 
 interface ChatInput {
   userId: string;
@@ -12,7 +17,7 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
   const [newMessage, setNewMessage] = useState("");
   const [imgSrc, setImgSrc] = useState<ArrayBuffer | string>();
   const [img, setImg] = useState<File>();
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -69,9 +74,11 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
       });
     }
     setNewMessage("");
+    setImgSrc("");
+    setImg(undefined);
   };
   return (
-    <div className="relative px-8">
+    <div className="relative">
       {imgSrc && (
         <div className="w-[400px] absolute bottom-[100%] bg-grey-100">
           <button
@@ -85,33 +92,40 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
           <img src={imgSrc + ""} alt="첨부 이미지" />
         </div>
       )}
-      <form onSubmit={handleOnSubmit} className="flex flex-row py-3 gap-2">
-        <input
-          type="file"
-          id="file"
-          name="file"
-          style={{ display: "none" }}
-          accept="image/*"
-          onChange={handleFileChange}
-        />
-        <label htmlFor="file">
-          <span>이미지</span>
-        </label>
-        <input
-          ref={inputRef}
-          type="text"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="메시지를 입력해봐요."
-          className="flex-1 bg-transparent bg-grey-200 rounded-md px-4 py-2"
-        />
-        <button
+      <form
+        onSubmit={handleOnSubmit}
+        className="flex flex-row items-center pt-8 gap-4 w-full"
+      >
+        <div className="relative flex-1 flex">
+          <TextArea
+            ref={inputRef}
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="메시지를 입력해봐요."
+            className="bg-transparent bg-grey-0 px-8 py-2 flex-1 h-[46px] !rounded-full text-base"
+          />
+          <label
+            htmlFor="file"
+            className="absolute right-4 top-[50%] -translate-y-[50%] cursor-pointer"
+          >
+            <Photo className="[&_path]:fill-grey-200" />
+          </label>
+          <input
+            type="file"
+            id="file"
+            name="file"
+            style={{ display: "none" }}
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+        </div>
+        <Button
           type="submit"
           disabled={!newMessage}
-          className="uppercase font-semibold text-sm tracking-wider text-grey-500 hover:text-grey-900 dark:hover:text-white transition-colors"
+          className="btn-orange w-[46px] h-[46px] rounded-full !p-0 flex items-center justify-center"
         >
-          전송
-        </button>
+          <Send />
+        </Button>
       </form>
     </div>
   );
