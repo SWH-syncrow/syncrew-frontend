@@ -34,6 +34,22 @@ const mock = [
     status: "MATCHED" as ALERT_STATUS,
     read: true,
   },
+  {
+    id: 3,
+    friendRequestId: 1,
+    friendName: "김그루",
+    friendId: 2,
+    status: "MATCHED" as ALERT_STATUS,
+    read: true,
+  },
+  {
+    id: 4,
+    friendRequestId: 1,
+    friendName: "김그루",
+    friendId: 2,
+    status: "MATCHED" as ALERT_STATUS,
+    read: true,
+  },
 ];
 
 type ALERT_STATUS = "RECEIVED" | "REQUESTED" | "MATCHED" | "REJECTED";
@@ -132,31 +148,44 @@ const Alert = () => {
         );
     }
   };
+  const bellRef = useRef<HTMLElement | undefined>();
   return (
     <div className="relative">
       <Dialog.Root
         modal={false}
-        onOpenChange={() => {
+        onOpenChange={(open) => {
           /* read */
+          if (open) {
+            alertRef.current?.classList.add("bg-orange");
+            alertRef.current?.classList.add("[&_svg_path]:fill-white");
+          } else {
+            alertRef.current?.classList.remove("bg-orange");
+            alertRef.current?.classList.remove("[&_svg_path]:fill-white");
+          }
         }}
       >
-        <Dialog.Trigger ref={alertRef}>
-          <Bell />
+        <Dialog.Trigger
+          ref={alertRef}
+          className="duration-300 rounded-full p-1"
+        >
+          <Bell ref={bellRef} className="[&_path]:duration-300" />
         </Dialog.Trigger>
         <Dialog.Content
           className={
-            "absolute right-0 translate-x-8 top-[100%] translate-y-4 flex flex-col bg-white shadow-lg w-[340px] rounded-2xl p-8 gap-6"
+            "absolute right-0 translate-x-8 top-[100%] translate-y-4  bg-white shadow-normal w-[340px] rounded-2xl py-8 "
           }
         >
-          {alertList.map((alert) => (
-            <div
-              key={alert.id}
-              className="flex flex-col w-full pt-6 border-t border-grey-100 first:border-none first:pt-0"
-            >
-              <span className="font-medium">싱크루 알림</span>
-              {getAlertElement(alert)}
-            </div>
-          ))}
+          <div className="max-h-[500px] overflow-auto flex flex-col gap-6 px-8">
+            {alertList.map((alert) => (
+              <div
+                key={alert.id}
+                className="flex flex-col w-full pt-6 border-t border-grey-100 first:border-none first:pt-0"
+              >
+                <span className="font-medium">싱크루 알림</span>
+                {getAlertElement(alert)}
+              </div>
+            ))}
+          </div>
         </Dialog.Content>
       </Dialog.Root>
     </div>

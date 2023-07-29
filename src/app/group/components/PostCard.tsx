@@ -31,13 +31,13 @@ const PostCard = ({ id, username, temp, title, content }: Post) => {
           </div>
           <button
             onClick={() => setOpenModal(true)}
-            className="btn-orange flex items-center gap-1 font-medium h-9 w-[126px]"
+            className="btn-orange flex items-center gap-1 font-medium h-9 w-[126px] mr-9"
           >
             <Request />
             친구 신청
           </button>
         </div>
-        <div className="relative flex gap-12 justify-between w-[780px] py-9 px-10 drop-shadow-[0_2px_10px_rgba(0,0,0,0.1)] rounded-2xl bg-white">
+        <div className="relative flex gap-12 justify-between w-[816px] py-9 px-10 shadow-normal rounded-2xl bg-white">
           <div className="flex flex-col gap-[15px] min-w-0">
             <div className="leading-7 text-grey-300">{title}</div>
             <p
