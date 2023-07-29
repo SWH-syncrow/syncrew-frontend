@@ -21,13 +21,19 @@ interface Group {
 const mock = [
   {
     id: 1,
-    name: "스마트폰 초급 활용",
+    name: "스마트폰 활용 초급",
     memberCount: 5,
     postCount: 8,
   },
   {
     id: 2,
-    name: "스마트폰 중급 활용",
+    name: "스마트폰 활용 중급",
+    memberCount: 5,
+    postCount: 8,
+  },
+  {
+    id: 3,
+    name: "스마트폰 활용 고급",
     memberCount: 5,
     postCount: 8,
   },

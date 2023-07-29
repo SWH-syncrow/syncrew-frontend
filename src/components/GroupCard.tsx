@@ -1,4 +1,5 @@
 import CreatePostModal from "@components/modal/CreatePostModal";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -13,7 +14,15 @@ const GroupCard = ({ id, name, memberCount, postCount }: CardProps) => {
     <>
       <CreatePostModal groupId={id.toString()} groupName={name} />
       <div className=" h-[293px] border border-grey-50 flex flex-col rounded-xl overflow-hidden">
-        <div className="flex-1 bg-grey-0"></div>
+        <div className="flex-1 flex items-center justify-center bg-grey-0">
+          <Image
+            src={`/assets/illusts/${name.replaceAll(" ", "_")}.svg`}
+            alt="home"
+            width={0}
+            height={0}
+            className="w-auto h-[110px]"
+          />
+        </div>
         <div className="flex-1 flex flex-col justify-between py-4 px-3">
           <span className="text-lg leading-6 font-medium">{name}</span>
           <div className="flex gap-2.5 mb-[25px]">

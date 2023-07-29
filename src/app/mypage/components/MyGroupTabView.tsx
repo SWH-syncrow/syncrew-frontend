@@ -6,7 +6,7 @@ const MyGroupTabView = () => {
   const [groups, setGroups] = useState([
     {
       id: 1,
-      name: "스마트폰 초급 활용",
+      name: "스마트폰 활용 초급",
       memberCount: 5,
       postCount: 8,
     },
