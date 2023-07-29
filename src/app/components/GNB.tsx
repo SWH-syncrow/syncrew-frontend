@@ -42,7 +42,7 @@ const GNB = () => {
           <Link
             href={"/mypage"}
             className={clsx(
-              "w-full flex items-center gap-1 justify-center py-1  duration-300",
+              "w-full flex items-center gap-1 justify-center py-1 rounded-full duration-300",
               pathname === "/mypage"
                 ? "bg-orange-50 text-orange-400 [&_path]:fill-orange-400"
                 : "text-grey-300"
