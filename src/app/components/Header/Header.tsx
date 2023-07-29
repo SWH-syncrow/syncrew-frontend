@@ -32,7 +32,7 @@ const Header = () => {
       className="py-8 w-full flex justify-center sticky top-0 bg-white"
     >
       <div className="w-[918px] flex justify-end">
-        {!isLoggedIn ? <Link href={"/login"}>로그인</Link> : <Alert />}
+        {!isLoggedIn ? <Link className="btn-orange rounded-full" href={"/login"}>로그인</Link> : <Alert />}
       </div>
     </header>
   );

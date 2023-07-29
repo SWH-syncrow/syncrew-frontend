@@ -14,6 +14,8 @@ import { useRef, useState } from "react";
 import { db } from "src/lib/firebase/firebase";
 import { firebaseUtils } from "src/lib/firebase/utils";
 import Bell from "public/assets/icons/알림_inactive.svg";
+import { useAtomValue } from "jotai";
+import { userAtom } from "@app/GlobalProvider";
 
 const mock = [
   {
@@ -46,6 +48,7 @@ interface Alert {
 const Alert = () => {
   const alertRef = useRef<HTMLButtonElement | null>(null);
   const [alertList, setAlertList] = useState(mock);
+  const userAtomValue = useAtomValue(userAtom);
   // useQuery(["getAlert"], {
   //   queryFn: () => {
   //     return;
@@ -61,13 +64,13 @@ const Alert = () => {
     });
 
     Promise.all([
-      setDoc(channelDoc, {
+      setDoc(doc(channelDoc, "users", alert.friendId.toString()), {
         username: alert.friendName,
         profileImage: "",
         temp: 36.5,
       }),
-      setDoc(channelDoc, {
-        username: "김지현",
+      setDoc(doc(channelDoc, "users", userAtomValue.id.toString()), {
+        username: userAtomValue.username,
         profileImage: "",
         temp: 36.5,
       }),
@@ -77,16 +80,13 @@ const Alert = () => {
           channels: [],
         }
       ),
-      await firebaseUtils.createDocIfNotExists(
-        doc(db, "channelsOfUser", "test"),
-        {
-          channels: [],
-        }
-      ),
+      await firebaseUtils.createDocIfNotExists(doc(db, "channelsOfUser", "1"), {
+        channels: [],
+      }),
       updateDoc(doc(db, "channelsOfUser", alert.friendId.toString()), {
         channels: arrayUnion(channelDoc.id),
       }),
-      updateDoc(doc(db, "channelsOfUser", "test"), {
+      updateDoc(doc(db, "channelsOfUser", userAtomValue.id.toString()), {
         channels: arrayUnion(channelDoc.id),
       }),
     ]);
@@ -118,7 +118,10 @@ const Alert = () => {
         return (
           <>
             <span className="text-grey-300 leading-8 mb-[14px]">{`${alert.friendName}님과 친구가 매칭되었어요`}</span>
-            <Link className="btn-orange text-xs !rounded-xl text-center" href={"/chat"}>
+            <Link
+              className="btn-orange text-xs !rounded-xl text-center"
+              href={"/chat"}
+            >
               싱크루 채팅으로 이동하기
             </Link>
           </>
