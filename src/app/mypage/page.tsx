@@ -4,7 +4,7 @@ import PageContent from "./PageContent";
 
 const Page = () => {
   return (
-    <div className="w-full flex flex-col items-cente">
+    <div className="w-full">
       <PageContent />
     </div>
   );
