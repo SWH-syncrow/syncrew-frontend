@@ -2,6 +2,7 @@ import CreatePostModal from "@components/modal/CreatePostModal";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import AuthCheckButton from "./AuthCheckButton";
 
 interface CardProps {
   id: number;
@@ -34,12 +35,13 @@ const GroupCard = ({ id, name, memberCount, postCount }: CardProps) => {
             </div>
           </div>
           <div className="flex justify-between gap-1.5">
-            <Link
-              href={`/group?id=${id}`}
+            <AuthCheckButton
+              onClick={() => {}}
               className="text-center text-sm btn-orange-border flex-1"
             >
               입장
-            </Link>
+            </AuthCheckButton>
+
             <CreatePostModal.Trigger className="flex-1" />
           </div>
         </div>
