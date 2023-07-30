@@ -5,4 +5,5 @@ export interface Post {
   username: string;
   profileImage?: string;
   temp: number;
+  rejectedUsers: number[];
 }

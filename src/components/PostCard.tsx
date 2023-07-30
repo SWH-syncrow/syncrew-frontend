@@ -1,4 +1,6 @@
+import { userAtom } from "@app/GlobalProvider";
 import clsx from "clsx";
+import { useAtomValue } from "jotai";
 import Delete from "public/assets/icons/Delete.svg";
 import Vector from "public/assets/icons/Vector.svg";
 import Down from "public/assets/icons/down_sm.svg";
@@ -14,9 +16,10 @@ interface PostCardProps {
   type?: "MINE" | "REQUESTED" | "NORMAL";
 }
 const PostCard = ({
-  post: { id, username, temp, title, content },
+  post: { id, username, temp, title, content, rejectedUsers },
   type = "NORMAL",
 }: PostCardProps) => {
+  const { id: userId } = useAtomValue(userAtom);
   const [isFullView, setIsFullView] = useState(false);
   const { setModalState } = useGlobalModal();
 
@@ -39,6 +42,11 @@ const PostCard = ({
         return (
           <Button
             onClick={() => {
+              if (rejectedUsers.includes(userId))
+                return setModalState({
+                  contents: "아쉽지만 거절된 친구 신청글이에요.",
+                });
+
               //요청
               setModalState({ contents: "친구 신청이 완료되었어요" });
             }}
