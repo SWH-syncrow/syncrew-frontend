@@ -42,12 +42,12 @@ const PageContent = () => {
   const [groups, setGroups] = useState<Group[]>(mock);
   const [selectedCategory, setSelectedCategory] = useState("ALL");
 
-  useQuery(["getGroup"], {
-    queryFn: (selectedCategory) => {},
-    onSuccess: () => {
-      //setGroups
-    },
-  });
+  // useQuery(["getGroup"], {
+  //   queryFn: (selectedCategory) => {},
+  //   onSuccess: () => {
+  //     //setGroups
+  //   },
+  // });
 
   return (
     <div className="w-[1118px] px-[100px]">
