@@ -61,6 +61,7 @@ module.exports = {
       },
       white: { DEFAULT: "#FFFFFF" },
       black: { DEFAULT: "#000000" },
+      transparent: "#00000000",
     },
     extend: {
       backgroundImage: {
@@ -71,6 +72,7 @@ module.exports = {
       boxShadow: {
         normal: "2px 2px 15px 0px rgba(0,0,0,0.12)",
       },
+      
     },
   },
   plugins: [],
