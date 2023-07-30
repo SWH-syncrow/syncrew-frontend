@@ -148,7 +148,6 @@ const Alert = () => {
         );
     }
   };
-  const bellRef = useRef<HTMLElement | undefined>();
   return (
     <div className="relative">
       <Dialog.Root
@@ -168,11 +167,11 @@ const Alert = () => {
           ref={alertRef}
           className="duration-300 rounded-full p-1"
         >
-          <Bell ref={bellRef} className="[&_path]:duration-300" />
+          <Bell className="[&_path]:duration-300" />
         </Dialog.Trigger>
         <Dialog.Content
           className={
-            "absolute right-0 translate-x-8 top-[100%] translate-y-4  bg-white shadow-normal w-[340px] rounded-2xl py-8 "
+            "absolute right-0 translate-x-8 top-[100%] translate-y-4  bg-white shadow-normal w-[340px] rounded-2xl py-8 modal-arrow-sm after:!left-[calc(100%-40px)] after:-translate-x-full"
           }
         >
           <div className="max-h-[500px] overflow-auto flex flex-col gap-6 px-8">

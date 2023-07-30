@@ -1,8 +1,8 @@
+import GroupCard from "@components/GroupCard";
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useState } from "react";
 import { Button } from "src/components/Button";
-import GroupCard from "./components/GroupCard";
 
 const CATEGORIES = [
   { key: "ALL", text: "전체" },
@@ -21,13 +21,19 @@ interface Group {
 const mock = [
   {
     id: 1,
-    name: "스마트폰 초급 활용",
+    name: "스마트폰 활용 초급",
     memberCount: 5,
     postCount: 8,
   },
   {
     id: 2,
-    name: "스마트폰 중급 활용",
+    name: "스마트폰 활용 중급",
+    memberCount: 5,
+    postCount: 8,
+  },
+  {
+    id: 3,
+    name: "스마트폰 활용 고급",
     memberCount: 5,
     postCount: 8,
   },
@@ -36,12 +42,12 @@ const PageContent = () => {
   const [groups, setGroups] = useState<Group[]>(mock);
   const [selectedCategory, setSelectedCategory] = useState("ALL");
 
-  useQuery(["getGroup"], {
-    queryFn: (selectedCategory) => {},
-    onSuccess: () => {
-      //setGroups
-    },
-  });
+  // useQuery(["getGroup"], {
+  //   queryFn: (selectedCategory) => {},
+  //   onSuccess: () => {
+  //     //setGroups
+  //   },
+  // });
 
   return (
     <div className="w-[1118px] px-[100px]">

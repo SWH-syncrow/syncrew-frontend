@@ -1,7 +1,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import CreatePostModal from "../../components/modal/CreatePostModal";
-import PostCard from "./components/PostCard";
+import PostCard from "@components/PostCard";
 
 const PageContent = () => {
   const searchParams = useSearchParams();
@@ -39,7 +39,7 @@ const PageContent = () => {
   return (
     <>
       <CreatePostModal groupId={groupId} groupName={groupInfo.name} />
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col">
         <div className="border-b border-grey-50 flex justify-center mt-[77px]">
           <div className="w-[816px] flex flex-col gap-5 pb-14">
             <span className="text-xl font-medium">
@@ -76,7 +76,7 @@ const PageContent = () => {
           {posts.length > 0 && (
             <div className="mt-[50px] flex flex-col gap-[25px]">
               {posts.map((post) => (
-                <PostCard key={post.id} {...{ ...post }} />
+                <PostCard key={post.id} {...{ post }} />
               ))}
             </div>
           )}
