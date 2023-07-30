@@ -148,7 +148,6 @@ const Alert = () => {
         );
     }
   };
-  const bellRef = useRef<HTMLElement | undefined>();
   return (
     <div className="relative">
       <Dialog.Root
@@ -168,7 +167,7 @@ const Alert = () => {
           ref={alertRef}
           className="duration-300 rounded-full p-1"
         >
-          <Bell ref={bellRef} className="[&_path]:duration-300" />
+          <Bell className="[&_path]:duration-300" />
         </Dialog.Trigger>
         <Dialog.Content
           className={
