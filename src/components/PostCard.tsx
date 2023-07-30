@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { Post } from "../app/group/types";
-import { Button } from "src/components/Button";
 import clsx from "clsx";
-import Modal from "src/components/Modal";
-import Vector from "public/assets/icons/Vector.svg";
-import Request from "public/assets/icons/친구신청.svg";
-import Requested from "public/assets/icons/친구_신청_완료.svg";
 import Delete from "public/assets/icons/Delete.svg";
+import Vector from "public/assets/icons/Vector.svg";
 import Down from "public/assets/icons/down_sm.svg";
+import Requested from "public/assets/icons/친구_신청_완료.svg";
+import Request from "public/assets/icons/친구신청.svg";
+import { useState } from "react";
+import { Button } from "src/components/Button";
+import { Post } from "../app/group/types";
+import { useGlobalModal } from "./modal/GlobalModal";
 
 interface PostCardProps {
   post: Post;
@@ -18,7 +18,7 @@ const PostCard = ({
   type = "NORMAL",
 }: PostCardProps) => {
   const [isFullView, setIsFullView] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
+  const { setModalState } = useGlobalModal();
 
   const ButtonByType = () => {
     switch (type) {
@@ -38,7 +38,10 @@ const PostCard = ({
       case "NORMAL":
         return (
           <Button
-            onClick={() => setOpenModal(true)}
+            onClick={() => {
+              //요청
+              setModalState({ contents: "친구 신청이 완료되었어요" });
+            }}
             className="btn-orange flex items-center gap-1 font-medium h-9 w-[126px] mr-9"
           >
             <Request />
@@ -49,14 +52,6 @@ const PostCard = ({
   };
   return (
     <>
-      <Modal open={openModal} onOpenChange={setOpenModal}>
-        <Modal.Content className="flex flex-col">
-          친구 신청이 완료되었어요
-          <Modal.Close>
-            <Button>확인</Button>
-          </Modal.Close>
-        </Modal.Content>
-      </Modal>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between">
           <div className="text-lg font-semibold flex justify-center gap-2.5 items-center bg-orange-50 py-1 w-[170px] rounded-lg leading-7">

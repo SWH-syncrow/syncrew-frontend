@@ -6,6 +6,7 @@ import GlobalProvider from "./GlobalProvider";
 import "src/styles/globals.css";
 import GNB from "./components/GNB";
 import localFont from "next/font/local";
+import GlobalModal from "@components/modal/GlobalModal";
 
 const pretendard = localFont({
   src: "../../public/font/PretendardVariable.woff2",
@@ -29,6 +30,7 @@ export default async function RootLayout({
           <RootStyleRegistry>
             <GlobalProvider>
               <main className="flex w-full">
+                <GlobalModal />
                 <GNB />
                 {children}
               </main>
