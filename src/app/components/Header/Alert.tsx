@@ -1,4 +1,4 @@
-import useFirebaseChannel from "@app/chat/components/hooks/useFirebaseChannel";
+import { useGenerateChannel } from "@app/chat/components/hooks/useFirebaseChannel";
 import { Button } from "@components/Button";
 import { Dialog } from "@components/Dialog";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -20,24 +20,27 @@ interface Alert {
 const Alert = () => {
   const alertRef = useRef<HTMLButtonElement | null>(null);
   const [alertList, setAlertList] = useState<Alert[] | []>([]);
-  const { createChannel } = useFirebaseChannel({ getCahnnelsMode: false });
+  const { genrateChannel } = useGenerateChannel();
 
-  const { refetch } = useQuery(["getAlert"], {
-    queryFn: async () => await NotiApis.getNotifications(),
-    onSuccess: ({ data: { notifications } }) => {
-      setAlertList(notifications);
-    },
-    onError: (e) => {
-      console.error(e);
-    },
-    refetchInterval: 10000,
-  });
+  const { refetch, isLoading: isFetchNotiLoading } = useQuery(
+    ["getNotifications"],
+    {
+      queryFn: async () => await NotiApis.getNotifications(),
+      onSuccess: ({ data: { notifications } }) => {
+        setAlertList(notifications);
+      },
+      onError: (e) => {
+        console.error(e);
+      },
+      refetchInterval: 10000,
+    }
+  );
 
   const acceptFriend = useMutation({
     mutationFn: async (friendRequestId: number) =>
       await FriendApis.acceptFriend(friendRequestId),
     onSuccess: (res: any) => {
-      createChannel(res.data);
+      genrateChannel.mutate(res.data);
       refetch();
     },
     onError: (e) => {
@@ -66,12 +69,14 @@ const Alert = () => {
               <Button
                 onClick={() => rejectFriend.mutate(alert.friendRequestId)}
                 className="btn-orange-border flex-1 text-xs py-2 !rounded-xl"
+                disabled={genrateChannel.isLoading || isFetchNotiLoading}
               >
                 거절하기
               </Button>
               <Button
                 onClick={() => acceptFriend.mutate(alert.friendRequestId)}
                 className="btn-orange flex-1 text-xs py-2 !rounded-xl"
+                disabled={genrateChannel.isLoading || isFetchNotiLoading}
               >
                 수락하기
               </Button>
