@@ -50,7 +50,7 @@ export const handlers = [
     return res(
       ctx.status(200),
       ctx.json({
-        data: [
+        groups: [
           {
             id: 1,
             name: "스마트폰 활용 초급",

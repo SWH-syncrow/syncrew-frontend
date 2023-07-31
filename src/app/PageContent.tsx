@@ -1,10 +1,14 @@
 import GroupCard from "@components/GroupCard";
 import { useQuery } from "@tanstack/react-query";
+import { data } from "autoprefixer";
+import axios, { AxiosResponse } from "axios";
 import clsx from "clsx";
 import { useState } from "react";
 import { Button } from "src/components/Button";
+import { GroupsApis } from "src/lib/apis/groupsApis";
+import { GroupCategory } from "./types";
 
-const CATEGORIES = [
+const CATEGORIES: { key: GroupCategory; text: string }[] = [
   { key: "ALL", text: "전체" },
   { key: "SMARTPHONE", text: "스마트폰" },
   { key: "PPT", text: "파워포인트" },
@@ -18,36 +22,20 @@ interface Group {
   memberCount: number;
   postCount: number;
 }
-const mock = [
-  {
-    id: 1,
-    name: "스마트폰 활용 초급",
-    memberCount: 5,
-    postCount: 8,
-  },
-  {
-    id: 2,
-    name: "스마트폰 활용 중급",
-    memberCount: 5,
-    postCount: 8,
-  },
-  {
-    id: 3,
-    name: "스마트폰 활용 고급",
-    memberCount: 5,
-    postCount: 8,
-  },
-];
 const PageContent = () => {
-  const [groups, setGroups] = useState<Group[]>(mock);
-  const [selectedCategory, setSelectedCategory] = useState("ALL");
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [selectedCategory, setSelectedCategory] =
+    useState<GroupCategory>("ALL");
 
-  // useQuery(["getGroup"], {
-  //   queryFn: (selectedCategory) => {},
-  //   onSuccess: () => {
-  //     //setGroups
-  //   },
-  // });
+  useQuery(["getGroup"], {
+    queryFn: async () => GroupsApis.getGroups(selectedCategory),
+    onSuccess: (res: AxiosResponse) => {
+      setGroups(res.data.groups);
+    },
+    onError: (e) => {
+      console.error(e);
+    },
+  });
 
   return (
     <div className="w-[1118px] px-[100px]">
