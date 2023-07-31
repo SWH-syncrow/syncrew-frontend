@@ -1,9 +1,9 @@
 import { userAtom } from "@app/GlobalProvider";
 import { ChatUser, Message } from "@app/chat/types";
+import { useQuery } from "@tanstack/react-query";
 import {
   collection,
   documentId,
-  getDoc,
   getDocs,
   onSnapshot,
   orderBy,
@@ -19,12 +19,23 @@ const useFirebaseMessage = (channelID: string) => {
   const [messages, setMessages] = useState<Message[] | []>([]);
   const [chatUser, setChatUser] = useState<ChatUser>();
 
-  const getChat = async () => {
+  useQuery(["getMessages"], {
+    queryFn: async () => await getMessages(),
+    enabled: channelID !== "" && userId != -1,
+  });
+  useQuery(["getChatUser"], {
+    queryFn: async () => await getChatUser(),
+    onSuccess: (res: ChatUser) => {
+      setChatUser(res);
+    },
+    enabled: channelID !== "" && userId != -1,
+  });
+
+  const getMessages = async () => {
     const getMSGQuery = query(
       collection(db, "channel", channelID, "message"),
       orderBy("createdAt")
     );
-
     const unsubscribe = onSnapshot(getMSGQuery, (querySnapshot) => {
       const data = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
@@ -42,15 +53,8 @@ const useFirebaseMessage = (channelID: string) => {
         where(documentId(), "!=", userId.toString())
       )
     );
-    setChatUser(fbChatUser.docs[0].data() as ChatUser);
+    return fbChatUser.docs[0].data();
   };
-
-  useEffect(() => {
-    if (channelID && userId != -1) {
-      getChat();
-      getChatUser();
-    }
-  }, [channelID, userId]);
 
   return { messages, chatUser };
 };

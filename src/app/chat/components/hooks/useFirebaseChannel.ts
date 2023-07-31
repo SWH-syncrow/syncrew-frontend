@@ -1,5 +1,6 @@
 import { userAtom } from "@app/GlobalProvider";
 import { Channel, ChatUser } from "@app/chat/types";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   addDoc,
   arrayUnion,
@@ -16,62 +17,74 @@ import {
   where,
 } from "firebase/firestore";
 import { useAtomValue } from "jotai";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { db } from "src/lib/firebase/firebase";
 import { firebaseUtils } from "src/lib/firebase/utils";
 
-const useFirebaseChannel = ({
-  getCahnnelsMode = true,
-}: {
-  getCahnnelsMode?: boolean;
-}) => {
-  const [isLoading, setIsLoading] = useState(true);
+export const useGetChannels = () => {
   const [channels, setChannels] = useState<Channel[]>([]);
-  const { id: userId, username } = useAtomValue(userAtom);
+  const user = useAtomValue(userAtom);
+
+  const { isLoading: isFetchChannelLoading } = useQuery(["getChannels"], {
+    queryFn: async () => await getChannels(),
+    onSuccess: (res: Channel[]) => {
+      setChannels(res);
+    },
+    onError: (e) => console.error(e),
+    enabled: user.id != -1,
+  });
 
   const getChannels = async () => {
     const querySnapshot = await getDoc(
-      doc(db, "channelsOfUser", userId.toString())
+      doc(db, "channelsOfUser", user.id.toString())
     );
-    const channels = querySnapshot.data()?.channels;
-
+    const channelsOfUser = querySnapshot.data()?.channels;
     const channelsSnapshot = await getDocs(
       query(
         collection(db, "channel"),
-        where(documentId(), "in", channels),
+        where(documentId(), "in", channelsOfUser),
         orderBy(documentId())
         // orderBy("created_at")
       )
     );
-
-    channelsSnapshot.forEach(async (doc) => {
-      const users = await getDocs(collection(db, "channel", doc.id, "users"));
-      const chatUser = users.docs
-        .filter((user) => user.id !== userId.toString())
-        .map((user) => ({ ...user.data(), id: user.id }))[0] as ChatUser;
-      const channel = { ...doc.data(), id: doc.id, chatUser } as Channel;
-
-      setChannels((p) => [...p, channel]);
+    const resPromises = channelsSnapshot.docs.map(async (doc) => {
+      const users = await getDocs(
+        query(
+          collection(db, "channel", doc.id, "users"),
+          where(documentId(), "!=", user.id.toString())
+        )
+      );
+      const chatUser = { ...users.docs[0].data(), id: users.docs[0].id };
+      return { ...doc.data(), id: doc.id, chatUser };
     });
+
+    const res = await Promise.all(resPromises);
+    return res;
   };
 
-  const createChannel = async (friend: ChatUser) => {
+  return {
+    channels,
+    isFetchChannelLoading: isFetchChannelLoading || user.id == -1,
+  };
+};
+
+export const useGenerateChannel = () => {
+  const user = useAtomValue(userAtom);
+
+  const genrateChannel = useMutation({
+    mutationFn: async (friend: ChatUser) => await generateFBChannel(friend),
+    onError: (e) => console.error(e),
+  });
+
+  const generateFBChannel = async (friend: ChatUser) => {
     const channelDoc = await addDoc(collection(db, "channel"), {
       createdAt: serverTimestamp(),
       status: "READY",
     });
 
     Promise.all([
-      setDoc(doc(channelDoc, "users", friend.id.toString()), {
-        username: friend.username,
-        profileImage: "",
-        temp: 36.5,
-      }),
-      setDoc(doc(channelDoc, "users", userId.toString()), {
-        username,
-        profileImage: "",
-        temp: 36.5,
-      }),
+      setDoc(doc(channelDoc, "users", friend.id.toString()), friend),
+      setDoc(doc(channelDoc, "users", user.id.toString()), user),
       await firebaseUtils.createDocIfNotExists(
         doc(db, "channelsOfUser", friend.id.toString()),
         {
@@ -84,18 +97,13 @@ const useFirebaseChannel = ({
       updateDoc(doc(db, "channelsOfUser", friend.id.toString()), {
         channels: arrayUnion(channelDoc.id),
       }),
-      updateDoc(doc(db, "channelsOfUser", userId.toString()), {
+      updateDoc(doc(db, "channelsOfUser", user.id.toString()), {
         channels: arrayUnion(channelDoc.id),
       }),
     ]);
   };
 
-  useEffect(() => {
-    if (!getCahnnelsMode) return;
-    userId != -1 && getChannels().then(() => setIsLoading(false));
-  }, [userId, getCahnnelsMode]);
-
-  return { channels, isLoading, createChannel };
+  return {
+    genrateChannel,
+  };
 };
-
-export default useFirebaseChannel;

@@ -1,31 +1,35 @@
+import UserAvatar from "@components/UserAvatar";
 import { useRouter } from "next/navigation";
-import useFirebaseChannel from "./hooks/useFirebaseChannel";
 import Right from "public/assets/icons/right.svg";
-import Logo from "public/assets/logos/XS_01.svg";
 import Logo_XL from "public/assets/logos/XL_01.svg";
 import { Channel } from "../types";
-import UserAvatar from "@components/UserAvatar";
-import { useSetAtom } from "jotai";
+import { useGetChannels } from "./hooks/useFirebaseChannel";
 
 const ChannelSection = () => {
-  const { channels, isLoading } = useFirebaseChannel();
+  const { channels, isFetchChannelLoading } = useGetChannels();
 
   return (
     <div className="w-[400px] flex flex-col border-r border-grey-50">
       <div className="pt-[107px] pb-[27px] pl-8 text-lg border-b-4 border-grey-50">
         전체 대화
       </div>
-      {channels.length === 0 && (
-        <div className="flex w-full flex-1 justify-center flex-col items-center gap-[50px] -translate-y-10">
-          <Logo_XL />
-          <span className="text-grey-300 text-lg">
-            아직 나의 매칭 친구가 없어요
-          </span>
-        </div>
+      {isFetchChannelLoading ? (
+        <>loading</>
+      ) : (
+        <>
+          {channels.length === 0 && (
+            <div className="flex w-full flex-1 justify-center flex-col items-center gap-[50px] -translate-y-10">
+              <Logo_XL />
+              <span className="text-grey-300 text-lg">
+                아직 나의 매칭 친구가 없어요
+              </span>
+            </div>
+          )}
+          {channels.map((channel) => (
+            <Channel key={channel.id} {...{ channel }} />
+          ))}
+        </>
       )}
-      {channels.map((channel) => (
-        <Channel key={channel.id} {...{ channel }} />
-      ))}
     </div>
   );
 };
