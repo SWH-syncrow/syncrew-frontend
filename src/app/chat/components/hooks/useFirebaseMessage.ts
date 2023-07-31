@@ -1,39 +1,45 @@
 import { userAtom } from "@app/GlobalProvider";
 import { Message } from "@app/chat/components/types";
-import { useQuery } from "@tanstack/react-query";
 import {
+  Unsubscribe,
   collection,
   onSnapshot,
   orderBy,
-  query
+  query,
 } from "firebase/firestore";
 import { useAtomValue } from "jotai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { db } from "src/lib/firebase/firebase";
 
 const useFirebaseMessage = (channelID: string) => {
   const { id: userId } = useAtomValue(userAtom);
   const [messages, setMessages] = useState<Message[] | []>([]);
-
-  useQuery(["getMessages"], {
-    queryFn: async () => await getMessages(),
-    enabled: channelID !== "" && userId != -1,
-  });
+  const [unsubscribe, setUnsubscribe] = useState<Unsubscribe | null>(null);
 
   const getMessages = async () => {
     const getMSGQuery = query(
       collection(db, "channel", channelID, "message"),
       orderBy("createdAt")
     );
-    const unsubscribe = onSnapshot(getMSGQuery, (querySnapshot) => {
+    const uns = onSnapshot(getMSGQuery, (querySnapshot) => {
       const data = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
       }));
       setMessages(data as Message[] | []);
     });
-    return unsubscribe;
+    setUnsubscribe(() => uns);
   };
+
+  useEffect(() => {
+    if (channelID !== "" && userId != -1) getMessages();
+  }, [channelID, userId]);
+
+  useEffect(() => {
+    return () => {
+      unsubscribe && unsubscribe();
+    };
+  }, [channelID]);
 
   return { messages };
 };
