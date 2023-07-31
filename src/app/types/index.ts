@@ -5,3 +5,4 @@ export interface User {
   profileImage?: string;
   temp: number;
 }
+export type GroupCategory = "ALL" | "SMARTPHONE" | "PPT" | "VIDEO" | "PS";
