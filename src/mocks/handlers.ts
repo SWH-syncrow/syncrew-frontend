@@ -108,6 +108,18 @@ export const handlers = [
             },
             rejectedUsers: [0],
           },
+          {
+            id: 1,
+            title: "친구 구해요",
+            content: "스마트폰 잘하는 사람",
+            writer: {
+              id: 1,
+              username: "김지현",
+              profileImage: null,
+              temp: 42.0,
+            },
+            rejectedUsers: [0],
+          },
         ],
       })
     );

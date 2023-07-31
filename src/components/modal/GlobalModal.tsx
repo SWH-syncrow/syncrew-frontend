@@ -9,10 +9,12 @@ import React, { useMemo } from "react";
 interface GlobalModalState {
   contents: React.ReactNode;
   button?: React.ReactNode;
+  closeButton?: string;
 }
 
 const ModalAtom = atomWithReset<GlobalModalState>({
   contents: null,
+  closeButton: "확인",
 });
 
 export function useGlobalModal() {
@@ -36,7 +38,7 @@ export default function GlobalModal() {
         <div className="flex justify-between [&>*]:flex-1  [&>*]:h-[63px]">
           <Modal.Close>
             <Button className="btn-grey-border border-none rounded-none rounded-bl-xl">
-              확인
+              {modalData.closeButton}
             </Button>
           </Modal.Close>
           {modalData.button}

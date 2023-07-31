@@ -12,6 +12,7 @@ import { Button } from "src/components/Button";
 import { FriendApis } from "src/lib/apis/friendApis";
 import { Post } from "../app/group/types";
 import { useGlobalModal } from "./modal/GlobalModal";
+import { PostApis } from "src/lib/apis/postApis";
 
 interface PostCardProps {
   post: Post;
@@ -21,37 +22,12 @@ const PostCard = ({
   post: { id, title, content, writer, rejectedUsers },
   type = "NORMAL",
 }: PostCardProps) => {
-  const { id: userId } = useAtomValue(userAtom);
   const [isFullView, setIsFullView] = useState(false);
-  const { setModalState } = useGlobalModal();
-  const queryClient = useQueryClient();
-
-  const requestFriend = useMutation({
-    mutationFn: async ({
-      userId,
-      postId,
-    }: {
-      userId: number;
-      postId: number;
-    }) => await FriendApis.requestFriend({ userId, postId }),
-    onSuccess: () => {
-      setModalState({ contents: "친구 신청이 완료되었어요" });
-      queryClient.invalidateQueries(["getGroupPosts"]);
-    },
-    onError: (e) => {
-      alert("친구 신청이 실패했어요");
-      console.error(e);
-    },
-  });
 
   const ButtonByType = () => {
     switch (type) {
       case "MINE":
-        return (
-          <Button className="mr-9 !p-0">
-            <Delete />
-          </Button>
-        );
+        return <PostCard.DeleteButton postId={id} />;
       case "REQUESTED":
         return (
           <div className="btn-orange flex items-center gap-1 font-medium h-9 mr-9 cursor-default">
@@ -61,19 +37,9 @@ const PostCard = ({
         );
       case "NORMAL":
         return (
-          <Button
-            onClick={() => {
-              if (rejectedUsers.includes(userId))
-                return setModalState({
-                  contents: "아쉽지만 거절된 친구 신청글이에요.",
-                });
-              requestFriend.mutate({ userId, postId: id });
-            }}
-            className="btn-orange flex items-center gap-1 font-medium h-9 w-[126px] mr-9"
-          >
-            <Request />
-            친구 신청
-          </Button>
+          <PostCard.AcceptButton
+            {...{ id, title, content, writer, rejectedUsers }}
+          />
         );
     }
   };
@@ -120,5 +86,84 @@ const PostCard = ({
     </>
   );
 };
+
+const DeleteButton = ({ postId }: { postId: number }) => {
+  const { setModalState, resetState } = useGlobalModal();
+  const queryClient = useQueryClient();
+  const deletePost = useMutation({
+    mutationFn: async (postId: number) => await PostApis.deletePost(postId),
+    onSuccess: () => {
+      resetState();
+      queryClient.invalidateQueries(["getGroupPosts"]);
+    },
+    onError: (e) => {
+      console.error(e);
+    },
+  });
+  return (
+    <Button
+      onClick={() => {
+        setModalState({
+          contents: "신청글을 삭제하시겠습니까?",
+          closeButton: "취소",
+          button: (
+            <Button
+              className="btn-orange rounded-none rounded-br-xl"
+              onClick={() => deletePost.mutate(postId)}
+            >
+              확인
+            </Button>
+          ),
+        });
+      }}
+      className="mr-9 !p-0"
+    >
+      <Delete />
+    </Button>
+  );
+};
+DeleteButton.displayName = "deleteButton";
+PostCard.DeleteButton = DeleteButton;
+
+const AcceptButton = ({ id, rejectedUsers }: Post) => {
+  const { id: userId } = useAtomValue(userAtom);
+  const { setModalState } = useGlobalModal();
+  const queryClient = useQueryClient();
+
+  const requestFriend = useMutation({
+    mutationFn: async ({
+      userId,
+      postId,
+    }: {
+      userId: number;
+      postId: number;
+    }) => await FriendApis.requestFriend({ userId, postId }),
+    onSuccess: () => {
+      setModalState({ contents: "친구 신청이 완료되었어요" });
+      queryClient.invalidateQueries(["getGroupPosts"]);
+    },
+    onError: (e) => {
+      alert("친구 신청이 실패했어요");
+      console.error(e);
+    },
+  });
+  return (
+    <Button
+      onClick={() => {
+        if (rejectedUsers.includes(userId))
+          return setModalState({
+            contents: "아쉽지만 거절된 친구 신청글이에요.",
+          });
+        requestFriend.mutate({ userId, postId: id });
+      }}
+      className="btn-orange flex items-center gap-1 font-medium h-9 w-[126px] mr-9"
+    >
+      <Request />
+      친구 신청
+    </Button>
+  );
+};
+AcceptButton.displayName = "acceptButton";
+PostCard.AcceptButton = AcceptButton;
 
 export default PostCard;
