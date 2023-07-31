@@ -4,7 +4,7 @@ import { Dialog } from "@components/Dialog";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import Bell from "public/assets/icons/알림_inactive.svg";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { FriendApis } from "src/lib/apis/friendApis";
 import { NotiApis } from "src/lib/apis/notiApis";
 
@@ -59,52 +59,55 @@ const Alert = () => {
     },
   });
 
-  const getAlertElement = (alert: Alert) => {
-    switch (alert.status) {
-      case "RECEIVED":
-        return (
-          <>
-            <span className="text-grey-300 leading-8 mb-[14px]">{`${alert.friendName}님이 친구요청을 보냈어요`}</span>
-            <div className="flex justify-between gap-3">
-              <Button
-                onClick={() => rejectFriend.mutate(alert.friendRequestId)}
-                className="btn-orange-border flex-1 text-xs py-2 !rounded-xl"
-                disabled={genrateChannel.isLoading || isFetchNotiLoading}
+  const getAlertElement = useCallback(
+    (alert: Alert) => {
+      switch (alert.status) {
+        case "RECEIVED":
+          return (
+            <>
+              <span className="text-grey-300 leading-8 mb-[14px]">{`${alert.friendName}님이 친구요청을 보냈어요`}</span>
+              <div className="flex justify-between gap-3">
+                <Button
+                  onClick={() => rejectFriend.mutate(alert.friendRequestId)}
+                  className="btn-orange-border flex-1 text-xs py-2 !rounded-xl"
+                  disabled={acceptFriend.isLoading || rejectFriend.isLoading}
+                >
+                  거절하기
+                </Button>
+                <Button
+                  onClick={() => acceptFriend.mutate(alert.friendRequestId)}
+                  className="btn-orange flex-1 text-xs py-2 !rounded-xl"
+                  disabled={acceptFriend.isLoading || rejectFriend.isLoading}
+                >
+                  수락하기
+                </Button>
+              </div>
+            </>
+          );
+        case "REQUESTED":
+          return (
+            <span className="text-grey-300 leading-8">{`${alert.friendName}님에게 친구요청을 보냈어요`}</span>
+          );
+        case "MATCHED":
+          return (
+            <>
+              <span className="text-grey-300 leading-8 mb-[14px]">{`${alert.friendName}님과 친구가 매칭되었어요`}</span>
+              <Link
+                className="btn-orange text-xs !rounded-xl text-center"
+                href={"/chat"}
               >
-                거절하기
-              </Button>
-              <Button
-                onClick={() => acceptFriend.mutate(alert.friendRequestId)}
-                className="btn-orange flex-1 text-xs py-2 !rounded-xl"
-                disabled={genrateChannel.isLoading || isFetchNotiLoading}
-              >
-                수락하기
-              </Button>
-            </div>
-          </>
-        );
-      case "REQUESTED":
-        return (
-          <span className="text-grey-300 leading-8">{`${alert.friendName}님에게 친구요청을 보냈어요`}</span>
-        );
-      case "MATCHED":
-        return (
-          <>
-            <span className="text-grey-300 leading-8 mb-[14px]">{`${alert.friendName}님과 친구가 매칭되었어요`}</span>
-            <Link
-              className="btn-orange text-xs !rounded-xl text-center"
-              href={"/chat"}
-            >
-              싱크루 채팅으로 이동하기
-            </Link>
-          </>
-        );
-      case "REJECTED":
-        return (
-          <span className="text-grey-300 leading-8">{`${alert.friendName}님이 친구요청을 거절했어요`}</span>
-        );
-    }
-  };
+                싱크루 채팅으로 이동하기
+              </Link>
+            </>
+          );
+        case "REJECTED":
+          return (
+            <span className="text-grey-300 leading-8">{`${alert.friendName}님이 친구요청을 거절했어요`}</span>
+          );
+      }
+    },
+    [acceptFriend, rejectFriend]
+  );
 
   return (
     <div className="relative">

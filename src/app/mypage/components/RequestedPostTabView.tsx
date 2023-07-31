@@ -28,13 +28,13 @@ const RequestedPostTabView = () => {
           </Link>
         </div>
       )}
-      {posts.length > 0 && (
+      {/* {posts.length > 0 && (
         <div className="mt-[50px] flex flex-col gap-[25px]">
           {posts.map((post) => (
             <PostCard key={post.id} {...{ post }} type="REQUESTED" />
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 };
