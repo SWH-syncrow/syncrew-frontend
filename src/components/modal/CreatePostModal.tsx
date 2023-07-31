@@ -5,6 +5,7 @@ import { Input } from "src/components/Input";
 import Modal from "src/components/Modal";
 import TextArea from "src/components/TextArea";
 import Prev from "public/assets/icons/left.svg";
+import AuthCheckButton from "@components/AuthCheckButton";
 
 interface CreatePostModalProps {
   groupId: string;
@@ -53,12 +54,12 @@ const CreatePostModal = ({ groupId, groupName }: CreatePostModalProps) => {
 const CreatePostModalTrigger = ({ className }: { className?: string }) => {
   const setOpenAtom = useSetAtom(modalOpenAtom);
   return (
-    <Button
+    <AuthCheckButton
       onClick={() => setOpenAtom(true)}
       className={clsx("btn-orange", className)}
     >
       신청 글쓰기
-    </Button>
+    </AuthCheckButton>
   );
 };
 CreatePostModal.Trigger = CreatePostModalTrigger;

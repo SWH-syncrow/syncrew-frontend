@@ -12,6 +12,7 @@ const RequestedPostTabView = () => {
       username: "김지현",
       profileImage: "",
       temp: 42.0,
+      rejectedUsers: [],
     },
   ]);
   return (
