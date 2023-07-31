@@ -1,7 +1,7 @@
 "use client";
 
-import PageContent from "./PageContent";
 import Header from "./components/Header/Header";
+import PageContent from "./components/PageContent";
 
 const Home = () => {
   return (

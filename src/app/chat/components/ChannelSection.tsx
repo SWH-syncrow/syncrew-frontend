@@ -4,6 +4,7 @@ import Right from "public/assets/icons/right.svg";
 import Logo_XL from "public/assets/logos/XL_01.svg";
 import { useGetChannels } from "./hooks/useFirebaseChannel";
 import { Channel } from "./types";
+import LoadingUI from "@components/LoadingUI";
 
 const ChannelSection = () => {
   const { channels, isFetchChannelLoading } = useGetChannels();
@@ -14,7 +15,12 @@ const ChannelSection = () => {
         전체 대화
       </div>
       {isFetchChannelLoading ? (
-        <>loading</>
+        <div className="flex w-full flex-1 justify-center flex-col items-center gap-[50px] -translate-y-10">
+          <div className="flex flex-col items-center gap-6">
+            <LoadingUI className="w-10 h-10" />
+            <span className="text-grey-200">loading ...</span>
+          </div>
+        </div>
       ) : (
         <>
           {Object.keys(channels).length === 0 && (

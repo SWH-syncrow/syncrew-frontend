@@ -6,7 +6,7 @@ import clsx from "clsx";
 import { useState } from "react";
 import { Button } from "src/components/Button";
 import { GroupsApis } from "src/lib/apis/groupsApis";
-import { GroupCategory } from "./types";
+import { GroupCategory } from "../types";
 
 const CATEGORIES: { key: GroupCategory; text: string }[] = [
   { key: "ALL", text: "전체" },

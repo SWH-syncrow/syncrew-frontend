@@ -1,4 +1,5 @@
-"use client"
+"use client";
+import LoadingScreen from "@components/LoadingScreen";
 import React, { PropsWithChildren, useEffect, useState } from "react";
 
 const MswProvider = ({ children }: PropsWithChildren) => {
@@ -15,7 +16,7 @@ const MswProvider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
-  return <>{shouldRender ? children : "loading mocks"}</>;
+  return <>{shouldRender ? children : <LoadingScreen />}</>;
 };
 
 export default MswProvider;
