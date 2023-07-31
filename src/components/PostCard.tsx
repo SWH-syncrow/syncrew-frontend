@@ -1,4 +1,5 @@
 import { userAtom } from "@app/GlobalProvider";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useAtomValue } from "jotai";
 import Delete from "public/assets/icons/Delete.svg";
@@ -8,6 +9,7 @@ import Requested from "public/assets/icons/친구_신청_완료.svg";
 import Request from "public/assets/icons/친구신청.svg";
 import { useState } from "react";
 import { Button } from "src/components/Button";
+import { FriendApis } from "src/lib/apis/friendApis";
 import { Post } from "../app/group/types";
 import { useGlobalModal } from "./modal/GlobalModal";
 
@@ -22,6 +24,25 @@ const PostCard = ({
   const { id: userId } = useAtomValue(userAtom);
   const [isFullView, setIsFullView] = useState(false);
   const { setModalState } = useGlobalModal();
+  const queryClient = useQueryClient();
+
+  const requestFriend = useMutation({
+    mutationFn: async ({
+      userId,
+      postId,
+    }: {
+      userId: number;
+      postId: number;
+    }) => await FriendApis.requestFriend({ userId, postId }),
+    onSuccess: () => {
+      setModalState({ contents: "친구 신청이 완료되었어요" });
+      queryClient.invalidateQueries(["getGroupPosts"]);
+    },
+    onError: (e) => {
+      alert("친구 신청이 실패했어요");
+      console.error(e);
+    },
+  });
 
   const ButtonByType = () => {
     switch (type) {
@@ -46,9 +67,7 @@ const PostCard = ({
                 return setModalState({
                   contents: "아쉽지만 거절된 친구 신청글이에요.",
                 });
-
-              //요청
-              setModalState({ contents: "친구 신청이 완료되었어요" });
+              requestFriend.mutate({ userId, postId: id });
             }}
             className="btn-orange flex items-center gap-1 font-medium h-9 w-[126px] mr-9"
           >

@@ -7,7 +7,7 @@ export const handlers = [
       ctx.json({
         user: {
           id: 1,
-          name: "김지현",
+          username: "김지현",
           email: "test@gmail.com",
           profileImage: null,
           temp: 36.5,
@@ -36,7 +36,7 @@ export const handlers = [
       ctx.status(200),
       ctx.json({
         id: 1,
-        name: "김지현",
+        username: "김지현",
         email: "test@gmail.com",
         profileImage: null,
         temp: 36.5,
@@ -120,7 +120,7 @@ export const handlers = [
       ctx.status(200),
       ctx.json({
         id: 3,
-        name: "김그루",
+        username: "김그루",
         email: "grew@gmail.com",
         profileImage: null,
         temp: 36.5,
@@ -186,7 +186,7 @@ export const handlers = [
     return res(
       ctx.status(200),
       ctx.json({
-        data: [
+        notifications: [
           {
             id: 1,
             friendRequestId: 1,
