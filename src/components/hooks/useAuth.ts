@@ -1,37 +1,49 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
+import { isLoggedInAtom, userAtom } from "@app/GlobalProvider";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useSetAtom } from "jotai";
+import { useResetAtom } from "jotai/utils";
 import {
   getRefreshTokenFromCookie,
   setRefreshTokenToCookie,
 } from "../serverAuth";
-import { useSetAtom } from "jotai";
-import { isLoggedInAtom, userAtom } from "@app/GlobalProvider";
-import { useResetAtom } from "jotai/utils";
-import { cookies } from "next/dist/client/components/headers";
+import { AuthUserApis } from "src/lib/apis/authUserApis";
+import { useEffect, useState } from "react";
 const useAuth = () => {
+  const [accessToken, setAccessToken] = useState("");
   const setUserAtom = useSetAtom(userAtom);
   const resetUserAtom = useResetAtom(userAtom);
   const setIsLoggedInAtom = useSetAtom(isLoggedInAtom);
   const resetIsLoggedInAtom = useResetAtom(userAtom);
 
-  useQuery(["reissue"], {
-    queryFn: async () => {
+  useEffect(() => {
+    (async () => {
       const refresh = (await getRefreshTokenFromCookie())?.value || "";
-      if (refresh === "") throw new Error("logout");
+      if (refresh !== "") reissueToken.mutate(refresh);
+    })();
+  }, []);
 
-      return { data: { access_token: "Test", refresh_token: "test" } };
+  const reissueToken = useMutation({
+    mutationFn: async (refreshToken: string) =>
+      await AuthUserApis.reissueToken(refreshToken),
+    onSuccess: (res: any) => {
+      const { accessToken, refreshToken } = res.data;
+      axios.defaults.headers.common["Authorization"] = `${accessToken}`;
+      setRefreshTokenToCookie(refreshToken);
+      setAccessToken(accessToken);
     },
+    onError: (err) => {
+      console.error(err);
+      resetUserAtom();
+      resetIsLoggedInAtom();
+    },
+  });
+
+  useQuery(["getUser"], {
+    queryFn: async () => await AuthUserApis.getUser(),
     onSuccess: ({ data }) => {
-      const { access_token, refresh_token } = data;
-      axios.defaults.headers.common["Authorization"] = `${access_token}`;
-      setRefreshTokenToCookie(refresh_token);
-      setUserAtom({
-        id: 1,
-        username: "김지현",
-        email: "test@example.com",
-        temp: 36.5,
-      });
+      setUserAtom(data);
       setIsLoggedInAtom(true);
     },
     onError: (err) => {
@@ -39,6 +51,7 @@ const useAuth = () => {
       resetUserAtom();
       resetIsLoggedInAtom();
     },
+    enabled: accessToken !== "",
   });
 
   return;

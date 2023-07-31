@@ -3,15 +3,19 @@ import { setRefreshTokenToCookie } from "@components/serverAuth";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useSetAtom } from "jotai";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { KakaoAuth } from "src/lib/apis/KakaoAuth";
+import { AuthUserApis } from "src/lib/apis/authUserApis";
 
 const useAuthKakao = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const query = searchParams?.get("code");
   const setUserAtom = useSetAtom(userAtom);
   const setIsLoggedInAtom = useSetAtom(isLoggedInAtom);
+  const storage = globalThis?.sessionStorage;
+  const prevPath = storage.getItem("prevPath") || "";
 
   const getKakaoToken = useMutation({
     mutationFn: async (code: string) => {
@@ -32,28 +36,28 @@ const useAuthKakao = () => {
       return await KakaoAuth.getToken(queryString);
     },
     onSuccess: (res: any) => {
-      // getAuthFromServer.mutate(res.data.access_token);
-      //임시
-      setUserAtom({
-        id: 1,
-        username: "김지현",
-        email: "test@example.com",
-        temp: 36.5,
-      });
-      setIsLoggedInAtom(true);
+      kakaoLogin.mutate(res.data.access_token);
     },
     retry: false,
   });
 
-  const getAuthFromServer = useMutation({
-    mutationFn: async (kakao_access_token: string) => {
-      return;
-    },
+  const kakaoLogin = useMutation({
+    mutationFn: async (kakao_access_token: string) =>
+      await AuthUserApis.kakaoLogin(kakao_access_token),
     onSuccess: (res: any) => {
-      const { access_token, refresh_token } = res.data;
-      axios.defaults.headers.common["Authorization"] = `${access_token}`;
-      setRefreshTokenToCookie(refresh_token);
-      // user 정보 저장
+      const {
+        user,
+        token: { accessToken, refreshToken },
+      } = res.data;
+      axios.defaults.headers.common["Authorization"] = `${accessToken}`;
+      setRefreshTokenToCookie(refreshToken);
+      setUserAtom(user);
+      setIsLoggedInAtom(true);
+      prevPath === "" ? router.push("/") : router.push(prevPath);
+    },
+    onError: (e) => {
+      alert("로그인에 실패했어요");
+      console.error(e);
     },
   });
 
@@ -64,7 +68,7 @@ const useAuthKakao = () => {
   }, [query]);
 
   return {
-    isLoading: getKakaoToken.isLoading || getAuthFromServer.isLoading,
+    isLoading: getKakaoToken.isLoading || kakaoLogin.isLoading,
   };
 };
 

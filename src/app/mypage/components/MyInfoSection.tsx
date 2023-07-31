@@ -1,13 +1,31 @@
-import { userAtom } from "@app/GlobalProvider";
+import { isLoggedInAtom, userAtom } from "@app/GlobalProvider";
 import { Button } from "@components/Button";
 import ToolTip from "@components/Tooltip";
 import UserAvatar from "@components/UserAvatar";
 import { useAtomValue } from "jotai";
 import React from "react";
 import Question from "public/assets/icons/question.svg";
+import { useMutation } from "@tanstack/react-query";
+import { AuthUserApis } from "src/lib/apis/authUserApis";
+import { useResetAtom } from "jotai/utils";
+import { useRouter } from "next/navigation";
 
 const MyInfoSection = () => {
+  const router = useRouter();
   const user = useAtomValue(userAtom);
+  const resetIsLoggedIn = useResetAtom(isLoggedInAtom);
+  const resetUser = useResetAtom(userAtom);
+  const logout = useMutation({
+    mutationFn: async () => await AuthUserApis.kakaoLogout(),
+    onSuccess: () => {
+      resetUser();
+      resetIsLoggedIn();
+      router.push("/");
+    },
+    onError: (e) => {
+      console.error(e);
+    },
+  });
   return (
     <div className="flex justify-between w-[900px]">
       <div className="flex items-center gap-3">
@@ -33,7 +51,10 @@ const MyInfoSection = () => {
           <span className="text-grey-300">{user.email}</span>
         </div>
       </div>
-      <Button className="btn-grey-border rounded-full text-sm h-9 !py-0">
+      <Button
+        onClick={() => logout.mutate()}
+        className="btn-grey-border rounded-full text-sm h-9 !py-0"
+      >
         로그아웃
       </Button>
     </div>
