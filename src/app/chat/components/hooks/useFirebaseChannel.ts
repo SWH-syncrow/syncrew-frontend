@@ -1,5 +1,5 @@
 import { userAtom } from "@app/GlobalProvider";
-import { Channel, ChatUser } from "@app/chat/types";
+import { Channel, ChannelsObj, ChatUser } from "@app/chat/components/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   addDoc,
@@ -16,19 +16,26 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { useAtomValue } from "jotai";
-import { useState } from "react";
+import { useAtom, useAtomValue } from "jotai";
 import { db } from "src/lib/firebase/firebase";
 import { firebaseUtils } from "src/lib/firebase/utils";
+import { channelsAtom } from "../ChatProvider";
 
 export const useGetChannels = () => {
-  const [channels, setChannels] = useState<Channel[]>([]);
+  const [channels, setChannels] = useAtom(channelsAtom);
   const user = useAtomValue(userAtom);
 
   const { isLoading: isFetchChannelLoading } = useQuery(["getChannels"], {
     queryFn: async () => await getChannels(),
     onSuccess: (res: Channel[]) => {
-      setChannels(res);
+      setChannels(
+        res.reduce(
+          (channels: ChannelsObj, curr) => (
+            (channels[curr.id] = { ...curr }), channels
+          ),
+          {}
+        )
+      );
     },
     onError: (e) => console.error(e),
     enabled: user.id != -1,
@@ -72,12 +79,25 @@ export const useGenerateChannel = () => {
   const user = useAtomValue(userAtom);
 
   const genrateChannel = useMutation({
-    mutationFn: async (friend: ChatUser) => await generateFBChannel(friend),
+    mutationFn: async ({
+      friend,
+      friendRequestId,
+    }: {
+      friend: ChatUser;
+      friendRequestId: number;
+    }) => await generateFBChannel({ friend, friendRequestId }),
     onError: (e) => console.error(e),
   });
 
-  const generateFBChannel = async (friend: ChatUser) => {
+  const generateFBChannel = async ({
+    friend,
+    friendRequestId,
+  }: {
+    friend: ChatUser;
+    friendRequestId: number;
+  }) => {
     const channelDoc = await addDoc(collection(db, "channel"), {
+      friendRequestId,
       createdAt: serverTimestamp(),
       status: "READY",
     });

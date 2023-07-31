@@ -2,8 +2,8 @@ import UserAvatar from "@components/UserAvatar";
 import { useRouter } from "next/navigation";
 import Right from "public/assets/icons/right.svg";
 import Logo_XL from "public/assets/logos/XL_01.svg";
-import { Channel } from "../types";
 import { useGetChannels } from "./hooks/useFirebaseChannel";
+import { Channel } from "./types";
 
 const ChannelSection = () => {
   const { channels, isFetchChannelLoading } = useGetChannels();
@@ -17,7 +17,7 @@ const ChannelSection = () => {
         <>loading</>
       ) : (
         <>
-          {channels.length === 0 && (
+          {Object.keys(channels).length === 0 && (
             <div className="flex w-full flex-1 justify-center flex-col items-center gap-[50px] -translate-y-10">
               <Logo_XL />
               <span className="text-grey-300 text-lg">
@@ -25,8 +25,8 @@ const ChannelSection = () => {
               </span>
             </div>
           )}
-          {channels.map((channel) => (
-            <Channel key={channel.id} {...{ channel }} />
+          {Object.keys(channels).map((channelId) => (
+            <Channel key={channelId} {...{ channel: channels[channelId] }} />
           ))}
         </>
       )}
