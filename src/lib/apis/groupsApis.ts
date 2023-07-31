@@ -13,5 +13,25 @@ const getGroups = async (category: GroupCategory) => {
     return error;
   }
 };
+const enterGroup = async (groupId: number) => {
+  try {
+    const res = await axios.post(`/api/group/${groupId}/enter`);
 
-export const GroupsApis = { getGroups };
+    return res;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
+
+const getGroupPosts = async (groupId: number) => {
+  try {
+    const res = await axios.get(`/api/groups/${groupId}/posts`);
+
+    return res;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
+export const GroupsApis = { getGroups, enterGroup, getGroupPosts };

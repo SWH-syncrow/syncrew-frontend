@@ -16,7 +16,7 @@ interface PostCardProps {
   type?: "MINE" | "REQUESTED" | "NORMAL";
 }
 const PostCard = ({
-  post: { id, username, temp, title, content, rejectedUsers },
+  post: { id, title, content, writer, rejectedUsers },
   type = "NORMAL",
 }: PostCardProps) => {
   const { id: userId } = useAtomValue(userAtom);
@@ -63,10 +63,10 @@ const PostCard = ({
       <div className="flex flex-col gap-4">
         <div className="flex justify-between">
           <div className="text-lg font-semibold flex justify-center gap-2.5 items-center bg-orange-50 py-1 w-[170px] rounded-lg leading-7">
-            {username}
+            {writer.username}
             <Vector />
             <span className="text-sm font-normal text-orange-400">
-              {temp}˚C
+              {writer.temp}˚C
             </span>
           </div>
           <ButtonByType />
@@ -78,7 +78,7 @@ const PostCard = ({
               className={clsx(
                 !isFullView &&
                   "text-ellipsis line-clamp-2 h-[48px] text-grey-500",
-                "leading-6 break-words"
+                "leading-6 break-words min-h-[48px]"
               )}
             >
               {content}

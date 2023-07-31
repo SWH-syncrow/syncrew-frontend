@@ -1,7 +1,8 @@
 import CreatePostModal from "@components/modal/CreatePostModal";
+import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
-import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import { GroupsApis } from "src/lib/apis/groupsApis";
 import AuthCheckButton from "./AuthCheckButton";
 
 interface CardProps {
@@ -11,6 +12,17 @@ interface CardProps {
   postCount: number;
 }
 const GroupCard = ({ id, name, memberCount, postCount }: CardProps) => {
+  const router = useRouter();
+  const enterGroup = useMutation({
+    mutationFn: async (groupdId: number) =>
+      await GroupsApis.enterGroup(groupdId),
+    onSuccess: () => {
+      router.push(`/group?id=${id}`);
+    },
+    onError: (e) => {
+      console.error(e);
+    },
+  });
   return (
     <>
       <CreatePostModal groupId={id.toString()} groupName={name} />
@@ -36,7 +48,7 @@ const GroupCard = ({ id, name, memberCount, postCount }: CardProps) => {
           </div>
           <div className="flex justify-between gap-1.5">
             <AuthCheckButton
-              onClick={() => {}}
+              onClick={() => enterGroup.mutate(id)}
               className="text-center text-sm btn-orange-border flex-1"
             >
               입장

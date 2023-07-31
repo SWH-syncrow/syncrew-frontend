@@ -1,9 +1,16 @@
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import CreatePostModal from "../../components/modal/CreatePostModal";
+import { userAtom } from "@app/GlobalProvider";
 import PostCard from "@components/PostCard";
+import { useQuery } from "@tanstack/react-query";
+import { AxiosResponse } from "axios";
+import { useAtomValue } from "jotai";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { GroupsApis } from "src/lib/apis/groupsApis";
+import CreatePostModal from "../../components/modal/CreatePostModal";
+import { Post } from "./types";
 
 const PageContent = () => {
+  const { id: userId } = useAtomValue(userAtom);
   const searchParams = useSearchParams();
   const groupId = searchParams?.get("id") || "";
   const [groupInfo, setGroupInfo] = useState({
@@ -11,32 +18,21 @@ const PageContent = () => {
     memeberCount: 1,
     postCount: 1,
   });
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      title: "친구 구해요",
-      content:
-        "안녕하세요! SNS를 사용하는 김그루 입니다. SNS 활용에 있어 필요한 앱 서비스를 사용해보고 정보를 공유할 친구를 구합니다. ddsjhfakjsdhfkajsdhflkjasdhflkjhasdkljfhalksjdhfaskljfhaskljdskajdfhakjsdfhksajdhfkajhfaskjkajsdfhaksj",
-      username: "소미",
-      profileImage: "",
-      temp: 42.0,
-      rejectedUsers: [],
-    },
-    {
-      id: 2,
-      title: "친구 구해요",
-      content:
-        "안녕하세요! SNS를 사용하는 김그루 입니다. SNS 활용에 있어 필요한 앱 서비스를 사용해보고 정보를 공유할 친구를 구합니다. ddsjhfakjsdhfkajsdhflkjasdhflkjhasdkljfhalksjdhfaskljfhaskljdskajdfhakjsdfhksajdhfkajhfaskjkajsdfhaksj",
-      username: "소미",
-      profileImage: "",
-      temp: 42.0,
-      rejectedUsers: [],
-    },
-  ]);
+  const [posts, setPosts] = useState<Post[] | []>([]);
 
-  useEffect(() => {
-    //get
-  }, [groupId]);
+  useQuery(["getGroupPosts"], {
+    queryFn: async () => await GroupsApis.getGroupPosts(parseInt(groupId)),
+    onSuccess: ({
+      data: { name, memeberCount, postCount, posts },
+    }: AxiosResponse) => {
+      setGroupInfo({ name, memeberCount, postCount });
+      setPosts(posts);
+    },
+    onError: (e) => {
+      console.error(e);
+    },
+    enabled: groupId !== "",
+  });
 
   return (
     <>
@@ -78,7 +74,11 @@ const PageContent = () => {
           {posts.length > 0 && (
             <div className="mt-[50px] flex flex-col gap-[25px]">
               {posts.map((post) => (
-                <PostCard key={post.id} {...{ post }} />
+                <PostCard
+                  key={post.id}
+                  {...{ post }}
+                  type={post.writer.id === userId ? "MINE" : "NORMAL"}
+                />
               ))}
             </div>
           )}
