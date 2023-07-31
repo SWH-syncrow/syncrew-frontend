@@ -20,6 +20,7 @@ const PageContent = () => {
       username: "소미",
       profileImage: "",
       temp: 42.0,
+      rejectedUsers: [],
     },
     {
       id: 2,
@@ -29,6 +30,7 @@ const PageContent = () => {
       username: "소미",
       profileImage: "",
       temp: 42.0,
+      rejectedUsers: [],
     },
   ]);
 
