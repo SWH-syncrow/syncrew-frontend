@@ -1,6 +1,8 @@
 import GroupCard from "@components/GroupCard";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import React, { useState } from "react";
+import { MypageApis } from "src/lib/apis/mypageApis";
 
 const MyGroupTabView = () => {
   const [groups, setGroups] = useState([
@@ -11,6 +13,16 @@ const MyGroupTabView = () => {
       postCount: 8,
     },
   ]);
+  useQuery(["getMyGroups"], {
+    queryFn: async () => await MypageApis.getMyGropus(),
+    onSuccess: ({ data }) => {
+      setGroups(data.groups);
+    },
+    onError: (e) => {
+      console.error(e);
+    },
+  });
+
   return (
     <div>
       {groups.length === 0 && (

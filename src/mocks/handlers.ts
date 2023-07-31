@@ -143,7 +143,7 @@ export const handlers = [
     return res(
       ctx.status(200),
       ctx.json({
-        data: [
+        posts: [
           {
             id: 1,
             title: "친구 구해요",
@@ -176,7 +176,7 @@ export const handlers = [
     return res(
       ctx.status(200),
       ctx.json({
-        data: [
+        groups: [
           {
             id: 1,
             name: "스마트폰 활용 초급",
