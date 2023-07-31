@@ -1,20 +1,23 @@
+import { Post } from "@app/group/types";
 import PostCard from "@components/PostCard";
 import CreatePostModal from "@components/modal/CreatePostModal";
+import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
+import { MypageApis } from "src/lib/apis/mypageApis";
 
 const MyPostTabView = () => {
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      title: "친구 구해요",
-      content:
-        "안녕하세요! SNS를 사용하는 김그루 입니다. SNS 활용에 있어 필요한 앱 서비스를 사용해보고 정보를 공유할 친구를 구합니다. ddsjhfakjsdhfkajsdhflkjasdhflkjhasdkljfhalksjdhfaskljfhaskljdskajdfhakjsdfhksajdhfkajhfaskjkajsdfhaksj",
-      username: "김지현",
-      profileImage: "",
-      temp: 42.0,
-      rejectedUsers: [],
+  const [posts, setPosts] = useState<Post[]>([]);
+
+  useQuery(["getMyPosts"], {
+    queryFn: async () => await MypageApis.getMyPosts(),
+    onSuccess: ({ data }) => {
+      setPosts(data.posts);
     },
-  ]);
+    onError: (e) => {
+      console.error(e);
+    },
+  });
+
   return (
     <>
       {/* <CreatePostModal /> */}

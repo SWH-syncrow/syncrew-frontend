@@ -27,7 +27,7 @@ const PageContent = () => {
                 selectedTab === "REQUESTED_POST" ? "visible" : "hidden"
               )}
             >
-              <RequestedPostTabView />
+              {/* <RequestedPostTabView /> */}
             </div>
             <div
               className={clsx(

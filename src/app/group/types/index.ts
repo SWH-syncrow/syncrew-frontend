@@ -2,8 +2,11 @@ export interface Post {
   id: number;
   title: string;
   content: string;
-  username: string;
-  profileImage?: string;
-  temp: number;
+  writer: {
+    id: number;
+    username: string;
+    profileImage?: string;
+    temp: number;
+  };
   rejectedUsers: number[];
 }

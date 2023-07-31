@@ -1,7 +1,12 @@
 export interface Channel {
   id: string;
+  friendRequestId: number;
   status: "READY" | "DOING";
   chatUser: ChatUser;
+}
+
+export interface ChannelsObj {
+  [key: string]: Channel;
 }
 
 export interface ChatUser {

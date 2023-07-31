@@ -9,10 +9,12 @@ import React, { useMemo } from "react";
 interface GlobalModalState {
   contents: React.ReactNode;
   button?: React.ReactNode;
+  closeButton?: string;
 }
 
 const ModalAtom = atomWithReset<GlobalModalState>({
   contents: null,
+  closeButton: "확인",
 });
 
 export function useGlobalModal() {
@@ -29,14 +31,14 @@ export default function GlobalModal() {
   const modalReset = useResetAtom(ModalAtom);
   return (
     <Modal open={!!modalData.contents} onOpenChange={modalReset}>
-      <Modal.Content className="w-80 z-50 !p-0 ">
-        <div className="py-10 text-center text-xl leading-[26px] text-grey-700 border-b border-grey-50">
+      <Modal.Content className="min-w-80 z-50 !p-0 ">
+        <div className="py-10 px-8 text-center text-xl leading-[26px] text-grey-700 border-b border-grey-50">
           {modalData.contents}
         </div>
         <div className="flex justify-between [&>*]:flex-1  [&>*]:h-[63px]">
           <Modal.Close>
             <Button className="btn-grey-border border-none rounded-none rounded-bl-xl">
-              확인
+              {modalData.closeButton}
             </Button>
           </Modal.Close>
           {modalData.button}

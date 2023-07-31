@@ -1,4 +1,5 @@
 import { userAtom } from "@app/GlobalProvider";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useAtomValue } from "jotai";
 import Delete from "public/assets/icons/Delete.svg";
@@ -8,29 +9,25 @@ import Requested from "public/assets/icons/친구_신청_완료.svg";
 import Request from "public/assets/icons/친구신청.svg";
 import { useState } from "react";
 import { Button } from "src/components/Button";
+import { FriendApis } from "src/lib/apis/friendApis";
 import { Post } from "../app/group/types";
 import { useGlobalModal } from "./modal/GlobalModal";
+import { PostApis } from "src/lib/apis/postApis";
 
 interface PostCardProps {
   post: Post;
   type?: "MINE" | "REQUESTED" | "NORMAL";
 }
 const PostCard = ({
-  post: { id, username, temp, title, content, rejectedUsers },
+  post: { id, title, content, writer, rejectedUsers },
   type = "NORMAL",
 }: PostCardProps) => {
-  const { id: userId } = useAtomValue(userAtom);
   const [isFullView, setIsFullView] = useState(false);
-  const { setModalState } = useGlobalModal();
 
   const ButtonByType = () => {
     switch (type) {
       case "MINE":
-        return (
-          <Button className="mr-9 !p-0">
-            <Delete />
-          </Button>
-        );
+        return <PostCard.DeleteButton postId={id} />;
       case "REQUESTED":
         return (
           <div className="btn-orange flex items-center gap-1 font-medium h-9 mr-9 cursor-default">
@@ -40,21 +37,9 @@ const PostCard = ({
         );
       case "NORMAL":
         return (
-          <Button
-            onClick={() => {
-              if (rejectedUsers.includes(userId))
-                return setModalState({
-                  contents: "아쉽지만 거절된 친구 신청글이에요.",
-                });
-
-              //요청
-              setModalState({ contents: "친구 신청이 완료되었어요" });
-            }}
-            className="btn-orange flex items-center gap-1 font-medium h-9 w-[126px] mr-9"
-          >
-            <Request />
-            친구 신청
-          </Button>
+          <PostCard.AcceptButton
+            {...{ id, title, content, writer, rejectedUsers }}
+          />
         );
     }
   };
@@ -63,10 +48,10 @@ const PostCard = ({
       <div className="flex flex-col gap-4">
         <div className="flex justify-between">
           <div className="text-lg font-semibold flex justify-center gap-2.5 items-center bg-orange-50 py-1 w-[170px] rounded-lg leading-7">
-            {username}
+            {writer.username}
             <Vector />
             <span className="text-sm font-normal text-orange-400">
-              {temp}˚C
+              {writer.temp}˚C
             </span>
           </div>
           <ButtonByType />
@@ -78,7 +63,7 @@ const PostCard = ({
               className={clsx(
                 !isFullView &&
                   "text-ellipsis line-clamp-2 h-[48px] text-grey-500",
-                "leading-6 break-words"
+                "leading-6 break-words min-h-[48px]"
               )}
             >
               {content}
@@ -101,5 +86,84 @@ const PostCard = ({
     </>
   );
 };
+
+const DeleteButton = ({ postId }: { postId: number }) => {
+  const { setModalState, resetState } = useGlobalModal();
+  const queryClient = useQueryClient();
+  const deletePost = useMutation({
+    mutationFn: async (postId: number) => await PostApis.deletePost(postId),
+    onSuccess: () => {
+      resetState();
+      queryClient.invalidateQueries(["getGroupPosts"]);
+    },
+    onError: (e) => {
+      console.error(e);
+    },
+  });
+  return (
+    <Button
+      onClick={() => {
+        setModalState({
+          contents: "신청글을 삭제하시겠습니까?",
+          closeButton: "취소",
+          button: (
+            <Button
+              className="btn-orange rounded-none rounded-br-xl"
+              onClick={() => deletePost.mutate(postId)}
+            >
+              확인
+            </Button>
+          ),
+        });
+      }}
+      className="mr-9 !p-0"
+    >
+      <Delete />
+    </Button>
+  );
+};
+DeleteButton.displayName = "deleteButton";
+PostCard.DeleteButton = DeleteButton;
+
+const AcceptButton = ({ id, rejectedUsers }: Post) => {
+  const { id: userId } = useAtomValue(userAtom);
+  const { setModalState } = useGlobalModal();
+  const queryClient = useQueryClient();
+
+  const requestFriend = useMutation({
+    mutationFn: async ({
+      userId,
+      postId,
+    }: {
+      userId: number;
+      postId: number;
+    }) => await FriendApis.requestFriend({ userId, postId }),
+    onSuccess: () => {
+      setModalState({ contents: "친구 신청이 완료되었어요" });
+      queryClient.invalidateQueries(["getGroupPosts"]);
+    },
+    onError: (e) => {
+      alert("친구 신청이 실패했어요");
+      console.error(e);
+    },
+  });
+  return (
+    <Button
+      onClick={() => {
+        if (rejectedUsers.includes(userId))
+          return setModalState({
+            contents: "아쉽지만 거절된 친구 신청글이에요.",
+          });
+        requestFriend.mutate({ userId, postId: id });
+      }}
+      className="btn-orange flex items-center gap-1 font-medium h-9 w-[126px] mr-9"
+    >
+      <Request />
+      친구 신청
+    </Button>
+  );
+};
+AcceptButton.displayName = "acceptButton";
+PostCard.AcceptButton = AcceptButton;
 
 export default PostCard;

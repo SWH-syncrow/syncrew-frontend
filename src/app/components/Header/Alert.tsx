@@ -1,56 +1,12 @@
+import { useGenerateChannel } from "@app/chat/components/hooks/useFirebaseChannel";
 import { Button } from "@components/Button";
 import { Dialog } from "@components/Dialog";
-import {
-  addDoc,
-  arrayUnion,
-  collection,
-  doc,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { useRef, useState } from "react";
-import { db } from "src/lib/firebase/firebase";
-import { firebaseUtils } from "src/lib/firebase/utils";
 import Bell from "public/assets/icons/알림_inactive.svg";
-import { useAtomValue } from "jotai";
-import { userAtom } from "@app/GlobalProvider";
-
-const mock = [
-  {
-    id: 1,
-    friendRequestId: 1,
-    friendName: "김그루",
-    friendId: 2,
-    status: "RECEIVED" as ALERT_STATUS,
-    read: true,
-  },
-  {
-    id: 2,
-    friendRequestId: 1,
-    friendName: "김그루",
-    friendId: 2,
-    status: "MATCHED" as ALERT_STATUS,
-    read: true,
-  },
-  {
-    id: 3,
-    friendRequestId: 1,
-    friendName: "김그루",
-    friendId: 2,
-    status: "MATCHED" as ALERT_STATUS,
-    read: true,
-  },
-  {
-    id: 4,
-    friendRequestId: 1,
-    friendName: "김그루",
-    friendId: 2,
-    status: "MATCHED" as ALERT_STATUS,
-    read: true,
-  },
-];
+import { useCallback, useRef, useState } from "react";
+import { FriendApis } from "src/lib/apis/friendApis";
+import { NotiApis } from "src/lib/apis/notiApis";
 
 type ALERT_STATUS = "RECEIVED" | "REQUESTED" | "MATCHED" | "REJECTED";
 interface Alert {
@@ -63,91 +19,96 @@ interface Alert {
 }
 const Alert = () => {
   const alertRef = useRef<HTMLButtonElement | null>(null);
-  const [alertList, setAlertList] = useState(mock);
-  const userAtomValue = useAtomValue(userAtom);
-  // useQuery(["getAlert"], {
-  //   queryFn: () => {
-  //     return;
-  //   },
-  //   // refetchInterval: 10000,
-  // });
-  const onAcceptHandler = async (alert: Alert) => {
-    //수락 api
-    //채팅 생성
-    const channelDoc = await addDoc(collection(db, "channel"), {
-      createdAt: serverTimestamp(),
-      status: "READY",
-    });
+  const [alertList, setAlertList] = useState<Alert[] | []>([]);
+  const { genrateChannel } = useGenerateChannel();
 
-    Promise.all([
-      setDoc(doc(channelDoc, "users", alert.friendId.toString()), {
-        username: alert.friendName,
-        profileImage: "",
-        temp: 36.5,
-      }),
-      setDoc(doc(channelDoc, "users", userAtomValue.id.toString()), {
-        username: userAtomValue.username,
-        profileImage: "",
-        temp: 36.5,
-      }),
-      await firebaseUtils.createDocIfNotExists(
-        doc(db, "channelsOfUser", alert.friendId.toString()),
-        {
-          channels: [],
-        }
-      ),
-      await firebaseUtils.createDocIfNotExists(doc(db, "channelsOfUser", "1"), {
-        channels: [],
-      }),
-      updateDoc(doc(db, "channelsOfUser", alert.friendId.toString()), {
-        channels: arrayUnion(channelDoc.id),
-      }),
-      updateDoc(doc(db, "channelsOfUser", userAtomValue.id.toString()), {
-        channels: arrayUnion(channelDoc.id),
-      }),
-    ]);
-  };
-  const getAlertElement = (alert: Alert) => {
-    switch (alert.status) {
-      case "RECEIVED":
-        return (
-          <>
-            <span className="text-grey-300 leading-8 mb-[14px]">{`${alert.friendName}님이 친구요청을 보냈어요`}</span>
-            <div className="flex justify-between gap-3">
-              <Button className="btn-orange-border flex-1 text-xs py-2 !rounded-xl">
-                거절하기
-              </Button>
-              <Button
-                onClick={() => onAcceptHandler(alert)}
-                className="btn-orange flex-1 text-xs py-2 !rounded-xl"
-              >
-                수락하기
-              </Button>
-            </div>
-          </>
-        );
-      case "REQUESTED":
-        return (
-          <span className="text-grey-300 leading-8">{`${alert.friendName}님에게 친구요청을 보냈어요`}</span>
-        );
-      case "MATCHED":
-        return (
-          <>
-            <span className="text-grey-300 leading-8 mb-[14px]">{`${alert.friendName}님과 친구가 매칭되었어요`}</span>
-            <Link
-              className="btn-orange text-xs !rounded-xl text-center"
-              href={"/chat"}
-            >
-              싱크루 채팅으로 이동하기
-            </Link>
-          </>
-        );
-      case "REJECTED":
-        return (
-          <span className="text-grey-300 leading-8">{`${alert.friendName}님이 친구요청을 거절했어요`}</span>
-        );
+  const { refetch, isLoading: isFetchNotiLoading } = useQuery(
+    ["getNotifications"],
+    {
+      queryFn: async () => await NotiApis.getNotifications(),
+      onSuccess: ({ data: { notifications } }) => {
+        setAlertList(notifications);
+      },
+      onError: (e) => {
+        console.error(e);
+      },
+      refetchInterval: 10000,
     }
-  };
+  );
+
+  const acceptFriend = useMutation({
+    mutationFn: async (friendRequestId: number) =>
+      await FriendApis.acceptFriend(friendRequestId),
+    onSuccess: (res: any) => {
+      genrateChannel.mutate(res.data);
+      refetch();
+    },
+    onError: (e) => {
+      console.error(e);
+    },
+  });
+
+  const rejectFriend = useMutation({
+    mutationFn: async (friendRequestId: number) =>
+      await FriendApis.rejectFriend(friendRequestId),
+    onSuccess: () => {
+      refetch();
+    },
+    onError: (e) => {
+      console.error(e);
+    },
+  });
+
+  const getAlertElement = useCallback(
+    (alert: Alert) => {
+      switch (alert.status) {
+        case "RECEIVED":
+          return (
+            <>
+              <span className="text-grey-300 leading-8 mb-[14px]">{`${alert.friendName}님이 친구요청을 보냈어요`}</span>
+              <div className="flex justify-between gap-3">
+                <Button
+                  onClick={() => rejectFriend.mutate(alert.friendRequestId)}
+                  className="btn-orange-border flex-1 text-xs py-2 !rounded-xl"
+                  disabled={acceptFriend.isLoading || rejectFriend.isLoading}
+                >
+                  거절하기
+                </Button>
+                <Button
+                  onClick={() => acceptFriend.mutate(alert.friendRequestId)}
+                  className="btn-orange flex-1 text-xs py-2 !rounded-xl"
+                  disabled={acceptFriend.isLoading || rejectFriend.isLoading}
+                >
+                  수락하기
+                </Button>
+              </div>
+            </>
+          );
+        case "REQUESTED":
+          return (
+            <span className="text-grey-300 leading-8">{`${alert.friendName}님에게 친구요청을 보냈어요`}</span>
+          );
+        case "MATCHED":
+          return (
+            <>
+              <span className="text-grey-300 leading-8 mb-[14px]">{`${alert.friendName}님과 친구가 매칭되었어요`}</span>
+              <Link
+                className="btn-orange text-xs !rounded-xl text-center"
+                href={"/chat"}
+              >
+                싱크루 채팅으로 이동하기
+              </Link>
+            </>
+          );
+        case "REJECTED":
+          return (
+            <span className="text-grey-300 leading-8">{`${alert.friendName}님이 친구요청을 거절했어요`}</span>
+          );
+      }
+    },
+    [acceptFriend, rejectFriend]
+  );
+
   return (
     <div className="relative">
       <Dialog.Root
