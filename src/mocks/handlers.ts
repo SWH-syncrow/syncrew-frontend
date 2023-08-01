@@ -11,6 +11,7 @@ export const handlers = [
           email: "test@gmail.com",
           profileImage: null,
           temp: 36.5,
+          isTestTarget: true,
         },
         token: {
           accessToken: "test",
@@ -40,6 +41,7 @@ export const handlers = [
         email: "test@gmail.com",
         profileImage: null,
         temp: 36.5,
+        isTestTarget: true,
       })
     );
   }),

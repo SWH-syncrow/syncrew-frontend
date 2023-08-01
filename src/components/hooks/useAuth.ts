@@ -7,7 +7,7 @@ import { useResetAtom } from "jotai/utils";
 import {
   getRefreshTokenFromCookie,
   setRefreshTokenToCookie,
-} from "../serverAuth";
+} from "../server/serverAuth";
 import { AuthUserApis } from "src/lib/apis/authUserApis";
 import { useEffect, useState } from "react";
 const useAuth = () => {
