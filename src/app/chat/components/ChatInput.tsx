@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useAtom } from "jotai";
-import Delete from "public/assets/icons/delete.svg";
+import Delete from "public/assets/icons/Delete.svg";
 import Photo from "public/assets/icons/image.svg";
 import Send from "public/assets/icons/send.svg";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
