@@ -12,6 +12,7 @@ export const userAtom = atomWithReset<User>({
   email: "",
   profileImage: "",
   temp: 36.5,
+  isTestTarget: false,
 });
 export const isLoggedInAtom = atomWithReset<boolean>(false);
 export default function GlobalProvider(props: { children: React.ReactNode }) {
