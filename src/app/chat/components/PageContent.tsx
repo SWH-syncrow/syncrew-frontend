@@ -1,5 +1,5 @@
-import ChannelSection from "./components/ChannelSection";
-import ChatSection from "./components/ChatSection";
+import ChannelSection from "./ChannelSection";
+import ChatSection from "./ChatSection";
 
 const PageContent = () => {
   return (

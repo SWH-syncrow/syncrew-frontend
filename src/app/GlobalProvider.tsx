@@ -5,6 +5,9 @@ import { atomWithReset } from "jotai/utils";
 import React, { useEffect } from "react";
 import { User } from "./types";
 import { usePathname } from "next/navigation";
+import { useGetChannels } from "./chat/components/hooks/useFirebaseChannel";
+import { ChannelsObj } from "./chat/components/types";
+import { atom } from "jotai";
 
 export const userAtom = atomWithReset<User>({
   id: -1,
@@ -15,9 +18,12 @@ export const userAtom = atomWithReset<User>({
   isTestTarget: false,
 });
 export const isLoggedInAtom = atomWithReset<boolean>(false);
+
+export const channelsAtom = atom<ChannelsObj>({});
 export default function GlobalProvider(props: { children: React.ReactNode }) {
-  useAuth();
   const path = usePathname();
+  useAuth();
+  useGetChannels();
 
   const storePathValues = () => {
     const storage = globalThis?.sessionStorage;

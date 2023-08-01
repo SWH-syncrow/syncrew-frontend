@@ -22,25 +22,23 @@ const Alert = () => {
   const [alertList, setAlertList] = useState<Alert[] | []>([]);
   const { genrateChannel } = useGenerateChannel();
 
-  const { refetch, isLoading: isFetchNotiLoading } = useQuery(
-    ["getNotifications"],
-    {
-      queryFn: async () => await NotiApis.getNotifications(),
-      onSuccess: ({ data: { notifications } }) => {
-        setAlertList(notifications);
-      },
-      onError: (e) => {
-        console.error(e);
-      },
-      refetchInterval: 10000,
-    }
-  );
+  const { refetch } = useQuery(["getNotifications"], {
+    queryFn: async () => await NotiApis.getNotifications(),
+    onSuccess: ({ data: { notifications } }) => {
+      setAlertList(notifications);
+    },
+    onError: (e) => {
+      console.error(e);
+    },
+    refetchInterval: 10000,
+  });
 
   const acceptFriend = useMutation({
     mutationFn: async (friendRequestId: number) =>
       await FriendApis.acceptFriend(friendRequestId),
     onSuccess: (res: any) => {
-      genrateChannel.mutate(res.data);
+      const friendRequestId = JSON.parse(res.config.data).data.friendRequestId;
+      genrateChannel.mutate({ friend: res.data, friendRequestId });
       refetch();
     },
     onError: (e) => {

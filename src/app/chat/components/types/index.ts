@@ -3,6 +3,7 @@ export interface Channel {
   friendRequestId: number;
   status: "READY" | "DOING";
   chatUser: ChatUser;
+  isUnread: boolean;
 }
 
 export interface ChannelsObj {

@@ -6,8 +6,8 @@ import { useAtomValue } from "jotai";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { GroupsApis } from "src/lib/apis/groupsApis";
-import CreatePostModal from "../../components/modal/CreatePostModal";
-import { Post } from "./types";
+import CreatePostModal from "../../../components/modal/CreatePostModal";
+import { Post } from "../types";
 
 const PageContent = () => {
   const { id: userId } = useAtomValue(userAtom);

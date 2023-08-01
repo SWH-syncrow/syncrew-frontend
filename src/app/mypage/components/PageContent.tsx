@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import { atom, useAtom, useAtomValue } from "jotai";
-import MyGroupTabView from "./components/MyGroupTabView";
-import MyInfoSection from "./components/MyInfoSection";
-import MyPostTabView from "./components/MyPostTabView";
-import RequestedPostTabView from "./components/RequestedPostTabView";
+import MyGroupTabView from "./MyGroupTabView";
+import MyInfoSection from "./MyInfoSection";
+import MyPostTabView from "./MyPostTabView";
+import RequestedPostTabView from "./RequestedPostTabView";
 
 const selectedTabAtom = atom<MYPATE_TAB>("MY_POST");
 const PageContent = () => {
