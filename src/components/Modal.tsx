@@ -46,7 +46,7 @@ const ModalContent = ({
       <Dialog.Content
         {...props}
         className={clsx(
-          "fixed left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6",
+          "fixed left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6",
           className
         )}
       >
