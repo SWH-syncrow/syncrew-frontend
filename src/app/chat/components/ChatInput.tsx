@@ -1,12 +1,20 @@
 import { Button } from "@components/Button";
 import TextArea from "@components/TextArea";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { useAtom } from "jotai";
 import Delete from "public/assets/icons/delete.svg";
 import Photo from "public/assets/icons/image.svg";
 import Send from "public/assets/icons/send.svg";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { db, storage } from "src/lib/firebase/firebase";
+import { channelsAtom } from "./ChatProvider";
 interface ChatInput {
   userId: string;
   channelID: string;
@@ -17,6 +25,7 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
   const [imgSrc, setImgSrc] = useState<ArrayBuffer | string>();
   const [img, setImg] = useState<File>();
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
+  const [channels, setChannels] = useAtom(channelsAtom);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -72,6 +81,15 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
         userId,
       });
     }
+
+    if (channels[channelID].status === "READY") {
+      updateDoc(doc(db, "channel", channelID), { status: "DOING" });
+      setChannels((c) => ({
+        ...c,
+        [channelID]: { ...channels[channelID], status: "DOING" },
+      }));
+    }
+
     setNewMessage("");
     setImgSrc("");
     setImg(undefined);

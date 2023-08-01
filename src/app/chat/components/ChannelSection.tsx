@@ -5,6 +5,7 @@ import Logo_XL from "public/assets/logos/XL_01.svg";
 import { useGetChannels } from "./hooks/useFirebaseChannel";
 import { Channel } from "./types";
 import LoadingUI from "@components/LoadingUI";
+import { useMemo } from "react";
 
 const ChannelSection = () => {
   const { channels, isFetchChannelLoading } = useGetChannels();
@@ -46,6 +47,16 @@ const Channel = ({
   channel: Channel;
 }) => {
   const router = useRouter();
+
+  const guideMent = useMemo(() => {
+    switch (status) {
+      case "READY":
+        return `${chatUser.username}님에게 첫 대화를 보내볼까요?`;
+      case "DOING":
+        return `${chatUser.username}님과 친구 매칭 중이에요`;
+    }
+  }, [status]);
+
   return (
     <div
       className="flex py-8 px-7 gap-6 justify-between items-center border-b border-grey-50 cursor-pointer"
@@ -56,11 +67,7 @@ const Channel = ({
       <UserAvatar profileImage={chatUser.profileImage} />
       <div className="flex flex-col flex-1 text-lg font-medium leading-8">
         {chatUser.username}
-        <span className="text-sm text-grey-200 font-normal">
-          {status === "READY" &&
-            `${chatUser.username}님에게 첫 대화를 보내볼까요?`}
-          {status === "DOING" && `${chatUser.username}님과 친구 매칭 중이에요`}
-        </span>
+        <span className="text-sm text-grey-200 font-normal">{guideMent}</span>
       </div>
       <Right />
     </div>
