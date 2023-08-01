@@ -12,6 +12,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FriendApis } from "src/lib/apis/friendApis";
 import { channelsAtom } from "./ChatProvider";
 import { useGlobalModal } from "@components/modal/GlobalModal";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "src/lib/firebase/firebase";
 
 const ChatSection = () => {
   const { id: userId } = useAtomValue(userAtom);
@@ -30,7 +32,8 @@ const ChatSection = () => {
   const rejectFriend = useMutation({
     mutationFn: async (friendRequestId: number) =>
       await FriendApis.rejectFriend(friendRequestId),
-    onSuccess: () => {
+    onSuccess: async () => {
+      await deleteDoc(doc(db, "channel", channelID));
       resetState();
       router.push("/chat");
       queryClient.invalidateQueries(["getChannels"]);
