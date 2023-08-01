@@ -1,4 +1,4 @@
-import { CreatePost } from "@components/modal/types";
+import { CreatePost } from "@components/modal/CreatePostModal/types";
 import axios from "axios";
 
 const createPost = async (post: CreatePost) => {
