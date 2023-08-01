@@ -24,9 +24,17 @@ const enterGroup = async (groupId: number) => {
   }
 };
 
-const getGroupPosts = async (groupId: number) => {
+const getGroupPosts = async ({
+  groupId,
+  pagination,
+}: {
+  groupId: number;
+  pagination: { page: number; limit: number };
+}) => {
   try {
-    const res = await axios.get(`/api/groups/${groupId}/posts`);
+    const res = await axios.get(
+      `/api/groups/${groupId}/posts?page=${pagination.page}&limit=${pagination.limit}`
+    );
 
     return res;
   } catch (error) {

@@ -7,3 +7,9 @@ export interface User {
   isTestTarget?: boolean;
 }
 export type GroupCategory = "ALL" | "SMARTPHONE" | "PPT" | "VIDEO" | "PS";
+export interface Group {
+  id: number;
+  name: string;
+  memberCount: number;
+  postCount: number;
+}
