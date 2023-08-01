@@ -1,13 +1,12 @@
-import { Input } from "@components/Input";
+import { Button } from "@components/Button";
 import TextArea from "@components/TextArea";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import { db, storage } from "src/lib/firebase/firebase";
+import Delete from "public/assets/icons/delete.svg";
 import Photo from "public/assets/icons/image.svg";
 import Send from "public/assets/icons/send.svg";
-import { Button } from "@components/Button";
-
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { db, storage } from "src/lib/firebase/firebase";
 interface ChatInput {
   userId: string;
   channelID: string;
@@ -80,16 +79,24 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
   return (
     <div className="relative">
       {imgSrc && (
-        <div className="w-[400px] absolute bottom-[100%] bg-grey-100">
-          <button
-            onClick={() => {
-              setImg(undefined);
-              setImgSrc("");
-            }}
-          >
-            삭제
-          </button>
-          <img src={imgSrc + ""} alt="첨부 이미지" />
+        <div className="absolute bottom-[100%]">
+          <div className="relative max-w-[400px] max-h-[50vh] w-fit rounded-3xl overflow-hidden">
+            <Button
+              onClick={() => {
+                setImg(undefined);
+                setImgSrc("");
+              }}
+              className="absolute m-1 !p-2 duration-300 hover:bg-orange-50 rounded-full z-20"
+            >
+              <Delete />
+            </Button>
+            <img
+              src={imgSrc + ""}
+              alt="첨부 이미지"
+              className="relative z-10 object-contain max-h-[50vh]"
+            />
+            <div className="absolute top-0 w-full h-full bg-grey-500 opacity-50"></div>
+          </div>
         </div>
       )}
       <form
