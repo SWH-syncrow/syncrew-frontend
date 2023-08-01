@@ -9,15 +9,9 @@ import { useAtomValue } from "jotai";
 import { useState } from "react";
 import { Button } from "src/components/Button";
 import { GroupsApis } from "src/lib/apis/groupsApis";
-import { GroupCategory } from "../types";
+import { Group, GroupCategory } from "../types";
 import { CATEGORIES } from "@app/constants";
 
-interface Group {
-  id: number;
-  name: string;
-  memberCount: number;
-  postCount: number;
-}
 const PageContent = () => {
   const isLoggedIn = useAtomValue(isLoggedInAtom);
   const user = useAtomValue(userAtom);
