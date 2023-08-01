@@ -1,47 +1,58 @@
-import { userAtom } from "@app/GlobalProvider";
+import { channelsAtom, userAtom } from "@app/GlobalProvider";
 import { Button } from "@components/Button";
 import UserAvatar from "@components/UserAvatar";
+import { useGlobalModal } from "@components/modal/GlobalModal";
+import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
+import { deleteDoc, doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { useAtomValue } from "jotai";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { Message } from "./types";
+import { FriendApis } from "src/lib/apis/friendApis";
+import { db } from "src/lib/firebase/firebase";
 import ChatInput from "./ChatInput";
 import useFirebaseMessage from "./hooks/useFirebaseMessage";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { FriendApis } from "src/lib/apis/friendApis";
-import { channelsAtom } from "./ChatProvider";
-import { useGlobalModal } from "@components/modal/GlobalModal";
-import { deleteDoc, doc } from "firebase/firestore";
-import { db } from "src/lib/firebase/firebase";
+import { Message } from "./types";
 
 const ChatSection = () => {
-  const { id: userId } = useAtomValue(userAtom);
-  const { setModalState, resetState } = useGlobalModal();
-  const messageEndRef = useRef<HTMLDivElement | null>(null);
-  const searchParams = useSearchParams();
-  const channelID = searchParams?.get("channel") || "";
+  const router = useRouter();
+  const channelID = useSearchParams()?.get("channel") || "";
   const channels = useAtomValue(channelsAtom);
   const { messages } = useFirebaseMessage(channelID);
-  const router = useRouter();
-  const queryClient = useQueryClient();
-  useEffect(() => {
-    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  const { id: userId } = useAtomValue(userAtom);
+
+  const messageEndRef = useRef<HTMLDivElement | null>(null);
+
+  const { setModalState, resetState } = useGlobalModal();
 
   const rejectFriend = useMutation({
     mutationFn: async (friendRequestId: number) =>
       await FriendApis.rejectFriend(friendRequestId),
     onSuccess: async () => {
-      await deleteDoc(doc(db, "channel", channelID));
       resetState();
+      await deleteDoc(doc(db, "channel", channelID));
       router.push("/chat");
-      queryClient.invalidateQueries(["getChannels"]);
     },
     onError: (e) => {
       console.error(e);
     },
   });
+
+  useEffect(() => {
+    return () => {
+      if (channelID) {
+        updateDoc(doc(db, "channel", channelID), {
+          [`lastVisitedAt.${userId}`]: serverTimestamp(),
+        }).catch((e) => {
+          if (e.code !== "not-found") throw e;
+        });
+      }
+    };
+  }, [channelID]);
+
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   return (
     <div

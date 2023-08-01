@@ -1,7 +1,8 @@
-import { userAtom } from "@app/GlobalProvider";
+import { channelsAtom, userAtom } from "@app/GlobalProvider";
 import { Channel, ChannelsObj, ChatUser } from "@app/chat/components/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  Unsubscribe,
   addDoc,
   arrayUnion,
   collection,
@@ -9,6 +10,7 @@ import {
   documentId,
   getDoc,
   getDocs,
+  onSnapshot,
   orderBy,
   query,
   serverTimestamp,
@@ -19,59 +21,77 @@ import {
 import { useAtom, useAtomValue } from "jotai";
 import { db } from "src/lib/firebase/firebase";
 import { firebaseUtils } from "src/lib/firebase/utils";
-import { channelsAtom } from "../ChatProvider";
+import { useEffect, useState } from "react";
 
 export const useGetChannels = () => {
+  const [channelsUnsb, setChannelsUnsb] = useState<Unsubscribe | null>(null);
+  const [channelsOfUserUnsb, setChannelsOfUserUnsb] =
+    useState<Unsubscribe | null>(null);
   const [channels, setChannels] = useAtom(channelsAtom);
   const user = useAtomValue(userAtom);
 
-  const { isLoading: isFetchChannelLoading } = useQuery(["getChannels"], {
-    queryFn: async () => await getChannels(),
-    onSuccess: (res: Channel[]) => {
-      setChannels(
-        res.reduce(
-          (channels: ChannelsObj, curr) => (
-            (channels[curr.id] = { ...curr }), channels
-          ),
-          {}
-        )
-      );
-    },
-    onError: (e) => console.error(e),
-    enabled: user.id != -1,
-  });
+  useEffect(() => {
+    if (user.id !== -1) getChannels();
+  }, [user.id]);
+
+  useEffect(() => {
+    return () => {
+      channelsUnsb && channelsUnsb();
+      channelsOfUserUnsb && channelsOfUserUnsb();
+    };
+  }, []);
 
   const getChannels = async () => {
-    const querySnapshot = await getDoc(
-      doc(db, "channelsOfUser", user.id.toString())
-    );
-    const channelsOfUser = querySnapshot.data()?.channels;
-    const channelsSnapshot = await getDocs(
-      query(
-        collection(db, "channel"),
-        where(documentId(), "in", channelsOfUser),
-        orderBy(documentId())
-        // orderBy("created_at")
-      )
-    );
-    const resPromises = channelsSnapshot.docs.map(async (doc) => {
-      const users = await getDocs(
-        query(
-          collection(db, "channel", doc.id, "users"),
-          where(documentId(), "!=", user.id.toString())
-        )
-      );
-      const chatUser = { ...users.docs[0].data(), id: users.docs[0].id };
-      return { ...doc.data(), id: doc.id, chatUser };
-    });
+    const unsb = onSnapshot(
+      doc(db, "channelsOfUser", user.id.toString()),
+      async (querySnapshot) => {
+        const channelsOfUser = querySnapshot.data()?.channels;
+        const channelsQuery = query(
+          collection(db, "channel"),
+          where(documentId(), "in", channelsOfUser),
+          orderBy(documentId())
+          // orderBy("created_at")
+        );
 
-    const res = await Promise.all(resPromises);
-    return res;
+        const chUnsb = onSnapshot(channelsQuery, async (querySnapshot) => {
+          const resPromises = querySnapshot.docs.map(async (channel) => {
+            const notMe = await getDocs(
+              query(
+                collection(channel.ref, "users"),
+                where(documentId(), "!=", user.id.toString())
+              )
+            );
+            const chatUser = {
+              ...notMe.docs[0].data(),
+              id: notMe.docs[0].id,
+            };
+            return {
+              ...channel.data(),
+              id: channel.id,
+              chatUser,
+              isUnread:
+                channel.data().lastChatAt >
+                channel.data()?.lastVisitedAt?.[user.id],
+            };
+          });
+          const res = (await Promise.all(resPromises)) as Channel[];
+          setChannels(
+            res.reduce(
+              (channels: ChannelsObj, curr) => (
+                (channels[curr.id] = { ...curr }), channels
+              ),
+              {}
+            )
+          );
+        });
+        setChannelsUnsb(() => chUnsb);
+      }
+    );
+    setChannelsOfUserUnsb(() => unsb);
   };
 
   return {
     channels,
-    isFetchChannelLoading: isFetchChannelLoading || user.id == -1,
   };
 };
 

@@ -1,3 +1,4 @@
+import { channelsAtom } from "@app/GlobalProvider";
 import { Button } from "@components/Button";
 import TextArea from "@components/TextArea";
 import {
@@ -14,7 +15,6 @@ import Photo from "public/assets/icons/image.svg";
 import Send from "public/assets/icons/send.svg";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { db, storage } from "src/lib/firebase/firebase";
-import { channelsAtom } from "./ChatProvider";
 interface ChatInput {
   userId: string;
   channelID: string;
@@ -82,12 +82,12 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
       });
     }
 
+    updateDoc(doc(db, "channel", channelID), {
+      lastChatAt: serverTimestamp(),
+    });
+
     if (channels[channelID].status === "READY") {
       updateDoc(doc(db, "channel", channelID), { status: "DOING" });
-      setChannels((c) => ({
-        ...c,
-        [channelID]: { ...channels[channelID], status: "DOING" },
-      }));
     }
 
     setNewMessage("");
