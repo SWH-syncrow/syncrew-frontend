@@ -1,8 +1,8 @@
-import axios from "axios";
+import authInstance from "../axios/instance";
 
 const requestFriend = async ({ userId, postId }: RequestFriendRequest) => {
   try {
-    const res = await axios.post("/api/friend/request", {
+    const res = await authInstance.post("/friend/request", {
       data: { userId, postId },
     });
 
@@ -18,7 +18,7 @@ const acceptFriend = async ({
   notificationId,
 }: PostFriendRequest) => {
   try {
-    const res = await axios.post("/api/friend?q=accept", {
+    const res = await authInstance.post("/friend?q=accept", {
       data: { friendRequestId, notificationId },
     });
 
@@ -34,7 +34,7 @@ const rejectFriend = async ({
   notificationId,
 }: PostFriendRequest) => {
   try {
-    const res = await axios.post("/api/friend?q=refuse", {
+    const res = await authInstance.post("/friend?q=refuse", {
       data: { friendRequestId, notificationId },
     });
 

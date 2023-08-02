@@ -1,10 +1,11 @@
 import { GroupCategory } from "@app/_types";
 import axios from "axios";
+import authInstance from "../axios/instance";
 
 const getGroups = async (category: GroupCategory) => {
   try {
     const res = await axios.get(
-      category === "ALL" ? `/api/groups` : `/api/groups?category=${category}`
+      category === "ALL" ? `/groups` : `/groups?category=${category}`
     );
 
     return res;
@@ -15,7 +16,7 @@ const getGroups = async (category: GroupCategory) => {
 };
 const enterGroup = async (groupId: number) => {
   try {
-    const res = await axios.post(`/api/group/${groupId}/enter`);
+    const res = await authInstance.post(`/group/${groupId}/enter`);
 
     return res;
   } catch (error) {
@@ -32,8 +33,8 @@ const getGroupPosts = async ({
   pagination: { page: number; limit: number };
 }) => {
   try {
-    const res = await axios.get(
-      `/api/groups/${groupId}/posts?page=${pagination.page}&limit=${pagination.limit}`
+    const res = await authInstance.get(
+      `/groups/${groupId}/posts?page=${pagination.page}&limit=${pagination.limit}`
     );
 
     return res;

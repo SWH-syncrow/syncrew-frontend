@@ -1,8 +1,8 @@
-import axios from "axios";
+import authInstance from "../axios/instance";
 
 const getNotifications = async () => {
   try {
-    const res = await axios.get("/api/notifications");
+    const res = await authInstance.get("/notifications");
 
     return res;
   } catch (error) {
@@ -13,7 +13,7 @@ const getNotifications = async () => {
 
 const readNotifications = async (ids: number[]) => {
   try {
-    const res = await axios.put(`/api/notifications?ids=${ids.join(",")}`);
+    const res = await authInstance.put(`/notifications?ids=${ids.join(",")}`);
 
     return res;
   } catch (error) {

@@ -1,8 +1,9 @@
 import axios from "axios";
+import authInstance from "../axios/instance";
 
 const kakaoLogin = async (accessToken: string) => {
   try {
-    const res = await axios.post("api/auth/login", { accessToken });
+    const res = await axios.post("/auth/login", { accessToken });
 
     return res;
   } catch (error) {
@@ -12,7 +13,7 @@ const kakaoLogin = async (accessToken: string) => {
 };
 const reissueToken = async (refreshToken: string) => {
   try {
-    const res = await axios.post("api/auth/reissue", { refreshToken });
+    const res = await axios.post("/auth/reissue", { refreshToken });
 
     return res;
   } catch (error) {
@@ -23,7 +24,7 @@ const reissueToken = async (refreshToken: string) => {
 
 const getUser = async () => {
   try {
-    const res = await axios.get("api/auth/user");
+    const res = await axios.get("/auth/user");
 
     return res;
   } catch (error) {
@@ -33,7 +34,7 @@ const getUser = async () => {
 };
 const kakaoLogout = async () => {
   try {
-    const res = await axios.delete("api/auth/logout");
+    const res = await authInstance.delete("/auth/logout");
 
     return res;
   } catch (error) {

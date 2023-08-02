@@ -1,8 +1,8 @@
-import axios from "axios";
+import authInstance from "../axios/instance";
 
 const getMyPosts = async () => {
   try {
-    const res = await axios.get("/api/users/posts");
+    const res = await authInstance.get("/users/posts");
 
     return res;
   } catch (error) {
@@ -12,7 +12,7 @@ const getMyPosts = async () => {
 };
 // const getMyGropus = async () => {
 //   try {
-//     const res = await axios.get("/api/users/groups");
+//     const res = await authInstance.get("/users/groups");
 
 //     return res;
 //   } catch (error) {
@@ -22,7 +22,7 @@ const getMyPosts = async () => {
 // };
 const getMyGropus = async () => {
   try {
-    const res = await axios.get("/api/users/groups");
+    const res = await authInstance.get("/users/groups");
 
     return res;
   } catch (error) {

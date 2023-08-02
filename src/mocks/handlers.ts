@@ -1,7 +1,7 @@
 import { rest } from "msw";
 
 export const handlers = [
-  rest.post("/api/auth/login", async (req, res, ctx) => {
+  rest.post("/auth/login", async (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -20,7 +20,7 @@ export const handlers = [
       })
     );
   }),
-  rest.post("/api/auth/reissue", async (req, res, ctx) => {
+  rest.post("/auth/reissue", async (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -29,10 +29,10 @@ export const handlers = [
       })
     );
   }),
-  rest.delete("/api/auth/logout", async (req, res, ctx) => {
+  rest.delete("/auth/logout", async (req, res, ctx) => {
     return res(ctx.status(200));
   }),
-  rest.get("/api/auth/user", async (req, res, ctx) => {
+  rest.get("/auth/user", async (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -45,10 +45,10 @@ export const handlers = [
       })
     );
   }),
-  rest.post("/api/group/:groupId/enter", async (req, res, ctx) => {
+  rest.post("/group/:groupId/enter", async (req, res, ctx) => {
     return res(ctx.status(200));
   }),
-  rest.get("/api/groups", async (req, res, ctx) => {
+  rest.get("/groups", async (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -78,7 +78,7 @@ export const handlers = [
       })
     );
   }),
-  rest.get("/api/groups/:groupId/posts", async (req, res, ctx) => {
+  rest.get("/groups/:groupId/posts", async (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -126,10 +126,10 @@ export const handlers = [
       })
     );
   }),
-  rest.post("/api/friend/request", async (req, res, ctx) => {
+  rest.post("/friend/request", async (req, res, ctx) => {
     return res(ctx.status(200));
   }),
-  rest.post("/api/friend", async (req, res, ctx) => {
+  rest.post("/friend", async (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -141,7 +141,7 @@ export const handlers = [
       })
     );
   }),
-  rest.get("/api/users/posts", async (req, res, ctx) => {
+  rest.get("/users/posts", async (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -174,7 +174,7 @@ export const handlers = [
       })
     );
   }),
-  rest.get("/api/users/groups", async (req, res, ctx) => {
+  rest.get("/users/groups", async (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -190,16 +190,16 @@ export const handlers = [
       })
     );
   }),
-  rest.post("/api/posts", async (req, res, ctx) => {
+  rest.post("/posts", async (req, res, ctx) => {
     return res(ctx.status(200));
   }),
-  rest.delete("/api/posts/:postId", async (req, res, ctx) => {
+  rest.delete("/posts/:postId", async (req, res, ctx) => {
     return res(ctx.status(200));
   }),
-  rest.put("/api/notifications", async (req, res, ctx) => {
+  rest.put("/notifications", async (req, res, ctx) => {
     return res(ctx.status(200));
   }),
-  rest.get("/api/notifications", async (req, res, ctx) => {
+  rest.get("/notifications", async (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
