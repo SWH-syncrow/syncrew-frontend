@@ -10,7 +10,7 @@ import {
 } from "../_server/serverAuth";
 import { AuthUserApis } from "src/lib/apis/authUserApis";
 import { useEffect, useState } from "react";
-import authInstance from "src/lib/axios/instance";
+import { authInstance } from "src/lib/axios/instance";
 const useAuth = () => {
   const [accessToken, setAccessToken] = useState("");
   const setUserAtom = useSetAtom(userAtom);
