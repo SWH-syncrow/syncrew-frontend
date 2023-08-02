@@ -9,7 +9,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import Delete from "public/assets/icons/Delete.svg";
 import Photo from "public/assets/icons/image.svg";
 import Send from "public/assets/icons/send.svg";
@@ -24,14 +24,14 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
   const [newMessage, setNewMessage] = useState("");
   const [imgSrc, setImgSrc] = useState<ArrayBuffer | string>();
   const [img, setImg] = useState<File>();
-  const inputRef = useRef<HTMLTextAreaElement | null>(null);
-  const [channels, setChannels] = useAtom(channelsAtom);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const channels = useAtomValue(channelsAtom);
 
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
+    if (textareaRef.current) {
+      textareaRef.current.focus();
     }
-  }, [inputRef]);
+  }, [channelID]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -124,12 +124,11 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
       >
         <div className="relative flex-1 flex">
           <TextArea
-            ref={inputRef}
+            ref={textareaRef}
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="메시지를 입력해봐요."
-            className="bg-transparent bg-grey-0 px-8 py-2 flex-1 h-[46px] !rounded-full text-base"
-            autoFocus
+            className="bg-grey-0 px-8 py-2 flex-1 h-[46px] !rounded-full !text-base !leading-7"
           />
           <label
             htmlFor="file"
