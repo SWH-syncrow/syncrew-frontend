@@ -1,6 +1,6 @@
 import { channelsAtom, userAtom } from "@app/GlobalProvider";
 import { Channel, ChannelsObj, ChatUser } from "@app/chat/components/types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
   Unsubscribe,
   addDoc,
@@ -8,10 +8,8 @@ import {
   collection,
   doc,
   documentId,
-  getDoc,
   getDocs,
   onSnapshot,
-  orderBy,
   query,
   serverTimestamp,
   setDoc,
@@ -19,9 +17,9 @@ import {
   where,
 } from "firebase/firestore";
 import { useAtom, useAtomValue } from "jotai";
+import { useEffect, useState } from "react";
 import { db } from "src/lib/firebase/firebase";
 import { firebaseUtils } from "src/lib/firebase/utils";
-import { useEffect, useState } from "react";
 
 export const useGetChannels = () => {
   const [channelsUnsb, setChannelsUnsb] = useState<Unsubscribe | null>(null);
@@ -32,14 +30,11 @@ export const useGetChannels = () => {
 
   useEffect(() => {
     if (user.id !== -1) getChannels();
-  }, [user.id]);
-
-  useEffect(() => {
     return () => {
       channelsUnsb && channelsUnsb();
       channelsOfUserUnsb && channelsOfUserUnsb();
     };
-  }, []);
+  }, [user.id]);
 
   const getChannels = async () => {
     const unsb = onSnapshot(
@@ -65,13 +60,15 @@ export const useGetChannels = () => {
                 ...notMe.docs[0].data(),
                 id: notMe.docs[0].id,
               };
+              const { lastChatAt, lastChatUser, lastVisitedAt, ...chProps } =
+                channel.data();
               return {
-                ...channel.data(),
+                ...chProps,
                 id: channel.id,
                 chatUser,
                 isUnread:
-                  channel.data().lastChatAt >
-                  channel.data()?.lastVisitedAt?.[user.id],
+                  lastChatUser != user.id.toString() &&
+                  lastChatAt > lastVisitedAt?.[user.id],
               };
             });
           const res = (await Promise.all(resPromises)) as Channel[];

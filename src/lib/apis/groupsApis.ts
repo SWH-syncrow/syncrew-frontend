@@ -1,4 +1,4 @@
-import { GroupCategory } from "@app/types";
+import { GroupCategory } from "@app/_types";
 import axios from "axios";
 
 const getGroups = async (category: GroupCategory) => {

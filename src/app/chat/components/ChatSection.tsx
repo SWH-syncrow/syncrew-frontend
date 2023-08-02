@@ -58,10 +58,10 @@ const ChatSection = () => {
     <div
       className={clsx(
         channelID === "" ? "hidden" : "visible",
-        "flex-1 flex flex-col pb-[50px] pt-[104px] w-full px-11"
+        "flex-1 flex flex-col pb-[50px] pt-[104px] w-full"
       )}
     >
-      <div className="flex justify-between bg-white pb-9">
+      <div className="flex justify-between bg-white pb-9  px-11">
         <div className="flex items-center gap-2">
           <UserAvatar
             profileImage={channels[channelID]?.chatUser?.profileImage}
@@ -105,7 +105,7 @@ const ChatSection = () => {
         </Button>
       </div>
 
-      <div className="flex flex-col flex-1 gap-2 overflow-y-scroll">
+      <div className="flex flex-col flex-1 gap-2 px-11 overflow-auto">
         {messages.map((message) => (
           <Message
             key={message.id}

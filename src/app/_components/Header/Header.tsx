@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import Alert from "./Alert";
+import Notification from "./Notification";
 import { useAtomValue } from "jotai";
 import { isLoggedInAtom } from "@app/GlobalProvider";
 
@@ -37,7 +37,7 @@ const Header = () => {
             로그인
           </Link>
         ) : (
-          <Alert />
+          <Notification />
         )}
       </div>
     </header>

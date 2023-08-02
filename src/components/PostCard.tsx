@@ -10,7 +10,7 @@ import Request from "public/assets/icons/친구신청.svg";
 import { useState } from "react";
 import { Button } from "src/components/Button";
 import { FriendApis } from "src/lib/apis/friendApis";
-import { GetGroupPostsResponse } from "src/lib/apis/models/GroupsDto";
+import { GetGroupPostsResponse } from "src/lib/apis/_models/GroupsDto";
 import { PostApis } from "src/lib/apis/postApis";
 import { useGlobalModal } from "./modal/GlobalModal";
 

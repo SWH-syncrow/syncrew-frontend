@@ -1,5 +1,5 @@
 import { isLoggedInAtom, userAtom } from "@app/GlobalProvider";
-import { setRefreshTokenToCookie } from "@components/server/serverAuth";
+import { setRefreshTokenToCookie } from "@components/_server/serverAuth";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useSetAtom } from "jotai";

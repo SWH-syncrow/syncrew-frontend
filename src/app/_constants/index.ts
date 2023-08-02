@@ -1,4 +1,4 @@
-import { GroupCategory } from "@app/types";
+import { GroupCategory } from "@app/_types";
 
 export const CATEGORIES: { key: GroupCategory; text: string }[] = [
   { key: "ALL", text: "전체" },

@@ -1,4 +1,4 @@
-import { GetGroupsRequest } from "src/lib/apis/models/GroupsDto";
+import { GetGroupsRequest } from "src/lib/apis/_models/GroupsDto";
 
 export type GroupCategory = "ALL" | GetGroupsRequest["query"]["category"];
 export interface Group {

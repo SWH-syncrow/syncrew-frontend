@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CreatePostRequest } from "./models/PostsDto";
+import { CreatePostRequest } from "./_models/PostsDto";
 
 const createPost = async (post: CreatePostRequest) => {
   try {

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { GroupsApis } from "src/lib/apis/groupsApis";
 import AuthCheckButton from "./AuthCheckButton";
-import { Group } from "@app/types";
+import { Group } from "@app/_types";
 
 const GroupCard = ({ id, name, memberCount, postCount }: Group) => {
   const router = useRouter();

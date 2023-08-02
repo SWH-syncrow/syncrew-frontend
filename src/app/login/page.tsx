@@ -1,5 +1,5 @@
 "use client";
-import useAuthKakao from "@components/hooks/useAuthKakao";
+import useAuthKakao from "@components/_hooks/useAuthKakao";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Kakao from "public/assets/kakao.svg";
