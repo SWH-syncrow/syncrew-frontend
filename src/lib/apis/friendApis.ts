@@ -29,7 +29,7 @@ const acceptFriend = async ({
   }
 };
 
-const rejectFriend = async ({
+const refuseFriend = async ({
   friendRequestId,
   notificationId,
 }: PostFriendRequest) => {
@@ -44,4 +44,4 @@ const rejectFriend = async ({
     return error;
   }
 };
-export const FriendApis = { requestFriend, acceptFriend, rejectFriend };
+export const FriendApis = { requestFriend, acceptFriend, refuseFriend };

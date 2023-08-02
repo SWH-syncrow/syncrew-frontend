@@ -1,4 +1,3 @@
-import { useGenerateChannel } from "@app/chat/components/hooks/useFirebaseChannel";
 import { Button } from "@components/Button";
 import { Dialog } from "@components/Dialog";
 import Ping from "@components/Ping";
@@ -9,6 +8,7 @@ import { useCallback, useRef, useState } from "react";
 import { FriendApis } from "src/lib/apis/friendApis";
 import { GetNotificationsResponse } from "src/lib/apis/_models/NotificationsDto";
 import { NotiApis } from "src/lib/apis/notiApis";
+import useGenerateChannel from "@app/chat/components/hooks/channel/useGenerateChannel";
 
 const Notification = () => {
   const [open, setOpen] = useState(false);
@@ -54,12 +54,12 @@ const Notification = () => {
     },
   });
 
-  const rejectFriend = useMutation({
+  const refuseFriend = useMutation({
     mutationFn: async ({
       friendRequestId,
       notificationId,
     }: PostFriendRequest) =>
-      await FriendApis.rejectFriend({ friendRequestId, notificationId }),
+      await FriendApis.refuseFriend({ friendRequestId, notificationId }),
     onSuccess: () => {
       refetch();
     },
@@ -78,13 +78,13 @@ const Notification = () => {
               <div className="flex justify-between gap-3">
                 <Button
                   onClick={() =>
-                    rejectFriend.mutate({
+                    refuseFriend.mutate({
                       friendRequestId: noti.friendRequestId,
                       notificationId: noti.id,
                     })
                   }
                   className="btn-orange-border flex-1 text-xs py-2 !rounded-xl"
-                  disabled={acceptFriend.isLoading || rejectFriend.isLoading}
+                  disabled={acceptFriend.isLoading || refuseFriend.isLoading}
                 >
                   거절하기
                 </Button>
@@ -96,7 +96,7 @@ const Notification = () => {
                     })
                   }
                   className="btn-orange flex-1 text-xs py-2 !rounded-xl"
-                  disabled={acceptFriend.isLoading || rejectFriend.isLoading}
+                  disabled={acceptFriend.isLoading || refuseFriend.isLoading}
                 >
                   수락하기
                 </Button>
@@ -130,7 +130,7 @@ const Notification = () => {
           );
       }
     },
-    [acceptFriend, rejectFriend]
+    [acceptFriend, refuseFriend]
   );
 
   return (
