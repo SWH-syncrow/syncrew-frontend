@@ -8,7 +8,7 @@ import { useRef, useState } from "react";
 import { GroupsApis } from "src/lib/apis/groupsApis";
 import CreatePostModal from "../../../components/modal/CreatePostModal";
 import useObserver from "../hooks/useObserver";
-import { Post } from "../types";
+import { GetGroupPostsResponse } from "src/lib/apis/models/GroupsDto";
 
 const PageContent = () => {
   const { id: userId } = useAtomValue(userAtom);
@@ -19,7 +19,7 @@ const PageContent = () => {
     memberCount: 0,
     postCount: 0,
   });
-  const [posts, setPosts] = useState<Post[] | []>([]);
+  const [posts, setPosts] = useState<GetGroupPostsResponse["posts"] | []>([]);
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
   const infiniteScrollTarget = useRef<HTMLDivElement | null>(null);
 
