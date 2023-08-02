@@ -1,32 +1,43 @@
 import { userAtom } from "@app/GlobalProvider";
+import { Group } from "@app/types";
 import PostCard from "@components/PostCard";
 import { useQuery } from "@tanstack/react-query";
-import { AxiosResponse } from "axios";
 import { useAtomValue } from "jotai";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { GroupsApis } from "src/lib/apis/groupsApis";
 import CreatePostModal from "../../../components/modal/CreatePostModal";
+import useObserver from "../hooks/useObserver";
 import { Post } from "../types";
 
 const PageContent = () => {
   const { id: userId } = useAtomValue(userAtom);
-  const searchParams = useSearchParams();
-  const groupId = searchParams?.get("id") || "";
-  const [groupInfo, setGroupInfo] = useState({
-    name: "스마트폰 활용 초급",
-    memeberCount: 1,
-    postCount: 1,
+  const groupId = useSearchParams()?.get("id") || "";
+  const [groupInfo, setGroupInfo] = useState<Group>({
+    id: parseInt(groupId),
+    name: "",
+    memberCount: 0,
+    postCount: 0,
   });
   const [posts, setPosts] = useState<Post[] | []>([]);
+  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const infiniteScrollTarget = useRef<HTMLDivElement | null>(null);
 
-  useQuery(["getGroupPosts"], {
-    queryFn: async () => await GroupsApis.getGroupPosts(parseInt(groupId)),
-    onSuccess: ({
-      data: { name, memeberCount, postCount, posts },
-    }: AxiosResponse) => {
-      setGroupInfo({ name, memeberCount, postCount });
-      setPosts(posts);
+  useObserver({
+    target: infiniteScrollTarget,
+    onIsIntersectingHandler: () =>
+      !isLoading && setPagination((p) => ({ ...p, page: p.page + 1 })),
+  });
+
+  const { isLoading } = useQuery(["getGroupPosts", { groupId, pagination }], {
+    queryFn: async () =>
+      await GroupsApis.getGroupPosts({
+        groupId: parseInt(groupId),
+        pagination,
+      }),
+    onSuccess: ({ data: { id, name, memberCount, postCount, posts } }) => {
+      setGroupInfo({ id, name, memberCount, postCount });
+      setPosts((p) => [...p, ...posts]);
     },
     onError: (e) => {
       console.error(e);
@@ -49,7 +60,7 @@ const PageContent = () => {
             <div className="flex justify-between items-center">
               <div className="flex gap-2.5 mb-[25px]">
                 <div className="text-xs btn-grey-border leading-4 py-0.5 px-2.5 rounded-full">
-                  참여 {groupInfo.memeberCount}
+                  참여 {groupInfo.memberCount}
                 </div>
                 <div className="text-xs btn-grey-border leading-4 py-0.5 px-2.5 rounded-full">
                   신청글 {groupInfo.postCount}
@@ -77,9 +88,10 @@ const PageContent = () => {
                 <PostCard
                   key={post.id}
                   {...{ post }}
-                  type={post.writer.id === userId ? "MINE" : "NORMAL"}
+                  type={post.writer?.id === userId ? "MINE" : "NORMAL"}
                 />
               ))}
+              <div ref={infiniteScrollTarget}></div>
             </div>
           )}
         </div>
