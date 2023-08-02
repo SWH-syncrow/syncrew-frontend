@@ -27,7 +27,7 @@ const ChatSection = () => {
 
   const rejectFriend = useMutation({
     mutationFn: async (friendRequestId: number) =>
-      await FriendApis.rejectFriend(friendRequestId),
+      await FriendApis.rejectFriend({ friendRequestId }),
     onSuccess: async () => {
       resetState();
       await deleteDoc(doc(db, "channel", channelID));

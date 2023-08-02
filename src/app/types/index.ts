@@ -1,12 +1,6 @@
-export interface User {
-  id: number;
-  username: string;
-  email: string;
-  profileImage?: string;
-  temp: number;
-  isTestTarget?: boolean;
-}
-export type GroupCategory = "ALL" | "SMARTPHONE" | "PPT" | "VIDEO" | "PS";
+import { GetGroupsRequest } from "src/lib/apis/models/GroupsDto";
+
+export type GroupCategory = "ALL" | GetGroupsRequest["query"]["category"];
 export interface Group {
   id: number;
   name: string;

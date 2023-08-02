@@ -10,12 +10,12 @@ import Request from "public/assets/icons/친구신청.svg";
 import { useState } from "react";
 import { Button } from "src/components/Button";
 import { FriendApis } from "src/lib/apis/friendApis";
-import { Post } from "../app/group/types";
-import { useGlobalModal } from "./modal/GlobalModal";
+import { GetGroupPostsResponse } from "src/lib/apis/models/GroupsDto";
 import { PostApis } from "src/lib/apis/postApis";
+import { useGlobalModal } from "./modal/GlobalModal";
 
 interface PostCardProps {
-  post: Post;
+  post: GetGroupPostsResponse["posts"][0];
   type?: "MINE" | "REQUESTED" | "NORMAL";
 }
 const PostCard = ({
@@ -125,7 +125,10 @@ const DeleteButton = ({ postId }: { postId: number }) => {
 DeleteButton.displayName = "deleteButton";
 PostCard.DeleteButton = DeleteButton;
 
-const AcceptButton = ({ id, rejectedUsers }: Post) => {
+const AcceptButton = ({
+  id,
+  rejectedUsers,
+}: GetGroupPostsResponse["posts"][0]) => {
   const { id: userId } = useAtomValue(userAtom);
   const { setModalState } = useGlobalModal();
   const queryClient = useQueryClient();
@@ -150,7 +153,7 @@ const AcceptButton = ({ id, rejectedUsers }: Post) => {
   return (
     <Button
       onClick={() => {
-        if (rejectedUsers.includes(userId))
+        if (rejectedUsers?.includes(userId))
           return setModalState({
             contents: "아쉽지만 거절된 친구 신청글이에요.",
           });

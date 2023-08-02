@@ -1,15 +1,15 @@
 "use client";
 
 import useAuth from "@components/hooks/useAuth";
+import { atom } from "jotai";
 import { atomWithReset } from "jotai/utils";
-import React, { useEffect } from "react";
-import { User } from "./types";
 import { usePathname } from "next/navigation";
+import React, { useEffect } from "react";
+import { GetUserResponse } from "src/lib/apis/models/AuthDto";
 import { useGetChannels } from "./chat/components/hooks/useFirebaseChannel";
 import { ChannelsObj } from "./chat/components/types";
-import { atom } from "jotai";
 
-export const userAtom = atomWithReset<User>({
+export const userAtom = atomWithReset<GetUserResponse>({
   id: -1,
   username: "",
   email: "",

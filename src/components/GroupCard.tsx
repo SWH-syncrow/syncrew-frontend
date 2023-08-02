@@ -4,14 +4,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { GroupsApis } from "src/lib/apis/groupsApis";
 import AuthCheckButton from "./AuthCheckButton";
+import { Group } from "@app/types";
 
-interface CardProps {
-  id: number;
-  name: string;
-  memberCount: number;
-  postCount: number;
-}
-const GroupCard = ({ id, name, memberCount, postCount }: CardProps) => {
+const GroupCard = ({ id, name, memberCount, postCount }: Group) => {
   const router = useRouter();
   const enterGroup = useMutation({
     mutationFn: async (groupdId: number) =>
