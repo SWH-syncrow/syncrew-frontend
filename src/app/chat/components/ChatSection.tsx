@@ -1,14 +1,13 @@
 import { channelsAtom, userAtom } from "@app/GlobalProvider";
 import UserAvatar from "@components/UserAvatar";
-import { useGlobalModal } from "@components/modal/GlobalModal";
 import clsx from "clsx";
 import { useAtomValue } from "jotai";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
+import ChatForm from "./ChatForm";
 import RefuseButton from "./RefuseButton";
 import useFirebaseChat from "./hooks/chat/useFirebaseChat";
 import { Message } from "./types";
-import ChatForm from "./ChatForm";
 
 interface MessageProps {
   message: Message;
@@ -32,8 +31,9 @@ const ChatSection = () => {
   const router = useRouter();
   const channelID = useSearchParams()?.get("channel") || "";
   const isEnteredChannel = channelID !== "";
+  
   const channels = useAtomValue(channelsAtom);
-  const { id, chatUser, friendRequestId } = channels[channelID];
+  const { chatUser, friendRequestId } = channels[channelID];
   const { id: userId } = useAtomValue(userAtom);
 
   const { messages } = useFirebaseChat(channelID);
