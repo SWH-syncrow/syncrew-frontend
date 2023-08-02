@@ -9,7 +9,7 @@ import { FriendApis } from "src/lib/apis/friendApis";
 import { GetNotificationsResponse } from "src/lib/apis/models/NotificationsDto";
 import { NotiApis } from "src/lib/apis/notiApis";
 
-const Alert = () => {
+const Notification = () => {
   const alertRef = useRef<HTMLButtonElement | null>(null);
   const [alertList, setAlertList] = useState<
     GetNotificationsResponse["notifications"] | []
@@ -165,4 +165,4 @@ const Alert = () => {
   );
 };
 
-export default Alert;
+export default Notification;
