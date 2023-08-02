@@ -1,11 +1,11 @@
 import { GroupCategory } from "@app/_types";
 import axios from "axios";
-import authInstance from "../axios/instance";
+import { authInstance, unAuthInstance } from "../axios/instance";
 
 const getGroups = async (category: GroupCategory) => {
   try {
-    const res = await axios.get(
-      category === "ALL" ? `/api/groups` : `/api/groups?category=${category}`
+    const res = await unAuthInstance.get(
+      category === "ALL" ? `/groups` : `/groups?category=${category}`
     );
 
     return res;

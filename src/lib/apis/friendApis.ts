@@ -1,4 +1,4 @@
-import authInstance from "../axios/instance";
+import { authInstance } from "../axios/instance";
 
 const requestFriend = async ({ userId, postId }: RequestFriendRequest) => {
   try {

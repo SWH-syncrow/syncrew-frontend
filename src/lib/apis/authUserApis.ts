@@ -1,9 +1,8 @@
-import axios from "axios";
-import authInstance from "../axios/instance";
+import { authInstance, unAuthInstance } from "../axios/instance";
 
 const kakaoLogin = async (accessToken: string) => {
   try {
-    const res = await axios.post("/api/auth/login", { accessToken });
+    const res = await unAuthInstance.post("/auth/login", { accessToken });
 
     return res;
   } catch (error) {
@@ -13,7 +12,9 @@ const kakaoLogin = async (accessToken: string) => {
 };
 const reissueToken = async (refreshToken: string) => {
   try {
-    const res = await axios.post("/api/auth/reissue", { refreshToken });
+    const res = await unAuthInstance.post("/auth/reissue", {
+      refreshToken,
+    });
 
     return res;
   } catch (error) {

@@ -1,4 +1,4 @@
-import authInstance from "../axios/instance";
+import { authInstance } from "../axios/instance";
 import { CreatePostRequest } from "./_models/PostsDto";
 
 const createPost = async (post: CreatePostRequest) => {

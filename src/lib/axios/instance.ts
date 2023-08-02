@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const authInstance = axios.create({ baseURL: "/api" });
+export const authInstance = axios.create({ baseURL: "/api" });
 authInstance.interceptors.response.use(
   (response) => {
     return response;
@@ -14,4 +14,4 @@ authInstance.interceptors.response.use(
   }
 );
 
-export default authInstance;
+export const unAuthInstance = axios.create({ baseURL: "/api" });
