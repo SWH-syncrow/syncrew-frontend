@@ -1,12 +1,6 @@
 import axios from "axios";
 
-const requestFriend = async ({
-  userId,
-  postId,
-}: {
-  userId: number;
-  postId: number;
-}) => {
+const requestFriend = async ({ userId, postId }: RequestFriendRequest) => {
   try {
     const res = await axios.post("/api/friend/request", {
       data: { userId, postId },
@@ -19,10 +13,13 @@ const requestFriend = async ({
   }
 };
 
-const acceptFriend = async (friendRequestId: number) => {
+const acceptFriend = async ({
+  friendRequestId,
+  notificationId,
+}: PostFriendRequest) => {
   try {
     const res = await axios.post("/api/friend?q=accept", {
-      data: { friendRequestId },
+      data: { friendRequestId, notificationId },
     });
 
     return res;
@@ -32,10 +29,13 @@ const acceptFriend = async (friendRequestId: number) => {
   }
 };
 
-const rejectFriend = async (friendRequestId: number) => {
+const rejectFriend = async ({
+  friendRequestId,
+  notificationId,
+}: PostFriendRequest) => {
   try {
     const res = await axios.post("/api/friend?q=refuse", {
-      data: { friendRequestId },
+      data: { friendRequestId, notificationId },
     });
 
     return res;

@@ -1,12 +1,12 @@
-import { Post } from "@app/group/types";
 import PostCard from "@components/PostCard";
 import CreatePostModal from "@components/modal/CreatePostModal";
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import { useState } from "react";
+import { GetUserPostsResponse } from "src/lib/apis/models/UserDto";
 import { MypageApis } from "src/lib/apis/mypageApis";
 
 const MyPostTabView = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<GetUserPostsResponse["posts"]>([]);
 
   useQuery(["getMyPosts"], {
     queryFn: async () => await MypageApis.getMyPosts(),

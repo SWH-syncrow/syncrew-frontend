@@ -13,7 +13,7 @@ export interface ChannelsObj {
 export interface ChatUser {
   id: string;
   username: string;
-  profileImage?: string;
+  profileImage: string | null;
   temp: number;
 }
 

@@ -1,7 +1,7 @@
-import { CreatePost } from "@components/modal/CreatePostModal/types";
 import axios from "axios";
+import { CreatePostRequest } from "./models/PostsDto";
 
-const createPost = async (post: CreatePost) => {
+const createPost = async (post: CreatePostRequest) => {
   try {
     const res = await axios.post("/api/notifications", { data: post });
 

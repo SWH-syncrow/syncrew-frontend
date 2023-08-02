@@ -7,7 +7,7 @@ const UserAvatar = ({
   profileImage,
   className,
 }: {
-  profileImage?: string;
+  profileImage: string | null;
   className?: string;
 }) => {
   return (

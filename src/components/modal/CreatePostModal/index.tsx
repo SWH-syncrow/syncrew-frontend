@@ -9,7 +9,7 @@ import AuthCheckButton from "@components/AuthCheckButton";
 import { FormEvent, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PostApis } from "src/lib/apis/postApis";
-import { CreatePost } from "./types";
+import { CreatePostRequest } from "src/lib/apis/models/PostsDto";
 
 interface CreatePostModalProps {
   groupId: string;
@@ -18,7 +18,7 @@ interface CreatePostModalProps {
 const modalOpenAtom = atom<boolean>(false);
 const CreatePostModal = ({ groupId, groupName }: CreatePostModalProps) => {
   const [openAtom, setOpenAtom] = useAtom(modalOpenAtom);
-  const [post, setPost] = useState<CreatePost>({
+  const [post, setPost] = useState<CreatePostRequest>({
     title: "",
     content: "",
     groupId: parseInt(groupId),
@@ -26,7 +26,8 @@ const CreatePostModal = ({ groupId, groupName }: CreatePostModalProps) => {
   const queryClient = useQueryClient();
 
   const createPost = useMutation({
-    mutationFn: async (post: CreatePost) => await PostApis.createPost(post),
+    mutationFn: async (post: CreatePostRequest) =>
+      await PostApis.createPost(post),
     onSuccess: () => {
       setOpenAtom(false);
       queryClient.invalidateQueries(["getGroupPosts"]);

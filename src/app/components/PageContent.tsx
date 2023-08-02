@@ -1,4 +1,5 @@
 import { isLoggedInAtom, userAtom } from "@app/GlobalProvider";
+import { CATEGORIES } from "@app/constants";
 import GroupCard from "@components/GroupCard";
 import ToolTip from "@components/Tooltip";
 import LevelTestModal from "@components/modal/LevelTestModal";
@@ -9,13 +10,13 @@ import { useAtomValue } from "jotai";
 import { useState } from "react";
 import { Button } from "src/components/Button";
 import { GroupsApis } from "src/lib/apis/groupsApis";
-import { Group, GroupCategory } from "../types";
-import { CATEGORIES } from "@app/constants";
+import { GetGroupsResponse } from "src/lib/apis/models/GroupsDto";
+import { GroupCategory } from "../types";
 
 const PageContent = () => {
   const isLoggedIn = useAtomValue(isLoggedInAtom);
   const user = useAtomValue(userAtom);
-  const [groups, setGroups] = useState<Group[]>([]);
+  const [groups, setGroups] = useState<GetGroupsResponse["groups"]>([]);
   const [selectedCategory, setSelectedCategory] =
     useState<GroupCategory>("ALL");
 

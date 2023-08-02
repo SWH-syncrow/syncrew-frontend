@@ -6,20 +6,14 @@ import Link from "next/link";
 import Bell from "public/assets/icons/알림_inactive.svg";
 import { useCallback, useRef, useState } from "react";
 import { FriendApis } from "src/lib/apis/friendApis";
+import { GetNotificationsResponse } from "src/lib/apis/models/NotificationsDto";
 import { NotiApis } from "src/lib/apis/notiApis";
 
-type ALERT_STATUS = "RECEIVED" | "REQUESTED" | "MATCHED" | "REJECTED";
-interface Alert {
-  id: number;
-  friendRequestId: number;
-  friendName: string;
-  friendId: number;
-  status: ALERT_STATUS;
-  read: boolean;
-}
 const Alert = () => {
   const alertRef = useRef<HTMLButtonElement | null>(null);
-  const [alertList, setAlertList] = useState<Alert[] | []>([]);
+  const [alertList, setAlertList] = useState<
+    GetNotificationsResponse["notifications"] | []
+  >([]);
   const { genrateChannel } = useGenerateChannel();
 
   const { refetch } = useQuery(["getNotifications"], {
@@ -34,8 +28,11 @@ const Alert = () => {
   });
 
   const acceptFriend = useMutation({
-    mutationFn: async (friendRequestId: number) =>
-      await FriendApis.acceptFriend(friendRequestId),
+    mutationFn: async ({
+      friendRequestId,
+      notificationId,
+    }: PostFriendRequest) =>
+      await FriendApis.acceptFriend({ friendRequestId, notificationId }),
     onSuccess: (res: any) => {
       const friendRequestId = JSON.parse(res.config.data).data.friendRequestId;
       genrateChannel.mutate({ friend: res.data, friendRequestId });
@@ -47,8 +44,11 @@ const Alert = () => {
   });
 
   const rejectFriend = useMutation({
-    mutationFn: async (friendRequestId: number) =>
-      await FriendApis.rejectFriend(friendRequestId),
+    mutationFn: async ({
+      friendRequestId,
+      notificationId,
+    }: PostFriendRequest) =>
+      await FriendApis.rejectFriend({ friendRequestId, notificationId }),
     onSuccess: () => {
       refetch();
     },
@@ -58,22 +58,32 @@ const Alert = () => {
   });
 
   const getAlertElement = useCallback(
-    (alert: Alert) => {
+    (alert: GetNotificationsResponse["notifications"][0]) => {
       switch (alert.status) {
-        case "RECEIVED":
+        case "REQUESTED":
           return (
             <>
               <span className="text-grey-300 leading-8 mb-[14px]">{`${alert.friendName}님이 친구요청을 보냈어요`}</span>
               <div className="flex justify-between gap-3">
                 <Button
-                  onClick={() => rejectFriend.mutate(alert.friendRequestId)}
+                  onClick={() =>
+                    rejectFriend.mutate({
+                      friendRequestId: alert.friendRequestId,
+                      notificationId: alert.id,
+                    })
+                  }
                   className="btn-orange-border flex-1 text-xs py-2 !rounded-xl"
                   disabled={acceptFriend.isLoading || rejectFriend.isLoading}
                 >
                   거절하기
                 </Button>
                 <Button
-                  onClick={() => acceptFriend.mutate(alert.friendRequestId)}
+                  onClick={() =>
+                    acceptFriend.mutate({
+                      friendRequestId: alert.friendRequestId,
+                      notificationId: alert.id,
+                    })
+                  }
                   className="btn-orange flex-1 text-xs py-2 !rounded-xl"
                   disabled={acceptFriend.isLoading || rejectFriend.isLoading}
                 >
@@ -82,11 +92,12 @@ const Alert = () => {
               </div>
             </>
           );
-        case "REQUESTED":
+        case "REQUEST":
           return (
             <span className="text-grey-300 leading-8">{`${alert.friendName}님에게 친구요청을 보냈어요`}</span>
           );
-        case "MATCHED":
+        case "ACCEPT":
+        case "ACCEPTED":
           return (
             <>
               <span className="text-grey-300 leading-8 mb-[14px]">{`${alert.friendName}님과 친구가 매칭되었어요`}</span>
@@ -98,7 +109,11 @@ const Alert = () => {
               </Link>
             </>
           );
-        case "REJECTED":
+        case "REFUSE":
+          return (
+            <span className="text-grey-300 leading-8">{`${alert.friendName}님의 친구요청을 거절했어요`}</span>
+          );
+        case "REFUSED":
           return (
             <span className="text-grey-300 leading-8">{`${alert.friendName}님이 친구요청을 거절했어요`}</span>
           );
