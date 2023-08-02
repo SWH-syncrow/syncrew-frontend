@@ -1,11 +1,15 @@
 "use client";
 
-import PageContent from "./components/PageContent";
+import ChannelSection from "./components/ChannelSection";
+import ChatSection from "./components/ChatSection";
 
 const Page = () => {
   return (
     <div className="w-full">
-      <PageContent />
+      <div className="flex flex-row min-h-screen">
+        <ChannelSection />
+        <ChatSection />
+      </div>
     </div>
   );
 };
