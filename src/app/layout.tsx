@@ -7,7 +7,7 @@ import GlobalProvider from "./GlobalProvider";
 import MswProvider from "./MswProvider";
 import ReactQueryProvider from "./ReactQueryProvider";
 import RootStyleRegistry from "./RootStyleRegistry";
-import GNB from "./components/GNB";
+import GNB from "./_components/GNB";
 
 const pretendard = localFont({
   src: "../../public/font/PretendardVariable.woff2",

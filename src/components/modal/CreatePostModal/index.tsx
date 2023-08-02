@@ -9,7 +9,7 @@ import AuthCheckButton from "@components/AuthCheckButton";
 import { FormEvent, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PostApis } from "src/lib/apis/postApis";
-import { CreatePostRequest } from "src/lib/apis/models/PostsDto";
+import { CreatePostRequest } from "src/lib/apis/_models/PostsDto";
 
 interface CreatePostModalProps {
   groupId: string;

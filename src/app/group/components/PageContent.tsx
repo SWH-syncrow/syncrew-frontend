@@ -1,5 +1,5 @@
 import { userAtom } from "@app/GlobalProvider";
-import { Group } from "@app/types";
+import { Group } from "@app/_types";
 import PostCard from "@components/PostCard";
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
@@ -8,7 +8,7 @@ import { useRef, useState } from "react";
 import { GroupsApis } from "src/lib/apis/groupsApis";
 import CreatePostModal from "../../../components/modal/CreatePostModal";
 import useObserver from "../hooks/useObserver";
-import { GetGroupPostsResponse } from "src/lib/apis/models/GroupsDto";
+import { GetGroupPostsResponse } from "src/lib/apis/_models/GroupsDto";
 
 const PageContent = () => {
   const { id: userId } = useAtomValue(userAtom);

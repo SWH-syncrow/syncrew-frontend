@@ -7,7 +7,7 @@ import Link from "next/link";
 import Bell from "public/assets/icons/알림_inactive.svg";
 import { useCallback, useRef, useState } from "react";
 import { FriendApis } from "src/lib/apis/friendApis";
-import { GetNotificationsResponse } from "src/lib/apis/models/NotificationsDto";
+import { GetNotificationsResponse } from "src/lib/apis/_models/NotificationsDto";
 import { NotiApis } from "src/lib/apis/notiApis";
 
 const Notification = () => {

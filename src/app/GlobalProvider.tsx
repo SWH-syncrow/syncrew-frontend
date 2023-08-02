@@ -1,11 +1,11 @@
 "use client";
 
-import useAuth from "@components/hooks/useAuth";
+import useAuth from "@components/_hooks/useAuth";
 import { atom } from "jotai";
 import { atomWithReset } from "jotai/utils";
 import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
-import { GetUserResponse } from "src/lib/apis/models/AuthDto";
+import { GetUserResponse } from "src/lib/apis/_models/AuthDto";
 import { useGetChannels } from "./chat/components/hooks/useFirebaseChannel";
 import { ChannelsObj } from "./chat/components/types";
 

@@ -1,5 +1,5 @@
 import { isLoggedInAtom, userAtom } from "@app/GlobalProvider";
-import { CATEGORIES } from "@app/constants";
+import { CATEGORIES } from "@app/_constants";
 import GroupCard from "@components/GroupCard";
 import ToolTip from "@components/Tooltip";
 import LevelTestModal from "@components/modal/LevelTestModal";
@@ -10,8 +10,8 @@ import { useAtomValue } from "jotai";
 import { useState } from "react";
 import { Button } from "src/components/Button";
 import { GroupsApis } from "src/lib/apis/groupsApis";
-import { GetGroupsResponse } from "src/lib/apis/models/GroupsDto";
-import { GroupCategory } from "../types";
+import { GetGroupsResponse } from "src/lib/apis/_models/GroupsDto";
+import { GroupCategory } from "../_types";
 
 const PageContent = () => {
   const isLoggedIn = useAtomValue(isLoggedInAtom);

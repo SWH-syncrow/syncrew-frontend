@@ -2,7 +2,7 @@ import PostCard from "@components/PostCard";
 import CreatePostModal from "@components/modal/CreatePostModal";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { GetUserPostsResponse } from "src/lib/apis/models/UserDto";
+import { GetUserPostsResponse } from "src/lib/apis/_models/UserDto";
 import { MypageApis } from "src/lib/apis/mypageApis";
 
 const MyPostTabView = () => {
