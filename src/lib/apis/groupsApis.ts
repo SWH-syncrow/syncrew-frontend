@@ -5,7 +5,7 @@ import authInstance from "../axios/instance";
 const getGroups = async (category: GroupCategory) => {
   try {
     const res = await axios.get(
-      category === "ALL" ? `/groups` : `/groups?category=${category}`
+      category === "ALL" ? `/api/groups` : `/api/groups?category=${category}`
     );
 
     return res;
