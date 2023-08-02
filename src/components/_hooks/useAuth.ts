@@ -10,6 +10,7 @@ import {
 } from "../_server/serverAuth";
 import { AuthUserApis } from "src/lib/apis/authUserApis";
 import { useEffect, useState } from "react";
+import { authInstance } from "src/lib/axios/instance";
 const useAuth = () => {
   const [accessToken, setAccessToken] = useState("");
   const setUserAtom = useSetAtom(userAtom);
@@ -29,7 +30,7 @@ const useAuth = () => {
       await AuthUserApis.reissueToken(refreshToken),
     onSuccess: (res: any) => {
       const { accessToken, refreshToken } = res.data;
-      axios.defaults.headers.common["Authorization"] = `${accessToken}`;
+      authInstance.defaults.headers.common["Authorization"] = `${accessToken}`;
       setRefreshTokenToCookie(refreshToken);
       setAccessToken(accessToken);
     },

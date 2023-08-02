@@ -6,8 +6,8 @@ import { atomWithReset } from "jotai/utils";
 import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 import { GetUserResponse } from "src/lib/apis/_models/AuthDto";
-import { useGetChannels } from "./chat/components/hooks/useFirebaseChannel";
 import { ChannelsObj } from "./chat/components/types";
+import useGetChannels from "./chat/components/hooks/channel/useGetChannels";
 
 export const userAtom = atomWithReset<GetUserResponse>({
   id: -1,

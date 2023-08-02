@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { KakaoAuth } from "src/lib/apis/kakao/KakaoAuth";
 import { AuthUserApis } from "src/lib/apis/authUserApis";
+import { authInstance } from "src/lib/axios/instance";
 
 const useAuthKakao = () => {
   const router = useRouter();
@@ -49,7 +50,7 @@ const useAuthKakao = () => {
         user,
         token: { accessToken, refreshToken },
       } = res.data;
-      axios.defaults.headers.common["Authorization"] = `${accessToken}`;
+      authInstance.defaults.headers.common["Authorization"] = `${accessToken}`;
       setRefreshTokenToCookie(refreshToken);
       setUserAtom(user);
       setIsLoggedInAtom(true);

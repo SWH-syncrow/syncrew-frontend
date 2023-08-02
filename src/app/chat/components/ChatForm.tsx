@@ -1,31 +1,25 @@
-import { channelsAtom } from "@app/GlobalProvider";
 import { Button } from "@components/Button";
 import TextArea from "@components/TextArea";
-import {
-  addDoc,
-  collection,
-  doc,
-  serverTimestamp,
-  updateDoc,
-} from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { useAtom, useAtomValue } from "jotai";
+import { useSearchParams } from "next/navigation";
 import Delete from "public/assets/icons/Delete.svg";
 import Photo from "public/assets/icons/image.svg";
 import Send from "public/assets/icons/send.svg";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import { db, storage } from "src/lib/firebase/firebase";
-interface ChatInput {
-  userId: string;
-  channelID: string;
-}
+import useUploadMessage from "./hooks/chat/useUploadMessage";
 
-const ChatInput = ({ userId, channelID }: ChatInput) => {
+const ChatForm = () => {
+  const channelID = useSearchParams()?.get("channel") || "";
   const [newMessage, setNewMessage] = useState("");
-  const [imgSrc, setImgSrc] = useState<ArrayBuffer | string>();
-  const [img, setImg] = useState<File>();
+  const [chatImgSrc, setChatImgSrc] = useState<ArrayBuffer | string>();
+  const [chatImg, setChatImg] = useState<File>();
+
+  const { uploadHandler } = useUploadMessage({
+    channelID,
+    message: newMessage,
+    chatImg,
+  });
+
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const channels = useAtomValue(channelsAtom);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -35,13 +29,11 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    setImg(file);
-
+    setChatImg(file);
     if (file) {
       const fileReader = new FileReader();
-
       fileReader.onloadend = (e) => {
-        setImgSrc(e.target?.result || "");
+        setChatImgSrc(e.target?.result || "");
       };
       fileReader.readAsDataURL(file);
     }
@@ -51,66 +43,28 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
   const handleOnSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    const trimmedMessage = newMessage.trim();
-
-    if (img) {
-      const uniqueId = img.name;
-      const storageRef = ref(storage, uniqueId);
-      const uploadTask = uploadBytesResumable(storageRef, img);
-
-      uploadTask.on(
-        "state_changed",
-        () => {},
-        (error) => {
-          console.error(error);
-        },
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          await addDoc(collection(db, "channel", channelID, "message"), {
-            text: trimmedMessage,
-            createdAt: serverTimestamp(),
-            userId,
-            photoURL: downloadURL,
-          });
-        }
-      );
-    } else if (trimmedMessage) {
-      addDoc(collection(db, "channel", channelID, "message"), {
-        text: trimmedMessage,
-        createdAt: serverTimestamp(),
-        userId,
-      });
-    }
-
-    updateDoc(doc(db, "channel", channelID), {
-      lastChatAt: serverTimestamp(),
-      lastChatUser: userId,
-    });
-
-    if (channels[channelID].status === "READY") {
-      updateDoc(doc(db, "channel", channelID), { status: "DOING" });
-    }
-
+    uploadHandler(e);
     setNewMessage("");
-    setImgSrc("");
-    setImg(undefined);
+    setChatImgSrc("");
+    setChatImg(undefined);
   };
+
   return (
     <div className="relative  px-11">
-      {imgSrc && (
+      {chatImgSrc && (
         <div className="absolute bottom-[100%]">
           <div className="relative max-w-[400px] max-h-[50vh] w-fit rounded-3xl overflow-hidden">
             <Button
               onClick={() => {
-                setImg(undefined);
-                setImgSrc("");
+                setChatImg(undefined);
+                setChatImgSrc("");
               }}
               className="absolute m-1 !p-2 duration-300 hover:bg-orange-50 rounded-full z-20"
             >
               <Delete />
             </Button>
             <img
-              src={imgSrc + ""}
+              src={chatImgSrc + ""}
               alt="첨부 이미지"
               className="relative z-10 object-contain max-h-[50vh]"
             />
@@ -126,6 +80,7 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
           <TextArea
             ref={textareaRef}
             value={newMessage}
+            name="text"
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="메시지를 입력해봐요."
             className="bg-grey-0 px-8 py-2 flex-1 h-[46px] !rounded-full !text-base !leading-7"
@@ -147,7 +102,7 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
         </div>
         <Button
           type="submit"
-          disabled={!newMessage && !imgSrc}
+          disabled={!newMessage && !chatImgSrc}
           className="btn-orange w-[46px] h-[46px] rounded-full !p-0 flex items-center justify-center"
         >
           <Send />
@@ -156,4 +111,4 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
     </div>
   );
 };
-export default ChatInput;
+export default ChatForm;

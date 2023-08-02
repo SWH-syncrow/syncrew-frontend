@@ -3,15 +3,19 @@ import { Message } from "@app/chat/components/types";
 import {
   Unsubscribe,
   collection,
+  doc,
   onSnapshot,
   orderBy,
   query,
+  serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import { db } from "src/lib/firebase/firebase";
 
-const useFirebaseMessage = (channelID: string) => {
+const useFirebaseChat = (channelID: string) => {
+  const isEnteredChannel = channelID !== "";
   const { id: userId } = useAtomValue(userAtom);
   const [messages, setMessages] = useState<Message[] | []>([]);
   const [unsubscribe, setUnsubscribe] = useState<Unsubscribe | null>(null);
@@ -32,16 +36,22 @@ const useFirebaseMessage = (channelID: string) => {
   };
 
   useEffect(() => {
-    if (channelID !== "" && userId != -1) getMessages();
+    if (isEnteredChannel && userId != -1) getMessages();
   }, [channelID, userId]);
 
   useEffect(() => {
     return () => {
       unsubscribe && unsubscribe();
+      if (isEnteredChannel) {
+        updateDoc(doc(db, "channel", channelID), {
+          [`lastVisitedAt.${userId}`]: serverTimestamp(),
+        }).catch((e) => {
+          if (e.code !== "not-found") throw e;
+        });
+      }
     };
   }, [channelID]);
 
   return { messages };
 };
-
-export default useFirebaseMessage;
+export default useFirebaseChat;
