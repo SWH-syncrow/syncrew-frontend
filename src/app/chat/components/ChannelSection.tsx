@@ -6,6 +6,7 @@ import Logo_XL from "public/assets/logos/XL_01.svg";
 import { useMemo } from "react";
 import { Channel } from "./types";
 import { channelsAtom } from "@app/GlobalProvider";
+import Ping from "@components/Ping";
 
 const ChannelSection = () => {
   const channels = useAtomValue(channelsAtom);
@@ -54,19 +55,11 @@ const Channel = ({
         router.push(`/chat?channel=${id}`);
       }}
     >
-      <div className="relative">
-        {isUnread && channelID !== id && (
-          <div className="absolute -top-2 -left-2">
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-orange"></span>
-            </span>
-          </div>
-        )}
-        <UserAvatar profileImage={chatUser.profileImage} />
-      </div>
+      <UserAvatar profileImage={chatUser.profileImage} />
       <div className="flex flex-col flex-1 text-lg font-medium leading-8">
-        {chatUser.username}
+        <Ping className="right-0" condition={isUnread && channelID !== id}>
+          {chatUser.username}
+        </Ping>
         <span className="text-sm text-grey-200 font-normal">{guideMent}</span>
       </div>
       <Right />

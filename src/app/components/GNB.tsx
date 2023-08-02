@@ -1,7 +1,12 @@
 "use client";
 import clsx from "clsx";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import Menu from "public/assets/icons/menu.svg";
 import Search from "public/assets/icons/search_inactive.svg";
 import Chat from "public/assets/icons/chat_inactive.svg";
@@ -11,15 +16,17 @@ import AuthCheckButton from "@components/AuthCheckButton";
 import { useAtomValue } from "jotai";
 import { channelsAtom } from "@app/GlobalProvider";
 import { useMemo } from "react";
+import Ping from "@components/Ping";
 const GNB = () => {
   const pathname = usePathname();
   const router = useRouter();
+  const channelID = useSearchParams()?.get("channel") || "";
   const channels = useAtomValue(channelsAtom);
 
   const isChannelsNoti = useMemo(() => {
     return (
       Object.values(channels).filter(
-        (ch) => ch.isUnread || ch.status === "READY"
+        (ch) => (channelID !== ch.id && ch.isUnread) || ch.status === "READY"
       ).length > 0
     );
   }, [channels]);
@@ -42,23 +49,17 @@ const GNB = () => {
           </Link>
           <AuthCheckButton
             className={clsx(
-              "relative w-full flex items-center gap-1 justify-center py-1 rounded-full duration-300",
+              "w-full flex items-center gap-1 justify-center py-1 rounded-full duration-300",
               pathname === "/chat"
                 ? "bg-orange-50 text-orange-400 [&_path]:fill-orange-400"
                 : "text-grey-300"
             )}
             onClick={() => router.push("/chat")}
           >
-            {isChannelsNoti && (
-              <div className="absolute top-[50%] left-4 -translate-y-[50%]">
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-orange"></span>
-                </span>
-              </div>
-            )}
-            <Chat />
-            싱크루 채팅
+            <Ping condition={isChannelsNoti} className="-right-6">
+              <Chat />
+              싱크루 채팅
+            </Ping>
           </AuthCheckButton>
           <AuthCheckButton
             className={clsx(

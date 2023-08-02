@@ -84,6 +84,7 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
 
     updateDoc(doc(db, "channel", channelID), {
       lastChatAt: serverTimestamp(),
+      lastChatUser: userId,
     });
 
     if (channels[channelID].status === "READY") {
@@ -95,7 +96,7 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
     setImg(undefined);
   };
   return (
-    <div className="relative">
+    <div className="relative  px-11">
       {imgSrc && (
         <div className="absolute bottom-[100%]">
           <div className="relative max-w-[400px] max-h-[50vh] w-fit rounded-3xl overflow-hidden">
@@ -128,6 +129,7 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="메시지를 입력해봐요."
             className="bg-transparent bg-grey-0 px-8 py-2 flex-1 h-[46px] !rounded-full text-base"
+            autoFocus
           />
           <label
             htmlFor="file"
@@ -146,7 +148,7 @@ const ChatInput = ({ userId, channelID }: ChatInput) => {
         </div>
         <Button
           type="submit"
-          disabled={!newMessage}
+          disabled={!newMessage && !imgSrc}
           className="btn-orange w-[46px] h-[46px] rounded-full !p-0 flex items-center justify-center"
         >
           <Send />
