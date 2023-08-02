@@ -196,6 +196,9 @@ export const handlers = [
   rest.delete("/api/posts/:postId", async (req, res, ctx) => {
     return res(ctx.status(200));
   }),
+  rest.put("/api/notifications", async (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
   rest.get("/api/notifications", async (req, res, ctx) => {
     return res(
       ctx.status(200),
@@ -205,7 +208,7 @@ export const handlers = [
             id: 1,
             friendRequestId: 1,
             friendName: "소미",
-            status: "MATCHED",
+            status: "ACCEPT",
             read: false,
           },
           {
@@ -219,8 +222,29 @@ export const handlers = [
             id: 3,
             friendRequestId: 3,
             friendName: "소미",
-            status: "RECEIVED",
-            read: false,
+            status: "REQUEST",
+            read: true,
+          },
+          {
+            id: 4,
+            friendRequestId: 3,
+            friendName: "소미",
+            status: "REQUEST",
+            read: true,
+          },
+          {
+            id: 5,
+            friendRequestId: 3,
+            friendName: "소미",
+            status: "REQUEST",
+            read: true,
+          },
+          {
+            id: 6,
+            friendRequestId: 3,
+            friendName: "소미",
+            status: "REQUEST",
+            read: true,
           },
         ],
       })
