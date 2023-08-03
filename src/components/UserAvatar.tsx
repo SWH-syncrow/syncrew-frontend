@@ -13,11 +13,22 @@ const UserAvatar = ({
   return (
     <div
       className={clsx(
-        "w-[54px] h-[54px] flex items-center justify-center bg-grey-50 border border-grey-100 rounded-full",
+        "w-[54px] h-[54px] flex items-center justify-center bg-grey-50 border border-grey-100 rounded-full overflow-hidden object-cover",
         className
       )}
     >
-      {profileImage ? <Image src={profileImage} alt="프로필사진" /> : <Logo />}
+      {profileImage ? (
+        <Image
+          src={profileImage}
+          alt="프로필사진"
+          width={100}
+          height={100}
+          objectFit="cover"
+          className="max-w-none"
+        />
+      ) : (
+        <Logo />
+      )}
     </div>
   );
 };
