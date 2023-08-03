@@ -187,7 +187,7 @@ const LevelTestModalTrigger = ({ className }: { className?: string }) => {
   return (
     <Button
       onClick={() => setOpenAtom(true)}
-      className={clsx("btn-orange font-medium", className)}
+      className={clsx("btn-blue font-medium", className)}
     >
       신청 전 테스트 시작
     </Button>

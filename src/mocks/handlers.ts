@@ -1,50 +1,6 @@
 import { rest } from "msw";
 
 export const handlers = [
-  rest.post("/api/auth/login", async (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        user: {
-          id: 1,
-          username: "김지현",
-          email: "test@gmail.com",
-          profileImage: null,
-          temp: 36.5,
-          isTestTarget: true,
-        },
-        token: {
-          accessToken: "test",
-          refreshToken: "test_rf",
-        },
-      })
-    );
-  }),
-  rest.post("/api/auth/reissue", async (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        accessToken: "test",
-        refreshToken: "test_rf",
-      })
-    );
-  }),
-  rest.delete("/api/auth/logout", async (req, res, ctx) => {
-    return res(ctx.status(200));
-  }),
-  rest.get("/api/auth/user", async (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        id: 1,
-        username: "김지현",
-        email: "test@gmail.com",
-        profileImage: null,
-        temp: 36.5,
-        isTestTarget: true,
-      })
-    );
-  }),
   rest.post("/api/group/:groupId/enter", async (req, res, ctx) => {
     return res(ctx.status(200));
   }),
@@ -89,7 +45,8 @@ export const handlers = [
           {
             id: 3,
             title: "친구 구해요",
-            content: "스마트폰 잘하는 사람",
+            content:
+              "스마트폰 잘하는 사람\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.",
             writer: {
               id: 2,
               username: "소미",
@@ -149,7 +106,8 @@ export const handlers = [
           {
             id: 1,
             title: "친구 구해요",
-            content: "스마트폰 잘하는 사람",
+            content:
+              "스마트폰 잘하는 사람구해요! \n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.",
             writer: {
               id: 2,
               username: "김지현",

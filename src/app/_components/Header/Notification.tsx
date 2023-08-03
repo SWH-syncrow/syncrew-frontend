@@ -27,7 +27,6 @@ const Notification = () => {
       console.error(e);
     },
     refetchInterval: 10000,
-    enabled: false,
   });
 
   const readNotis = useMutation({
@@ -165,7 +164,7 @@ const Notification = () => {
         </Dialog.Trigger>
         <Dialog.Content
           className={
-            "absolute right-0 translate-x-8 top-[100%] translate-y-4  bg-white shadow-normal w-[340px] rounded-2xl py-8 modal-arrow-sm after:!left-[calc(100%-40px)] after:-translate-x-full"
+            "absolute right-0 translate-x-8 top-[100%] translate-y-4 bg-white shadow-normal w-[340px] rounded-2xl py-8 modal-arrow-sm after:!left-[calc(100%-40px)] after:-translate-x-full"
           }
         >
           <div className="max-h-[500px] overflow-auto flex flex-col gap-6 px-8">

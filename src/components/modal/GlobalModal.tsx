@@ -38,7 +38,7 @@ export default function GlobalModal() {
         <div className="flex justify-between [&>*]:flex-1  [&>*]:h-[63px]">
           <Modal.Close>
             <Button className="btn-grey-border border-none rounded-none rounded-bl-xl">
-              {modalData.closeButton}
+              {modalData.closeButton || "확인"}
             </Button>
           </Modal.Close>
           {modalData.button}

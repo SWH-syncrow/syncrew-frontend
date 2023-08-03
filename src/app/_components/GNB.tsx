@@ -1,22 +1,18 @@
 "use client";
-import clsx from "clsx";
-import Link from "next/link";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
-import Menu from "public/assets/icons/menu.svg";
-import Search from "public/assets/icons/search_inactive.svg";
-import Chat from "public/assets/icons/chat_inactive.svg";
-import Mypage from "public/assets/icons/my_page_inactive-1.svg";
-import LOGO from "public/assets/logos/XS_03.svg";
-import AuthCheckButton from "@components/AuthCheckButton";
-import { useAtomValue } from "jotai";
 import { channelsAtom } from "@app/GlobalProvider";
-import { useMemo } from "react";
+import AuthCheckButton from "@components/AuthCheckButton";
 import Ping from "@components/Ping";
+import clsx from "clsx";
+import { useAtomValue } from "jotai";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Chat from "public/assets/icons/chat_inactive.svg";
+import Menu from "public/assets/icons/menu.svg";
+import Mypage from "public/assets/icons/my_page_inactive-1.svg";
+import Search from "public/assets/icons/search_inactive.svg";
+import LOGO from "public/assets/logos/XS_03.svg";
+import { useMemo } from "react";
+
 const GNB = () => {
   const pathname = usePathname();
   const router = useRouter();
@@ -38,20 +34,20 @@ const GNB = () => {
           <Link
             href={"/"}
             className={clsx(
-              "w-full flex items-center gap-1 justify-center py-1 rounded-full duration-300",
-              pathname === "/" || pathname === "/group"
-                ? "bg-orange-50 text-orange-400 [&_path]:fill-orange-400"
+              "w-full flex items-center gap-1 justify-center py-1 rounded-full duration-300 hover:bg-orange-50 hover:text-orange-200 [&_path]:hover:fill-orange-200",
+              ["/", "/group"].includes(pathname)
+                ? "bg-orange-50 !text-orange-400 [&_path]:!fill-orange-400"
                 : "text-grey-300"
             )}
           >
-            <Search />
+            <Search className="duration-300" />
             싱크루 탐색
           </Link>
           <AuthCheckButton
             className={clsx(
-              "w-full flex items-center gap-1 justify-center py-1 rounded-full duration-300",
+              "w-full flex items-center gap-1 justify-center py-1 rounded-full duration-300 hover:bg-orange-50 hover:text-orange-200 [&_path]:hover:fill-orange-200",
               pathname === "/chat"
-                ? "bg-orange-50 text-orange-400 [&_path]:fill-orange-400"
+                ? "bg-orange-50 !text-orange-400 [&_path]:!fill-orange-400"
                 : "text-grey-300"
             )}
             onClick={() => router.push("/chat")}
@@ -63,9 +59,9 @@ const GNB = () => {
           </AuthCheckButton>
           <AuthCheckButton
             className={clsx(
-              "w-full flex items-center gap-1 justify-center py-1 rounded-full duration-300",
+              "w-full flex items-center gap-1 justify-center py-1 rounded-full duration-300 hover:bg-orange-50 hover:text-orange-200 [&_path]:hover:fill-orange-200",
               pathname === "/mypage"
-                ? "bg-orange-50 text-orange-400 [&_path]:fill-orange-400"
+                ? "bg-orange-50 !text-orange-400 [&_path]:!fill-orange-400"
                 : "text-grey-300"
             )}
             onClick={() => router.push("/mypage")}

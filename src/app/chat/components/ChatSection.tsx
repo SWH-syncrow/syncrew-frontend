@@ -31,9 +31,8 @@ const ChatSection = () => {
   const router = useRouter();
   const channelID = useSearchParams()?.get("channel") || "";
   const isEnteredChannel = channelID !== "";
-  
+
   const channels = useAtomValue(channelsAtom);
-  const { chatUser, friendRequestId } = channels[channelID];
   const { id: userId } = useAtomValue(userAtom);
 
   const { messages } = useFirebaseChat(channelID);
@@ -44,7 +43,7 @@ const ChatSection = () => {
     if (
       isEnteredChannel &&
       Object.keys(channels).length !== 0 &&
-      !Object.keys(channels).includes(channelID)
+      !channels[channelID]
     )
       router.replace("/404");
   }, [channelID, channels]);
@@ -53,23 +52,30 @@ const ChatSection = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  if (!channels[channelID]) return <></>;
   return (
     <div
       className={clsx(
         channelID === "" ? "hidden" : "visible",
-        "flex-1 flex flex-col pb-[50px] pt-[104px] w-full"
+        "flex-1 flex flex-col pb-[50px] pt-[104px] w-full max-h-screen"
       )}
     >
       <div className="flex justify-between bg-white pb-9  px-11">
         <div className="flex items-center gap-2">
           <UserAvatar
-            profileImage={chatUser?.profileImage}
+            profileImage={channels[channelID].chatUser?.profileImage}
             className="w-10 h-10 mr-2"
           />
-          <span className="text-lg font-medium">{chatUser?.username}</span>
-          <span className="text-sm text-grey-300">{chatUser?.temp}</span>
+          <span className="text-lg font-medium">
+            {channels[channelID]?.chatUser?.username}
+          </span>
+          <span className="text-sm text-grey-300">
+            {channels[channelID]?.chatUser?.temp}
+          </span>
         </div>
-        <RefuseButton {...{ friendRequestId }} />
+        <RefuseButton
+          {...{ friendRequestId: channels[channelID].friendRequestId }}
+        />
       </div>
 
       <div className="flex flex-col flex-1 gap-2 px-11 overflow-auto">
