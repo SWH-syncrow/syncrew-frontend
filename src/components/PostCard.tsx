@@ -47,12 +47,17 @@ const PostCard = ({
     <>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between">
-          <div className="text-lg font-semibold flex justify-center gap-2.5 items-center bg-orange-50 py-1 w-[170px] rounded-lg leading-7">
+          <div
+            className={clsx(
+              "text-lg font-semibold flex justify-center gap-2.5 items-center py-1 w-[170px] rounded-lg leading-7",
+              type === "MINE"
+                ? "bg-grey-50 [&>span]:text-grey-300 [&>svg>path]:stroke-grey-100"
+                : "bg-orange-50 [&>span]:text-orange-400"
+            )}
+          >
             {writer.username}
             <Vector />
-            <span className="text-sm font-normal text-orange-400">
-              {writer.temp}˚C
-            </span>
+            <span className="text-sm font-norma">{writer.temp}˚C</span>
           </div>
           <ButtonByType />
         </div>
@@ -116,9 +121,9 @@ const DeleteButton = ({ postId }: { postId: number }) => {
           ),
         });
       }}
-      className="mr-9 !p-0"
+      className="btn-grey mr-9 flex items-center justify-center h-9 w-[126px] gap-2 font-medium"
     >
-      <Delete />
+      <Delete />글 삭제
     </Button>
   );
 };

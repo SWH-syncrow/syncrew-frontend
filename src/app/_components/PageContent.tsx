@@ -12,6 +12,7 @@ import { Button } from "src/components/Button";
 import { GroupsApis } from "src/lib/apis/groupsApis";
 import { GetGroupsResponse } from "src/lib/apis/_models/GroupsDto";
 import { GroupCategory } from "../_types";
+import Image from "next/image";
 
 const PageContent = () => {
   const isLoggedIn = useAtomValue(isLoggedInAtom);
@@ -33,8 +34,10 @@ const PageContent = () => {
   return (
     <>
       <LevelTestModal />
-      <div className="w-[1118px] px-[100px]">
-        <div className="w-full h-[237px] bg-grey-100 rounded-xl mb-[53px]"></div>
+      <div className="w-[1118px] px-[100px] pb-10">
+        <div className="w-full h-[237px] bg-grey-100 rounded-xl mb-[53px] overflow-hidden">
+          <img src={"/assets/mockCF.png"} alt="광고" className="w-full" />
+        </div>
         <div className="flex justify-between">
           <div className="text-[23px] leading-[30px] font-medium">
             디지털 정보 교환을 위해
