@@ -25,7 +25,7 @@ const useAuthKakao = () => {
         client_id: process.env.NEXT_PUBLIC_KAKAO_REST_KEY || "",
         redirect_uri: `${
           process.env.NODE_ENV === "production"
-            ? process.env.NEXT_PROD_DOMAIN
+            ? process.env.NEXT_PUBLIC_PROD_DOMAIN
             : process.env.NEXT_PUBLIC_DOMAIN
         }/login`,
         code,
