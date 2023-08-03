@@ -1,50 +1,6 @@
 import { rest } from "msw";
 
 export const handlers = [
-  rest.post("/api/auth/login", async (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        user: {
-          id: 1,
-          username: "김지현",
-          email: "test@gmail.com",
-          profileImage: null,
-          temp: 36.5,
-          isTestTarget: true,
-        },
-        token: {
-          accessToken: "test",
-          refreshToken: "test_rf",
-        },
-      })
-    );
-  }),
-  rest.post("/api/auth/reissue", async (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        accessToken: "test",
-        refreshToken: "test_rf",
-      })
-    );
-  }),
-  rest.delete("/api/auth/logout", async (req, res, ctx) => {
-    return res(ctx.status(200));
-  }),
-  rest.get("/api/auth/user", async (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        id: 1,
-        username: "김지현",
-        email: "test@gmail.com",
-        profileImage: null,
-        temp: 36.5,
-        isTestTarget: true,
-      })
-    );
-  }),
   rest.post("/api/group/:groupId/enter", async (req, res, ctx) => {
     return res(ctx.status(200));
   }),
