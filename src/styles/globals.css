@@ -28,6 +28,9 @@ body {
   .btn-orange-border {
     @apply duration-300 py-2 px-4 border-orange-400 text-orange-500 border rounded-xl disabled:cursor-not-allowed hover:shadow-normal active:border-orange-500 disabled:opacity-50
   }
+  .btn-blue {
+    @apply duration-300 py-2 px-4 bg-blue text-white rounded-xl disabled:cursor-not-allowed hover:shadow-normal disabled:opacity-50
+  }
   .modal-arrow-sm{
     @apply after:content-[''] after:absolute after:top-0 after:left-6 after:-translate-y-[100%] after:border-[8px] after:border-transparent after:border-b-white after:border-t-0
   }

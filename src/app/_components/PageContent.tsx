@@ -40,17 +40,15 @@ const PageContent = () => {
             디지털 정보 교환을 위해
             <br /> 친구 신청 글쓰기를 시작해볼까요?
           </div>
-          {isLoggedIn && user.isTestTarget && (
-            <ToolTip
-              tooltipContentElement={
-                <ToolTip.Caption className="bg-white relative shadow-normal py-5 rounded-xl text-sm leading-5 text-center px-6 translate-y-[calc(100%+20px)] translate-x-[calc(50%-32px)] modal-arrow-sm">
-                  테스트를 통해 서비스를
-                  <br /> 원활히 이용할 수 있어요
-                </ToolTip.Caption>
-              }
-            >
+          {/* @todo isTestTarget 조건 */}
+          {isLoggedIn && (
+            <div className="relative">
               <LevelTestModal.Trigger />
-            </ToolTip>
+              <ToolTip.Caption className="bg-white absolute top-[100%] shadow-normal py-5 rounded-xl text-sm leading-5 text-center px-6 translate-x-[calc(50%-32px)] modal-arrow-sm whitespace-nowrap">
+                테스트를 통해 서비스를
+                <br /> 원활히 이용할 수 있어요
+              </ToolTip.Caption>
+            </div>
           )}
         </div>
         <div className="mt-9">
