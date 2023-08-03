@@ -25,7 +25,7 @@ const reissueToken = async (refreshToken: string) => {
 
 const getUser = async () => {
   try {
-    const res = await authInstance.get("/auth/user");
+    const res = await authInstance.get("/auth/user", { withCredentials: true });
 
     return res;
   } catch (error) {

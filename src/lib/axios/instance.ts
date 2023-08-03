@@ -1,6 +1,9 @@
 import axios from "axios";
 
-export const authInstance = axios.create({ baseURL: "/api" });
+export const authInstance = axios.create({
+  baseURL:
+    "http://ec2-15-164-169-130.ap-northeast-2.compute.amazonaws.com:8080/api",
+});
 authInstance.interceptors.response.use(
   (response) => {
     return response;
@@ -14,4 +17,7 @@ authInstance.interceptors.response.use(
   }
 );
 
-export const unAuthInstance = axios.create({ baseURL: "/api" });
+export const unAuthInstance = axios.create({
+  baseURL:
+    "http://ec2-15-164-169-130.ap-northeast-2.compute.amazonaws.com:8080/api",
+});

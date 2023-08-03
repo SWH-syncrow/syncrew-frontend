@@ -29,15 +29,15 @@ export default async function RootLayout({
       <body>
         <ReactQueryProvider>
           <RootStyleRegistry>
-            <MswProvider>
-              <GlobalProvider>
-                <main className="flex w-full">
-                  <GlobalModal />
-                  <GNB />
-                  {children}
-                </main>
-              </GlobalProvider>
-            </MswProvider>
+            {/* <MswProvider> */}
+            <GlobalProvider>
+              <main className="flex w-full">
+                <GlobalModal />
+                <GNB />
+                {children}
+              </main>
+            </GlobalProvider>
+            {/* </MswProvider> */}
           </RootStyleRegistry>
         </ReactQueryProvider>
       </body>
