@@ -50,9 +50,12 @@ const useGenerateChannel = () => {
           channels: [],
         }
       ),
-      await firebaseUtils.createDocIfNotExists(doc(db, "channelsOfUser", "1"), {
-        channels: [],
-      }),
+      await firebaseUtils.createDocIfNotExists(
+        doc(db, "channelsOfUser", user.id.toString()),
+        {
+          channels: [],
+        }
+      ),
       updateDoc(doc(db, "channelsOfUser", friend.id.toString()), {
         channels: arrayUnion(channelDoc.id),
       }),

@@ -34,7 +34,8 @@ const useGetChannels = () => {
       doc(db, "channelsOfUser", user.id.toString()),
       async (querySnapshot) => {
         const channelsOfUser = querySnapshot.data()?.channels;
-        if (!channelsOfUser) return;
+        if (!channelsOfUser || channelsOfUser.length === 0) return;
+        
         const channelsQuery = query(
           collection(db, "channel"),
           where(documentId(), "in", channelsOfUser)
@@ -49,6 +50,7 @@ const useGetChannels = () => {
                   where(documentId(), "!=", user.id.toString())
                 )
               );
+              if (!notMe.docs[0]) return;
               const chatUser = {
                 ...notMe.docs[0]?.data(),
                 id: notMe.docs[0]?.id,

@@ -44,7 +44,7 @@ const useUploadMessage = ({
             await addDoc(collection(db, "channel", channelID, "message"), {
               text: trimmedMessage,
               createdAt: serverTimestamp(),
-              userId,
+              userId: userId.toString(),
               photoURL: downloadURL,
             });
           }
@@ -53,7 +53,7 @@ const useUploadMessage = ({
         addDoc(collection(db, "channel", channelID, "message"), {
           text: trimmedMessage,
           createdAt: serverTimestamp(),
-          userId,
+          userId: userId.toString(),
         });
       }
       updateDoc(doc(db, "channel", channelID), {
