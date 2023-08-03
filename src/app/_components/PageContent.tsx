@@ -45,7 +45,7 @@ const PageContent = () => {
           </div>
           {/* @todo isTestTarget 조건 */}
           {isLoggedIn && (
-            <div className="relative">
+            <div className="relative -z-[1]">
               <LevelTestModal.Trigger />
               <ToolTip.Caption className="bg-white absolute top-[100%] shadow-normal py-5 rounded-xl text-sm leading-5 text-center px-6 translate-x-[calc(50%-32px)] modal-arrow-sm whitespace-nowrap">
                 테스트를 통해 서비스를
