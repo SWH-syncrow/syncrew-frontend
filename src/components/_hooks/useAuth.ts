@@ -30,7 +30,9 @@ const useAuth = () => {
       await AuthUserApis.reissueToken(refreshToken),
     onSuccess: (res: any) => {
       const { accessToken, refreshToken } = res.data;
-      authInstance.defaults.headers.common["Authorization"] = `${accessToken}`;
+      authInstance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${accessToken}`;
       setRefreshTokenToCookie(refreshToken);
       setAccessToken(accessToken);
     },
@@ -44,7 +46,7 @@ const useAuth = () => {
   useQuery(["getUser"], {
     queryFn: async () => await AuthUserApis.getUser(),
     onSuccess: ({ data }) => {
-      // setUserAtom(data);
+      setUserAtom(data);
       setIsLoggedInAtom(true);
     },
     onError: (err) => {
