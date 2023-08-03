@@ -28,7 +28,6 @@ const PageContent = () => {
     onError: (e) => {
       console.error(e);
     },
-    enabled: false,
   });
 
   return (

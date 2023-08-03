@@ -63,7 +63,7 @@ const PostCard = ({
               className={clsx(
                 !isFullView &&
                   "text-ellipsis line-clamp-2 h-[48px] text-grey-500",
-                "leading-6 break-words min-h-[48px]"
+                "leading-6 break-words min-h-[48px] text-lg"
               )}
             >
               {content}

@@ -27,7 +27,6 @@ const Notification = () => {
       console.error(e);
     },
     refetchInterval: 10000,
-    enabled: false,
   });
 
   const readNotis = useMutation({
