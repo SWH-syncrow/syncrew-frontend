@@ -1,3 +1,67 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  width:100%;
+  height:100%;
+  font-synthesis: none;
+}
+
+@layer base {
+  [data-nextjs-scroll-focus-boundary] {
+    display: contents;
+  }
+}
+
+@layer components {
+  .btn-grey-border {
+    @apply duration-300 py-2 px-4 border-grey-200 text-grey-300 border rounded-xl hover:shadow-normal active:border active:border-grey-400 disabled:opacity-50
+  }
+  .btn-orange {
+    @apply duration-300 py-2 px-4 bg-orange-400 text-white rounded-xl disabled:cursor-not-allowed hover:shadow-normal active:border active:border-orange-500 disabled:opacity-50
+  }
+  .btn-orange-border {
+    @apply duration-300 py-2 px-4 border-orange-400 text-orange-500 border rounded-xl disabled:cursor-not-allowed hover:shadow-normal active:border-orange-500 disabled:opacity-50
+  }
+  .modal-arrow-sm{
+    @apply after:content-[''] after:absolute after:top-0 after:left-6 after:-translate-y-[100%] after:border-[8px] after:border-transparent after:border-b-white after:border-t-0
+  }
+  .modal-arrow-md{
+    @apply after:content-[''] after:absolute after:top-0 after:left-6 after:-translate-y-[100%] after:border-[16px] after:border-transparent after:border-b-white after:border-t-0
+  }
+}
+
+@layer base {
+  *::-webkit-scrollbar {
+    width: 5px;
+  }
+  *::-webkit-scrollbar-thumb {
+    @apply bg-grey-100 rounded-2xl
+  }
+
+  *::-webkit-scrollbar-track {
+    @apply bg-transparent
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  outline-color: #FC773E;
+  box-sizing: border-box;
+}
+
+input, textarea {
+  outline-width: 1px;
+}
+button {
+  border-radius: unset;
+}
