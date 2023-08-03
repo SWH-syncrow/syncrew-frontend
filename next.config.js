@@ -21,6 +21,14 @@ const nextConfig = {
   experimental: {
     serverActions: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "http://ec2-13-124-241-105.ap-northeast-2.compute.amazonaws.com:8080/:path*",
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
