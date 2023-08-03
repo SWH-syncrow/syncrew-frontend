@@ -34,14 +34,14 @@ const useGetChannels = () => {
       doc(db, "channelsOfUser", user.id.toString()),
       async (querySnapshot) => {
         const channelsOfUser = querySnapshot.data()?.channels;
+        if (!channelsOfUser) return;
         const channelsQuery = query(
           collection(db, "channel"),
           where(documentId(), "in", channelsOfUser)
         );
-
         const chUnsb = onSnapshot(channelsQuery, async (querySnapshot) => {
           const resPromises = querySnapshot.docs
-            .sort((a, b) => b.data().createdAt - a.data().createdAt)
+            .sort((a, b) => b.data()?.createdAt - a.data()?.createdAt)
             .map(async (channel) => {
               const notMe = await getDocs(
                 query(
@@ -50,8 +50,8 @@ const useGetChannels = () => {
                 )
               );
               const chatUser = {
-                ...notMe.docs[0].data(),
-                id: notMe.docs[0].id,
+                ...notMe.docs[0]?.data(),
+                id: notMe.docs[0]?.id,
               };
               const { lastChatAt, lastChatUser, lastVisitedAt, ...chProps } =
                 channel.data();
