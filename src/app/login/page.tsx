@@ -4,10 +4,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Kakao from "public/assets/kakao.svg";
 import Prev from "public/assets/icons/left.svg";
+import { useAtomValue } from "jotai";
+import { isLoggedInAtom } from "@app/GlobalProvider";
+import { useEffect } from "react";
 
 const Page = () => {
   useAuthKakao();
   const router = useRouter();
+  const isLoggedIn = useAtomValue(isLoggedInAtom);
+
+  useEffect(() => {
+    isLoggedIn && router.replace("/");
+  }, [isLoggedIn]);
 
   return (
     <div className="flex flex-col items-center  w-full h-screen">
