@@ -1,16 +1,15 @@
 "use client";
 import { isLoggedInAtom, userAtom } from "@app/GlobalProvider";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useSetAtom } from "jotai";
 import { useResetAtom } from "jotai/utils";
+import { useEffect, useState } from "react";
+import { AuthUserApis } from "src/lib/apis/authUserApis";
+import { authInstance } from "src/lib/axios/instance";
 import {
   getRefreshTokenFromCookie,
   setRefreshTokenToCookie,
 } from "../_server/serverAuth";
-import { AuthUserApis } from "src/lib/apis/authUserApis";
-import { useEffect, useState } from "react";
-import { authInstance } from "src/lib/axios/instance";
 const useAuth = () => {
   const [accessToken, setAccessToken] = useState("");
   const setUserAtom = useSetAtom(userAtom);
@@ -20,7 +19,7 @@ const useAuth = () => {
 
   useEffect(() => {
     (async () => {
-      const refresh = (await getRefreshTokenFromCookie())?.value || "";
+      const refresh = (await getRefreshTokenFromCookie()) || "";
       if (refresh !== "") reissueToken.mutate(refresh);
     })();
   }, []);

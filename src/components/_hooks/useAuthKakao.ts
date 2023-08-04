@@ -1,12 +1,11 @@
 import { isLoggedInAtom, userAtom } from "@app/GlobalProvider";
 import { setRefreshTokenToCookie } from "@components/_server/serverAuth";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { useSetAtom } from "jotai";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { KakaoAuth } from "src/lib/apis/kakao/KakaoAuth";
 import { AuthUserApis } from "src/lib/apis/authUserApis";
+import { KakaoAuth } from "src/lib/apis/kakao/KakaoAuth";
 import { authInstance } from "src/lib/axios/instance";
 
 const useAuthKakao = () => {

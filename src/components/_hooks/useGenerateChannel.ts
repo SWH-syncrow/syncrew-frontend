@@ -35,34 +35,38 @@ const useGenerateChannel = () => {
     friend: ChatUser;
     friendRequestId: number;
   }) => {
-    const channelDoc = await addDoc(collection(db, "channel"), {
-      friendRequestId,
-      createdAt: serverTimestamp(),
-      status: "READY",
-    });
+    try {
+      const channelDoc = await addDoc(collection(db, "channel"), {
+        friendRequestId,
+        createdAt: serverTimestamp(),
+        status: "READY",
+      });
 
-    Promise.all([
-      setDoc(doc(channelDoc, "users", friend.id.toString()), friend),
-      setDoc(doc(channelDoc, "users", user.id.toString()), user),
-      await firebaseUtils.createDocIfNotExists(
-        doc(db, "channelsOfUser", friend.id.toString()),
-        {
-          channels: [],
-        }
-      ),
-      await firebaseUtils.createDocIfNotExists(
-        doc(db, "channelsOfUser", user.id.toString()),
-        {
-          channels: [],
-        }
-      ),
-      updateDoc(doc(db, "channelsOfUser", friend.id.toString()), {
-        channels: arrayUnion(channelDoc.id),
-      }),
-      updateDoc(doc(db, "channelsOfUser", user.id.toString()), {
-        channels: arrayUnion(channelDoc.id),
-      }),
-    ]);
+      Promise.all([
+        setDoc(doc(channelDoc, "users", friend.id.toString()), friend),
+        setDoc(doc(channelDoc, "users", user.id.toString()), user),
+        await firebaseUtils.createDocIfNotExists(
+          doc(db, "channelsOfUser", friend.id.toString()),
+          {
+            channels: [],
+          }
+        ),
+        await firebaseUtils.createDocIfNotExists(
+          doc(db, "channelsOfUser", user.id.toString()),
+          {
+            channels: [],
+          }
+        ),
+        updateDoc(doc(db, "channelsOfUser", friend.id.toString()), {
+          channels: arrayUnion(channelDoc.id),
+        }),
+        updateDoc(doc(db, "channelsOfUser", user.id.toString()), {
+          channels: arrayUnion(channelDoc.id),
+        }),
+      ]);
+    } catch (error) {
+      return error;
+    }
   };
 
   return {

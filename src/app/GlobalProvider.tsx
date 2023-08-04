@@ -7,8 +7,8 @@ import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 import { GetUserResponse } from "src/lib/apis/_models/AuthDto";
 import { ChannelsObj } from "./chat/_components/types";
-import useGetChannels from "./chat/_components/hooks/useGetChannels";
 import { DevTools } from "jotai-devtools";
+import useGetChannels from "@components/_hooks/useGetChannels";
 
 export const userAtom = atomWithReset<GetUserResponse>({
   id: -1,
