@@ -20,9 +20,7 @@ const useAuth = () => {
   useEffect(() => {
     (async () => {
       const refresh = (await getRefreshTokenFromCookie()) || "";
-      if (refresh !== "") {
-        reissueToken.mutate(refresh);
-      }
+      if (refresh !== "") reissueToken.mutate(refresh);
     })();
   }, []);
 
