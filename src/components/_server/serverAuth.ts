@@ -8,3 +8,7 @@ export async function setRefreshTokenToCookie(refresh_token: string) {
 export async function getRefreshTokenFromCookie() {
   return cookies().get("refreshToken")?.value;
 }
+
+export async function deleteRefreshTokenFromCookie() {
+  return cookies().delete("refreshToken");
+}

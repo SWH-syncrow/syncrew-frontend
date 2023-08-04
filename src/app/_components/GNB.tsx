@@ -16,13 +16,13 @@ import { styled } from "styled-components";
 const GNB = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const channelID = useSearchParams()?.get("channel") || "";
+  const channelId = useSearchParams()?.get("channel") || "";
   const channels = useAtomValue(channelsAtom);
 
   const isChannelsNoti = useMemo(() => {
     return (
       Object.values(channels).filter(
-        (ch) => (channelID !== ch.id && ch.isUnread) || ch.status === "READY"
+        (ch) => (channelId !== ch.id && ch.isUnread) || ch.status === "READY"
       ).length > 0
     );
   }, [channels]);
@@ -33,12 +33,15 @@ const GNB = () => {
     <div className="flex flex-col justify-between items-center h-screen min-w-[248px] py-8 border-r border-grey-50 sticky top-0 left-0 bg-white z-10">
       <div className="flex flex-col gap-5 px-8 w-full">
         <MenuIcon className="mb-3" />
-        <StyledLink href={"/"} isActive={["/", "/group"].includes(pathname)}>
+        <StyledLink
+          href={"/"}
+          isvisit={["/", "/group"].includes(pathname).toString()}
+        >
           <Search className="duration-300" />
           싱크루 탐색
         </StyledLink>
         <StyledAuthCheckButton
-          isActive={pathname === "/chat"}
+          isvisit={(pathname === "/chat").toString()}
           onClick={() => router.push("/chat")}
         >
           <Ping condition={isChannelsNoti} className="-right-6">
@@ -47,7 +50,7 @@ const GNB = () => {
           </Ping>
         </StyledAuthCheckButton>
         <StyledAuthCheckButton
-          isActive={pathname === "/mypage"}
+          isvisit={(pathname === "/mypage").toString()}
           onClick={() => router.push("/mypage")}
         >
           <Mypage />
@@ -62,7 +65,7 @@ const GNB = () => {
 };
 
 export default GNB;
-const StyledLink = styled(Link)<{ isActive: boolean }>`
+const StyledLink = styled(Link)<{ isvisit: string }>`
   width: 100%;
   display: flex;
   align-items: center;
@@ -81,8 +84,8 @@ const StyledLink = styled(Link)<{ isActive: boolean }>`
       fill: ${({ theme }) => theme.colors.orange[200]};
     }
   }
-  ${({ isActive, theme }) =>
-    isActive
+  ${({ isvisit, theme }) =>
+    isvisit === "true"
       ? `
     background-color: ${theme.colors.orange[50]};
     color: ${theme.colors.orange[400]} !important;
@@ -93,7 +96,7 @@ const StyledLink = styled(Link)<{ isActive: boolean }>`
 `;
 
 const StyledAuthCheckButton = styled(AuthCheckButton)<{
-  isActive: boolean;
+  isvisit: string;
 }>`
   width: 100%;
   display: flex;
@@ -113,8 +116,8 @@ const StyledAuthCheckButton = styled(AuthCheckButton)<{
       fill: ${({ theme }) => theme.colors.orange[200]};
     }
   }
-  ${({ isActive, theme }) =>
-    isActive
+  ${({ isvisit, theme }) =>
+    isvisit === "true"
       ? `
   background-color: ${theme.colors.orange[50]};
   color: ${theme.colors.orange[400]} !important;

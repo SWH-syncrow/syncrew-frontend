@@ -20,7 +20,7 @@ const useUploadMessage = ({
   messageImg: File | undefined;
   message: string;
 }) => {
-  const userId = useAtomValue(userAtom);
+  const userId = useAtomValue(userAtom).id;
   const channels = useAtomValue(channelsAtom);
 
   const uploadHandler = (e: FormEvent) => {
@@ -60,7 +60,7 @@ const useUploadMessage = ({
 
       updateDoc(doc(db, "channel", channelId), {
         lastChatAt: serverTimestamp(),
-        lastChatUser: userId,
+        lastChatUser: userId.toString(),
       });
 
       if (channels[channelId].status === "READY") {

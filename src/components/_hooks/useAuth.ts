@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { AuthUserApis } from "src/lib/apis/authUserApis";
 import { authInstance } from "src/lib/axios/instance";
 import {
+  deleteRefreshTokenFromCookie,
   getRefreshTokenFromCookie,
   setRefreshTokenToCookie,
 } from "../_server/serverAuth";
@@ -37,6 +38,7 @@ const useAuth = () => {
     },
     onError: (err) => {
       console.error(err);
+      deleteRefreshTokenFromCookie();
       resetUserAtom();
       resetIsLoggedInAtom();
     },
