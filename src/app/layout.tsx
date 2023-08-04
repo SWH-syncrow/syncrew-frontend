@@ -28,7 +28,7 @@ export default async function RootLayout({
             content="upgrade-insecure-requests"
           />
         )}
-        <link rel="shortcut icon" href="/favicon.png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
         <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
         <title>syncrew</title>
       </head>
