@@ -19,8 +19,8 @@ const Notification = () => {
 
   useQuery(["getNotifications"], {
     queryFn: async () => await NotiApis.getNotifications(),
-    onSuccess: ({ data: { notifications } }) => {
-      setNotiList(notifications);
+    onSuccess: ({ data }) => {
+      setNotiList(data);
     },
     onError: (e) => {
       console.error(e);
@@ -28,7 +28,7 @@ const Notification = () => {
     refetchInterval: 10000,
   });
 
-  const readNotis = useMutation({
+  const readNotifications = useMutation({
     mutationFn: async (ids: number[]) => await NotiApis.readNotifications(ids),
     onSuccess: (res: any) => {
       setNotiList((p) => p.map((noti) => ({ ...noti, read: true })));
@@ -37,6 +37,9 @@ const Notification = () => {
       console.error(e);
     },
   });
+  /**
+   * @todo 알림 없음 UI
+   */
   return (
     <div className="relative">
       <Dialog.Root
@@ -48,9 +51,12 @@ const Notification = () => {
             notiRef.current?.classList.add("bg-orange");
             notiRef.current?.classList.add("[&_svg_path]:fill-white");
           } else {
-            readNotis.mutate(
-              notiList.filter((noti) => !noti.read).map((noti) => noti.id)
-            );
+            const readNotiIds = notiList
+              .filter((noti) => !noti.read)
+              .map((noti) => noti.id);
+            if (readNotiIds.length > 0) {
+              readNotifications.mutate(readNotiIds);
+            }
             notiRef.current?.classList.remove("bg-orange");
             notiRef.current?.classList.remove("[&_svg_path]:fill-white");
           }
