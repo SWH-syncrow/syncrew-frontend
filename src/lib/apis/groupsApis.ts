@@ -1,5 +1,4 @@
 import { GroupCategory } from "@app/_types";
-import axios from "axios";
 import { authInstance, unAuthInstance } from "../axios/instance";
 
 const getGroups = async (category: GroupCategory) => {
@@ -14,6 +13,18 @@ const getGroups = async (category: GroupCategory) => {
     return error;
   }
 };
+
+const getGroupInfo = async (gropuId: number) => {
+  try {
+    const res = await authInstance.get(`/groups/${gropuId}`);
+
+    return res;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
+
 const enterGroup = async (groupId: number) => {
   try {
     const res = await authInstance.post(`/group/${groupId}/enter`);
@@ -43,4 +54,9 @@ const getGroupPosts = async ({
     return error;
   }
 };
-export const GroupsApis = { getGroups, enterGroup, getGroupPosts };
+export const GroupsApis = {
+  getGroups,
+  getGroupInfo,
+  enterGroup,
+  getGroupPosts,
+};

@@ -34,6 +34,18 @@ export const handlers = [
       })
     );
   }),
+  rest.get("/api/groups/:groupId", async (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        id: 1,
+        name: "스마트폰 활용 초급",
+        category: "SMARTPHONE",
+        memberCount: 5,
+        postCount: 8,
+      })
+    );
+  }),
   rest.get("/api/groups/:groupId/posts", async (req, res, ctx) => {
     return res(
       ctx.status(200),

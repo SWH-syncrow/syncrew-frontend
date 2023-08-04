@@ -1,11 +1,15 @@
 "use client";
 
-import PageContent from "./_components/PageContent";
+import GroupInfoSection from "./_components/GroupInfoSection";
+import PostsSection from "./_components/PostsSection";
 
 const Page = () => {
   return (
     <div className="w-full">
-      <PageContent />
+      <div className="flex flex-col">
+        <GroupInfoSection />
+        <PostsSection />
+      </div>
     </div>
   );
 };

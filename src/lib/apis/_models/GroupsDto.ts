@@ -5,14 +5,16 @@ export interface GetGroupsRequest {
   };
 }
 
+export interface GetGroupInfoResponse {
+  id: number;
+  name: string;
+  category: category;
+  memberCount: number;
+  postCount: number;
+}
+
 export interface GetGroupsResponse {
-  groups: {
-    id: number;
-    name: string;
-    category: category;
-    memberCount: number;
-    postCount: number;
-  }[];
+  groups: GetGroupInfoResponse[];
 }
 
 export interface GetGroupPostsResponse {
