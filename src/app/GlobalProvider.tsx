@@ -1,14 +1,15 @@
 "use client";
 
+import LoadingScreen from "@components/LoadingScreen";
 import useAuth from "@components/_hooks/useAuth";
+import useGetChannels from "@components/_hooks/useGetChannels";
 import { atom } from "jotai";
+import { DevTools } from "jotai-devtools";
 import { atomWithReset } from "jotai/utils";
 import { usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { GetUserResponse } from "src/lib/apis/_models/AuthDto";
 import { ChannelsObj } from "./chat/_components/types";
-import { DevTools } from "jotai-devtools";
-import useGetChannels from "@components/_hooks/useGetChannels";
 
 export const userAtom = atomWithReset<GetUserResponse>({
   id: -1,
@@ -27,7 +28,7 @@ channelsAtom.debugLabel = "channelsAtom";
 
 export default function GlobalProvider(props: { children: React.ReactNode }) {
   const path = usePathname();
-  useAuth();
+  const { isFetching } = useAuth();
   useGetChannels();
 
   const storePathValues = () => {
@@ -41,9 +42,9 @@ export default function GlobalProvider(props: { children: React.ReactNode }) {
   useEffect(() => storePathValues, [path]);
 
   return (
-    <>
+    <Suspense fallback={<LoadingScreen />}>
       <DevTools />
-      {props.children}
-    </>
+      {!isFetching && props.children}
+    </Suspense>
   );
 }
