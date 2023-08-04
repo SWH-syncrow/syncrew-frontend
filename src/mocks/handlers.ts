@@ -4,36 +4,36 @@ export const handlers = [
   rest.post("/api/group/:groupId/enter", async (req, res, ctx) => {
     return res(ctx.status(200));
   }),
-  rest.get("/api/groups", async (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        groups: [
-          {
-            id: 1,
-            name: "스마트폰 활용 초급",
-            category: "SMARTPHONE",
-            memberCount: 5,
-            postCount: 8,
-          },
-          {
-            id: 2,
-            name: "스마트폰 활용 중급",
-            category: "SMARTPHONE",
-            memberCount: 2,
-            postCount: 3,
-          },
-          {
-            id: 3,
-            name: "스마트폰 활용 고급",
-            category: "SMARTPHONE",
-            memberCount: 2,
-            postCount: 3,
-          },
-        ],
-      })
-    );
-  }),
+  // rest.get("/api/groups", async (req, res, ctx) => {
+  //   return res(
+  //     ctx.status(200),
+  //     ctx.json({
+  //       groups: [
+  //         {
+  //           id: 1,
+  //           name: "스마트폰 활용 초급",
+  //           category: "SMARTPHONE",
+  //           memberCount: 5,
+  //           postCount: 8,
+  //         },
+  //         {
+  //           id: 2,
+  //           name: "스마트폰 활용 중급",
+  //           category: "SMARTPHONE",
+  //           memberCount: 2,
+  //           postCount: 3,
+  //         },
+  //         {
+  //           id: 3,
+  //           name: "스마트폰 활용 고급",
+  //           category: "SMARTPHONE",
+  //           memberCount: 2,
+  //           postCount: 3,
+  //         },
+  //       ],
+  //     })
+  //   );
+  // }),
   rest.get("/api/groups/:groupId", async (req, res, ctx) => {
     return res(
       ctx.status(200),
