@@ -17,12 +17,37 @@ const Message = ({ message, isMine }: MessageProps) => {
   return (
     <div
       className={clsx(
-        isMine ? "self-end bg-orange text-white" : "self-start bg-grey-0",
-        "py-2 px-4 rounded-3xl first:mt-auto leading-8 max-w-[80%]"
+        isMine ? "self-end" : "self-start items-start",
+        "flex flex-col max-w-[80%]"
       )}
     >
-      {message.photoURL && <img src={message.photoURL} className="" />}
-      {message.text}
+      {message.photoURL && (
+        <div className="relative max-w-[400px] w-fit rounded-3xl overflow-hidden">
+          <img
+            src={message.photoURL}
+            alt="첨부 이미지"
+            className="relative object-contain max-h-[50vh] !z-0"
+          />
+          <div className="absolute top-0 w-full h-full bg-grey-50 !-z-10"></div>
+        </div>
+      )}
+      {message.text && (
+        <div
+          className={clsx(
+            isMine
+              ? "self-end bg-orange text-white text-right"
+              : "self-start bg-grey-0",
+            "py-2 px-4 rounded-3xl first:mt-auto leading-8 "
+          )}
+        >
+          {message.text.split("\n").map((line) => (
+            <>
+              {line}
+              <br />
+            </>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

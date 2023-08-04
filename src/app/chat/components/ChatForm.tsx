@@ -50,7 +50,7 @@ const ChatForm = () => {
   };
 
   return (
-    <div className="relative  px-11">
+    <div className="relative px-11">
       {chatImgSrc && (
         <div className="absolute bottom-[100%]">
           <div className="relative max-w-[400px] max-h-[50vh] w-fit rounded-3xl overflow-hidden">
@@ -59,7 +59,7 @@ const ChatForm = () => {
                 setChatImg(undefined);
                 setChatImgSrc("");
               }}
-              className="absolute m-1 !p-2 duration-300 hover:bg-orange-50 rounded-full z-20"
+              className="absolute m-1 !p-2 duration-300 bg-orange opacity-50 hover:opacity-100 rounded-full z-20"
             >
               <Delete />
             </Button>

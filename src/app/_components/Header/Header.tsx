@@ -29,7 +29,7 @@ const Header = () => {
   return (
     <header
       ref={headerRef}
-      className="py-8 w-full flex justify-center sticky top-0 bg-white"
+      className="py-8 w-full flex justify-center sticky top-0 bg-white z-10"
     >
       <div className="w-[918px] flex justify-end">
         {!isLoggedIn ? (

@@ -15,6 +15,7 @@ const MyInfoSection = () => {
   const user = useAtomValue(userAtom);
   const resetIsLoggedIn = useResetAtom(isLoggedInAtom);
   const resetUser = useResetAtom(userAtom);
+
   const logout = useMutation({
     mutationFn: async () => await AuthUserApis.kakaoLogout(),
     onSuccess: () => {
@@ -26,6 +27,7 @@ const MyInfoSection = () => {
       console.error(e);
     },
   });
+  
   return (
     <div className="flex justify-between w-[900px]">
       <div className="flex items-center gap-3">
