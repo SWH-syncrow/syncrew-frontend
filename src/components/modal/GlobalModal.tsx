@@ -32,7 +32,7 @@ export default function GlobalModal() {
   const modalReset = useResetAtom(globalModalAtom);
   return (
     <Modal open={!!modalData.contents} onOpenChange={modalReset}>
-      <Modal.Content className="min-w-80 z-50 !p-0 ">
+      <Modal.Content className="min-w-[366px] z-50 !p-0 ">
         <div className="py-10 px-8 text-center text-xl leading-[26px] text-grey-700 border-b border-grey-50">
           {modalData.contents}
         </div>

@@ -1,9 +1,9 @@
 export type NOTI_STATUS =
   | "REQUESTED"
   | "ACCEPT"
+  | "ACCEPTED"
   | "REFUSE"
   | "REQUEST"
-  | "ACCEPTED"
   | "REFUSED";
 
 export interface GetNotificationsResponse {
