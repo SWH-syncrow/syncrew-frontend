@@ -22,7 +22,7 @@ export interface GetGroupPostsResponse {
     id: number;
     title: string;
     content: string;
-    writerDto: {
+    writer: {
       id: number;
       username: string;
       profileImage: null | string;
