@@ -7,7 +7,7 @@ const kakaoLogin = async (accessToken: string) => {
     return res;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 };
 const reissueToken = async (refreshToken: string) => {
@@ -19,7 +19,7 @@ const reissueToken = async (refreshToken: string) => {
     return res;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 };
 
@@ -30,7 +30,7 @@ const getUser = async () => {
     return res;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 };
 const kakaoLogout = async () => {
@@ -40,7 +40,7 @@ const kakaoLogout = async () => {
     return res;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 };
 export const AuthUserApis = { kakaoLogin, reissueToken, getUser, kakaoLogout };
