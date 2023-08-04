@@ -6,20 +6,28 @@ import { useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 import { GetGroupPostsResponse } from "src/lib/apis/_models/GroupsDto";
 import { GroupsApis } from "src/lib/apis/groupsApis";
-import CreatePostModal from "../../../components/modal/CreatePostModal";
 import useObserver from "../hooks/useObserver";
+import CreatePostModal from "@components/modal/CreatePostModal";
 
 const PostsSection = () => {
   const userId = useAtomValue(userAtom).id;
   const groupId = useSearchParams()?.get("id") || "";
   const [posts, setPosts] = useState<GetGroupPostsResponse["posts"] | []>([]);
-  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
+  const [pagination, setPagination] = useState({
+    page: 0,
+    size: 1,
+  });
+  const [isLastPage, setIsLastPage] = useState(true);
   const infiniteScrollTarget = useRef<HTMLDivElement | null>(null);
-
+  /**
+   * @todo pagination size 계산
+   */
   useObserver({
     target: infiniteScrollTarget,
     onIsIntersectingHandler: () =>
-      !isLoading && setPagination((p) => ({ ...p, page: p.page + 1 })),
+      !isLastPage &&
+      !isLoading &&
+      setPagination((p) => ({ ...p, page: p.page + 1 })),
   });
 
   const { isLoading } = useQuery(["getGroupPosts", { groupId, pagination }], {
@@ -29,7 +37,8 @@ const PostsSection = () => {
         pagination,
       }),
     onSuccess: ({ data }) => {
-      setPosts((p) => [...p, ...data.posts]);
+      setPosts((p) => [...p, ...data.content]);
+      setIsLastPage(data.last);
     },
     onError: (e) => {
       console.error(e);
@@ -54,7 +63,7 @@ const PostsSection = () => {
             <PostCard
               key={post.id}
               {...{ post }}
-              type={post.writer?.id === userId ? "MINE" : "NORMAL"}
+              type={post.writerDto?.id === userId ? "MINE" : "NORMAL"}
             />
           ))}
           <div ref={infiniteScrollTarget}></div>
