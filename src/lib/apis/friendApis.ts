@@ -3,13 +3,14 @@ import { authInstance } from "../axios/instance";
 const requestFriend = async ({ userId, postId }: RequestFriendRequest) => {
   try {
     const res = await authInstance.post("/friend/request", {
-      data: { userId, postId },
+      userId,
+      postId,
     });
 
     return res;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 };
 
@@ -19,13 +20,14 @@ const acceptFriend = async ({
 }: PostFriendRequest) => {
   try {
     const res = await authInstance.post("/friend?q=accept", {
-      data: { friendRequestId, notificationId },
+      friendRequestId,
+      notificationId,
     });
 
     return res;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 };
 
@@ -35,13 +37,14 @@ const refuseFriend = async ({
 }: PostFriendRequest) => {
   try {
     const res = await authInstance.post("/friend?q=refuse", {
-      data: { friendRequestId, notificationId },
+      friendRequestId,
+      notificationId,
     });
 
     return res;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 };
 export const FriendApis = { requestFriend, acceptFriend, refuseFriend };
