@@ -24,7 +24,7 @@ const GroupCard = ({ id, name, memberCount, postCount }: Group) => {
       <div className=" h-[293px] border border-grey-50 flex flex-col rounded-xl overflow-hidden">
         <div className="flex-1 flex items-center justify-center bg-grey-0">
           <Image
-            src={`/assets/illusts/${name.replaceAll(" ", "_")}.svg`}
+            src={`/assets/illusts/group_${id}.svg`}
             alt="home"
             width={0}
             height={0}
