@@ -49,7 +49,9 @@ const useAuthKakao = () => {
         user,
         token: { accessToken, refreshToken },
       } = res.data;
-      authInstance.defaults.headers.common["Authorization"] = `${accessToken}`;
+      authInstance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${accessToken}`;
       setRefreshTokenToCookie(refreshToken);
       setUserAtom(user);
       setIsLoggedInAtom(true);
