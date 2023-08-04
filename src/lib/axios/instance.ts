@@ -4,13 +4,14 @@ export const authInstance = axios.create({
   baseURL: "/api",
   withCredentials: true,
 });
+
 authInstance.interceptors.response.use(
   (response) => {
     return response;
   },
 
   (error) => {
-    if (error.code === 401) {
+    if (error.response.status === 401) {
       window.location.replace("/login");
     }
     return Promise.reject(error);
