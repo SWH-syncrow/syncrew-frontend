@@ -1,3 +1,4 @@
+"use client";
 import { isLoggedInAtom, userAtom } from "@app/GlobalProvider";
 import { Button } from "@components/Button";
 import ToolTip from "@components/Tooltip";
@@ -27,7 +28,7 @@ const MyInfoSection = () => {
       console.error(e);
     },
   });
-  
+
   return (
     <div className="flex justify-between w-[900px]">
       <div className="flex items-center gap-3">

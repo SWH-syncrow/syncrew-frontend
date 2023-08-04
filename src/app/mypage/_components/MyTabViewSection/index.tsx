@@ -1,49 +1,14 @@
+"use client";
 import clsx from "clsx";
 import { atom, useAtom, useAtomValue } from "jotai";
 import MyGroupTabView from "./MyGroupTabView";
-import MyInfoSection from "./MyInfoSection";
 import MyPostTabView from "./MyPostTabView";
 
 const selectedTabAtom = atom<MYPATE_TAB>("MY_POST");
 selectedTabAtom.debugLabel = "selectedTabAtom";
-const PageContent = () => {
-  const selectedTab = useAtomValue(selectedTabAtom);
-
-  return (
-    <>
-      <div className="flex flex-col items-center py-[77px] gap-11">
-        <MyInfoSection />
-        <div className="w-[900px]">
-          <MyTab />
-
-          <div className="flex flex-col items-center w-full">
-            <div
-              className={clsx(selectedTab === "MY_POST" ? "visible" : "hidden")}
-            >
-              <MyPostTabView />
-            </div>
-            <div
-              className={clsx(
-                selectedTab === "REQUESTED_POST" ? "visible" : "hidden"
-              )}
-            >
-              {/* <RequestedPostTabView /> */}
-            </div>
-            <div
-              className={clsx(
-                selectedTab === "GROUP" ? "visible w-full" : "hidden"
-              )}
-            >
-              <MyGroupTabView />
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
 
 type MYPATE_TAB = "MY_POST" | "REQUESTED_POST" | "GROUP";
+
 const MY_TABS = [
   {
     key: "MY_POST",
@@ -73,4 +38,33 @@ const MyTab = () => {
     </div>
   );
 };
-export default PageContent;
+
+const MyTabViewSection = () => {
+  const selectedTab = useAtomValue(selectedTabAtom);
+  return (
+    <div className="w-[900px]">
+      <MyTab />
+      <div className="flex flex-col items-center w-full">
+        <div className={clsx(selectedTab === "MY_POST" ? "visible" : "hidden")}>
+          <MyPostTabView />
+        </div>
+        <div
+          className={clsx(
+            selectedTab === "REQUESTED_POST" ? "visible" : "hidden"
+          )}
+        >
+          {/* <RequestedPostTabView /> */}
+        </div>
+        <div
+          className={clsx(
+            selectedTab === "GROUP" ? "visible w-full" : "hidden"
+          )}
+        >
+          <MyGroupTabView />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MyTabViewSection;

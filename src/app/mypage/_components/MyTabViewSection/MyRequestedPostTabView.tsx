@@ -2,7 +2,7 @@ import PostCard from "@components/PostCard";
 import Link from "next/link";
 import React, { useState } from "react";
 
-const RequestedPostTabView = () => {
+const MyRequestedPostTabView = () => {
   const [posts, setPosts] = useState([
     {
       id: 1,
@@ -39,4 +39,4 @@ const RequestedPostTabView = () => {
   );
 };
 
-export default RequestedPostTabView;
+export default MyRequestedPostTabView;
