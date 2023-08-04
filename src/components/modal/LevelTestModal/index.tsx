@@ -12,9 +12,13 @@ interface Items {
   [key: string]: { value: string; isSelected: boolean };
 }
 const modalOpenAtom = atom<boolean>(false);
+modalOpenAtom.debugLabel = "levelTestModalAtom";
 const levelAtom = atomWithReset<number>(0);
+levelAtom.debugLabel = "levelAtom";
 const deviceItemsAtom = atomWithReset<Items>(DEVICE_ITEMS);
+deviceItemsAtom.debugLabel = "deviceItemsAtom";
 const swItemsAtom = atomWithReset<Items>(SW_ITEMS);
+swItemsAtom.debugLabel = "swItemsAtom";
 
 const LevelTestModal = () => {
   const [openAtom, setOpenAtom] = useAtom(modalOpenAtom);

@@ -12,14 +12,15 @@ interface GlobalModalState {
   closeButton?: string;
 }
 
-const ModalAtom = atomWithReset<GlobalModalState>({
+const globalModalAtom = atomWithReset<GlobalModalState>({
   contents: null,
   closeButton: "확인",
 });
+globalModalAtom.debugLabel = "globalModalAtom";
 
 export function useGlobalModal() {
-  const [modalState, setModalState] = useAtom(ModalAtom);
-  const resetState = useResetAtom(ModalAtom);
+  const [modalState, setModalState] = useAtom(globalModalAtom);
+  const resetState = useResetAtom(globalModalAtom);
   return useMemo(
     () => ({ modalState, setModalState, resetState }),
     [modalState, setModalState, resetState]
@@ -27,8 +28,8 @@ export function useGlobalModal() {
 }
 
 export default function GlobalModal() {
-  const modalData = useAtomValue(ModalAtom);
-  const modalReset = useResetAtom(ModalAtom);
+  const modalData = useAtomValue(globalModalAtom);
+  const modalReset = useResetAtom(globalModalAtom);
   return (
     <Modal open={!!modalData.contents} onOpenChange={modalReset}>
       <Modal.Content className="min-w-80 z-50 !p-0 ">

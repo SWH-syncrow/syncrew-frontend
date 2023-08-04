@@ -3,9 +3,9 @@ import { atom, useAtom, useAtomValue } from "jotai";
 import MyGroupTabView from "./MyGroupTabView";
 import MyInfoSection from "./MyInfoSection";
 import MyPostTabView from "./MyPostTabView";
-import RequestedPostTabView from "./RequestedPostTabView";
 
 const selectedTabAtom = atom<MYPATE_TAB>("MY_POST");
+selectedTabAtom.debugLabel = "selectedTabAtom";
 const PageContent = () => {
   const selectedTab = useAtomValue(selectedTabAtom);
 
