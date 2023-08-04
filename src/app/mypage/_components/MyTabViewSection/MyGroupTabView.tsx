@@ -11,7 +11,7 @@ const MyGroupTabView = () => {
   useQuery(["getMyGroups"], {
     queryFn: async () => await MypageApis.getMyGropus(),
     onSuccess: ({ data }) => {
-      setGroups(data.groups);
+      setGroups(data);
     },
     onError: (e) => {
       console.error(e);

@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { atom, useAtom, useAtomValue } from "jotai";
 import MyGroupTabView from "./MyGroupTabView";
 import MyPostTabView from "./MyPostTabView";
+import MyRequestPostTabView from "./MyRequestPostTabView";
 
 const selectedTabAtom = atom<MYPATE_TAB>("MY_POST");
 selectedTabAtom.debugLabel = "selectedTabAtom";
@@ -53,7 +54,7 @@ const MyTabViewSection = () => {
             selectedTab === "REQUESTED_POST" ? "visible" : "hidden"
           )}
         >
-          {/* <RequestedPostTabView /> */}
+          <MyRequestPostTabView />
         </div>
         <div
           className={clsx(

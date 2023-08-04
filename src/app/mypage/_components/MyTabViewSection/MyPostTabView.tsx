@@ -1,6 +1,6 @@
 import PostCard from "@components/PostCard";
-import CreatePostModal from "@components/modal/CreatePostModal";
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 import { useState } from "react";
 import { GetUserPostsResponse } from "src/lib/apis/_models/UserDto";
 import { MypageApis } from "src/lib/apis/mypageApis";
@@ -11,7 +11,7 @@ const MyPostTabView = () => {
   useQuery(["getMyPosts"], {
     queryFn: async () => await MypageApis.getMyPosts(),
     onSuccess: ({ data }) => {
-      setPosts(data.posts);
+      setPosts(data.content);
     },
     onError: (e) => {
       console.error(e);
@@ -20,14 +20,15 @@ const MyPostTabView = () => {
 
   return (
     <>
-      {/* <CreatePostModal /> */}
       {posts.length === 0 && (
         <div className="flex flex-col items-center mt-[162px]">
           <span className="mb-4 text-2xl font-medium">
             아직 글이 작성되지 않았어요
           </span>
-          <span className="mb-[45px]">첫 신청글을 작성 해볼까요?</span>
-          <CreatePostModal.Trigger />
+          <span className="mb-[45px]">첫 신청글을 작성하러 가볼까요?</span>
+          <Link href={"/"} className="btn-orange">
+            싱크루 탐색 이동
+          </Link>
         </div>
       )}
       {posts.length > 0 && (
