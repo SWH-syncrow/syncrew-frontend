@@ -1,13 +1,12 @@
 "use client";
 
-import LoadingScreen from "@components/LoadingScreen";
 import useAuth from "@components/_hooks/useAuth";
 import useGetChannels from "@components/_hooks/useGetChannels";
 import { atom } from "jotai";
 import { DevTools } from "jotai-devtools";
 import { atomWithReset } from "jotai/utils";
 import { usePathname } from "next/navigation";
-import React, { Suspense, useEffect } from "react";
+import React, { useEffect } from "react";
 import { GetUserResponse } from "src/lib/apis/_models/AuthDto";
 import { ChannelsObj } from "./chat/_components/types";
 
@@ -42,9 +41,9 @@ export default function GlobalProvider(props: { children: React.ReactNode }) {
   useEffect(() => storePathValues, [path]);
 
   return (
-    <Suspense fallback={<LoadingScreen />}>
+    <>
       <DevTools />
       {!isFetching && props.children}
-    </Suspense>
+    </>
   );
 }
