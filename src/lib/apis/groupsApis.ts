@@ -41,11 +41,11 @@ const getGroupPosts = async ({
   pagination,
 }: {
   groupId: number;
-  pagination: { page: number; limit: number };
+  pagination: { page: number; size: number };
 }) => {
   try {
     const res = await authInstance.get(
-      `/groups/${groupId}/posts?page=${pagination.page}&limit=${pagination.limit}`
+      `/groups/${groupId}/posts?page=${pagination.page}&size=${pagination.size}`
     );
 
     return res;

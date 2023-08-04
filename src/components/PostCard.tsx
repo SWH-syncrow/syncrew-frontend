@@ -19,7 +19,7 @@ interface PostCardProps {
   type?: "MINE" | "REQUESTED" | "NORMAL";
 }
 const PostCard = ({
-  post: { id, title, content, writer, rejectedUsers },
+  post: { id, title, content, writerDto, rejectedUsers },
   type = "NORMAL",
 }: PostCardProps) => {
   const [isFullView, setIsFullView] = useState(false);
@@ -38,7 +38,7 @@ const PostCard = ({
       case "NORMAL":
         return (
           <PostCard.AcceptButton
-            {...{ id, title, content, writer, rejectedUsers }}
+            {...{ id, title, content, writerDto, rejectedUsers }}
           />
         );
     }
@@ -55,9 +55,9 @@ const PostCard = ({
                 : "bg-orange-50 [&>span]:text-orange-400"
             )}
           >
-            {writer.username}
+            {writerDto.username}
             <Vector />
-            <span className="text-sm font-norma">{writer.temp}˚C</span>
+            <span className="text-sm font-norma">{writerDto.temp}˚C</span>
           </div>
           <ButtonByType />
         </div>
