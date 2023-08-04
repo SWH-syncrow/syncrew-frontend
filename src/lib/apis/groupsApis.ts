@@ -10,7 +10,7 @@ const getGroups = async (category: GroupCategory) => {
     return res;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 };
 
@@ -21,18 +21,18 @@ const getGroupInfo = async (gropuId: number) => {
     return res;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 };
 
 const enterGroup = async (groupId: number) => {
   try {
-    const res = await authInstance.post(`/group/${groupId}/enter`);
+    const res = await authInstance.post(`/groups/${groupId}/enter`);
 
     return res;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 };
 
@@ -51,7 +51,7 @@ const getGroupPosts = async ({
     return res;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 };
 export const GroupsApis = {
