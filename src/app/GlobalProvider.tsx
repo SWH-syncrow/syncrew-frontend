@@ -6,8 +6,9 @@ import { atomWithReset } from "jotai/utils";
 import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 import { GetUserResponse } from "src/lib/apis/_models/AuthDto";
-import { ChannelsObj } from "./chat/components/types";
-import useGetChannels from "./chat/components/hooks/channel/useGetChannels";
+import { ChannelsObj } from "./chat/_components/types";
+import { DevTools } from "jotai-devtools";
+import useGetChannels from "@components/_hooks/useGetChannels";
 
 export const userAtom = atomWithReset<GetUserResponse>({
   id: -1,
@@ -17,9 +18,13 @@ export const userAtom = atomWithReset<GetUserResponse>({
   temp: 36.5,
   isTestTarget: false,
 });
+userAtom.debugLabel = "userAtom";
 export const isLoggedInAtom = atomWithReset<boolean>(false);
+isLoggedInAtom.debugLabel = "isLoggedInAtom";
 
 export const channelsAtom = atom<ChannelsObj>({});
+channelsAtom.debugLabel = "channelsAtom";
+
 export default function GlobalProvider(props: { children: React.ReactNode }) {
   const path = usePathname();
   useAuth();
@@ -35,5 +40,10 @@ export default function GlobalProvider(props: { children: React.ReactNode }) {
 
   useEffect(() => storePathValues, [path]);
 
-  return <>{props.children}</>;
+  return (
+    <>
+      <DevTools />
+      {props.children}
+    </>
+  );
 }

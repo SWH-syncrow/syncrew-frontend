@@ -2,17 +2,12 @@ import GroupCard from "@components/GroupCard";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import React, { useState } from "react";
+import { GetUserGroupsResponse } from "src/lib/apis/_models/UserDto";
 import { MypageApis } from "src/lib/apis/mypageApis";
 
 const MyGroupTabView = () => {
-  const [groups, setGroups] = useState([
-    {
-      id: 1,
-      name: "스마트폰 활용 초급",
-      memberCount: 5,
-      postCount: 8,
-    },
-  ]);
+  const [groups, setGroups] = useState<GetUserGroupsResponse["groups"]>([]);
+
   useQuery(["getMyGroups"], {
     queryFn: async () => await MypageApis.getMyGropus(),
     onSuccess: ({ data }) => {

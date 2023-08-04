@@ -4,33 +4,45 @@ export const handlers = [
   rest.post("/api/group/:groupId/enter", async (req, res, ctx) => {
     return res(ctx.status(200));
   }),
-  rest.get("/api/groups", async (req, res, ctx) => {
+  // rest.get("/api/groups", async (req, res, ctx) => {
+  //   return res(
+  //     ctx.status(200),
+  //     ctx.json({
+  //       groups: [
+  //         {
+  //           id: 1,
+  //           name: "스마트폰 활용 초급",
+  //           category: "SMARTPHONE",
+  //           memberCount: 5,
+  //           postCount: 8,
+  //         },
+  //         {
+  //           id: 2,
+  //           name: "스마트폰 활용 중급",
+  //           category: "SMARTPHONE",
+  //           memberCount: 2,
+  //           postCount: 3,
+  //         },
+  //         {
+  //           id: 3,
+  //           name: "스마트폰 활용 고급",
+  //           category: "SMARTPHONE",
+  //           memberCount: 2,
+  //           postCount: 3,
+  //         },
+  //       ],
+  //     })
+  //   );
+  // }),
+  rest.get("/api/groups/:groupId", async (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
-        groups: [
-          {
-            id: 1,
-            name: "스마트폰 활용 초급",
-            category: "SMARTPHONE",
-            memberCount: 5,
-            postCount: 8,
-          },
-          {
-            id: 2,
-            name: "스마트폰 활용 중급",
-            category: "SMARTPHONE",
-            memberCount: 2,
-            postCount: 3,
-          },
-          {
-            id: 3,
-            name: "스마트폰 활용 고급",
-            category: "SMARTPHONE",
-            memberCount: 2,
-            postCount: 3,
-          },
-        ],
+        id: 1,
+        name: "스마트폰 활용 초급",
+        category: "SMARTPHONE",
+        memberCount: 5,
+        postCount: 8,
       })
     );
   }),
@@ -48,7 +60,7 @@ export const handlers = [
             content:
               "스마트폰 잘하는 사람\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.\n테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.테스트입니다.",
             writer: {
-              id: 2,
+              id: 5,
               username: "소미",
               profileImage: null,
               temp: 42.0,
@@ -60,8 +72,8 @@ export const handlers = [
             title: "친구 구해요",
             content: "스마트폰 잘하는 사람",
             writer: {
-              id: 3,
-              username: "김그루",
+              id: 2,
+              username: "김지현",
               profileImage: null,
               temp: 42.0,
             },
@@ -121,7 +133,7 @@ export const handlers = [
             title: "친구 구해요",
             content: "스마트폰 잘하는 사람",
             writer: {
-              id: 3,
+              id: 2,
               username: "김지현",
               profileImage: null,
               temp: 42.0,
@@ -170,7 +182,7 @@ export const handlers = [
             read: false,
           },
           {
-            id: 2,
+            id: 5,
             friendRequestId: 2,
             friendName: "소미",
             status: "REQUESTED",

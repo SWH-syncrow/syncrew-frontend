@@ -16,6 +16,7 @@ interface CreatePostModalProps {
   groupName: string;
 }
 const modalOpenAtom = atom<boolean>(false);
+modalOpenAtom.debugLabel = "createPostModalAtom";
 const CreatePostModal = ({ groupId, groupName }: CreatePostModalProps) => {
   const [openAtom, setOpenAtom] = useAtom(modalOpenAtom);
   const [post, setPost] = useState<CreatePostRequest>({

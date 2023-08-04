@@ -4,77 +4,58 @@ import clsx from "clsx";
 import { useAtomValue } from "jotai";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
-import ChatForm from "./ChatForm";
+import MessageForm from "./MessageForm";
 import RefuseButton from "./RefuseButton";
-import useFirebaseChat from "./hooks/chat/useFirebaseChat";
-import { Message } from "./types";
-
-interface MessageProps {
-  message: Message;
-  isMine: boolean;
-}
-const Message = ({ message, isMine }: MessageProps) => {
-  return (
-    <div
-      className={clsx(
-        isMine ? "self-end bg-orange text-white" : "self-start bg-grey-0",
-        "py-2 px-4 rounded-3xl first:mt-auto leading-8 max-w-[80%]"
-      )}
-    >
-      {message.photoURL && <img src={message.photoURL} className="" />}
-      {message.text}
-    </div>
-  );
-};
+import useChat from "./hooks/useChat";
+import Message from "./Message";
 
 const ChatSection = () => {
   const router = useRouter();
-  const channelID = useSearchParams()?.get("channel") || "";
-  const isEnteredChannel = channelID !== "";
+  const channelId = useSearchParams()?.get("channel") || "";
 
   const channels = useAtomValue(channelsAtom);
-  const { id: userId } = useAtomValue(userAtom);
+  const userId = useAtomValue(userAtom).id;
 
-  const { messages } = useFirebaseChat(channelID);
+  const { messages } = useChat(channelId);
 
   const messageEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (
-      isEnteredChannel &&
+      channelId !== "" &&
       Object.keys(channels).length !== 0 &&
-      !channels[channelID]
+      !channels[channelId]
     )
       router.replace("/404");
-  }, [channelID, channels]);
+  }, [channelId, channels]);
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  if (!channels[channelID]) return <></>;
+  if (!channels[channelId]) return <></>;
   return (
     <div
       className={clsx(
-        channelID === "" ? "hidden" : "visible",
+        channelId === "" ? "hidden" : "visible",
         "flex-1 flex flex-col pb-[50px] pt-[104px] w-full max-h-screen"
       )}
     >
       <div className="flex justify-between bg-white pb-9  px-11">
         <div className="flex items-center gap-2">
           <UserAvatar
-            profileImage={channels[channelID].chatUser?.profileImage}
+            profileImage={channels[channelId].chatUser?.profileImage}
             className="w-10 h-10 mr-2"
           />
           <span className="text-lg font-medium">
-            {channels[channelID]?.chatUser?.username}
+            {channels[channelId]?.chatUser?.username}
           </span>
           <span className="text-sm text-grey-300">
-            {channels[channelID]?.chatUser?.temp}
+            {channels[channelId]?.chatUser?.temp}
           </span>
         </div>
         <RefuseButton
-          {...{ friendRequestId: channels[channelID].friendRequestId }}
+          {...{ friendRequestId: channels[channelId].friendRequestId }}
         />
       </div>
 
@@ -88,7 +69,7 @@ const ChatSection = () => {
         ))}
         <div ref={messageEndRef}></div>
       </div>
-      <ChatForm />
+      <MessageForm />
     </div>
   );
 };

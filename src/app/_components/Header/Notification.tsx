@@ -1,14 +1,14 @@
+import useGenerateChannel from "@components/_hooks/useGenerateChannel";
 import { Button } from "@components/Button";
 import { Dialog } from "@components/Dialog";
 import Ping from "@components/Ping";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import Bell from "public/assets/icons/알림_inactive.svg";
-import { useCallback, useRef, useState } from "react";
-import { FriendApis } from "src/lib/apis/friendApis";
+import { useRef, useState } from "react";
 import { GetNotificationsResponse } from "src/lib/apis/_models/NotificationsDto";
+import { FriendApis } from "src/lib/apis/friendApis";
 import { NotiApis } from "src/lib/apis/notiApis";
-import useGenerateChannel from "@app/chat/components/hooks/channel/useGenerateChannel";
 
 const Notification = () => {
   const [open, setOpen] = useState(false);
@@ -16,9 +16,8 @@ const Notification = () => {
   const [notiList, setNotiList] = useState<
     GetNotificationsResponse["notifications"] | []
   >([]);
-  const { genrateChannel } = useGenerateChannel();
 
-  const { refetch } = useQuery(["getNotifications"], {
+  useQuery(["getNotifications"], {
     queryFn: async () => await NotiApis.getNotifications(),
     onSuccess: ({ data: { notifications } }) => {
       setNotiList(notifications);
@@ -38,101 +37,6 @@ const Notification = () => {
       console.error(e);
     },
   });
-  const acceptFriend = useMutation({
-    mutationFn: async ({
-      friendRequestId,
-      notificationId,
-    }: PostFriendRequest) =>
-      await FriendApis.acceptFriend({ friendRequestId, notificationId }),
-    onSuccess: (res: any) => {
-      const friendRequestId = JSON.parse(res.config.data).data.friendRequestId;
-      genrateChannel.mutate({ friend: res.data, friendRequestId });
-      refetch();
-    },
-    onError: (e) => {
-      console.error(e);
-    },
-  });
-
-  const refuseFriend = useMutation({
-    mutationFn: async ({
-      friendRequestId,
-      notificationId,
-    }: PostFriendRequest) =>
-      await FriendApis.refuseFriend({ friendRequestId, notificationId }),
-    onSuccess: () => {
-      refetch();
-    },
-    onError: (e) => {
-      console.error(e);
-    },
-  });
-
-  const getNotiElement = useCallback(
-    (noti: GetNotificationsResponse["notifications"][0]) => {
-      switch (noti.status) {
-        case "REQUESTED":
-          return (
-            <>
-              <span className="text-grey-300 leading-8 mb-[14px]">{`${noti.friendName}님이 친구요청을 보냈어요`}</span>
-              <div className="flex justify-between gap-3">
-                <Button
-                  onClick={() =>
-                    refuseFriend.mutate({
-                      friendRequestId: noti.friendRequestId,
-                      notificationId: noti.id,
-                    })
-                  }
-                  className="btn-orange-border flex-1 text-xs py-2 !rounded-xl"
-                  disabled={acceptFriend.isLoading || refuseFriend.isLoading}
-                >
-                  거절하기
-                </Button>
-                <Button
-                  onClick={() =>
-                    acceptFriend.mutate({
-                      friendRequestId: noti.friendRequestId,
-                      notificationId: noti.id,
-                    })
-                  }
-                  className="btn-orange flex-1 text-xs py-2 !rounded-xl"
-                  disabled={acceptFriend.isLoading || refuseFriend.isLoading}
-                >
-                  수락하기
-                </Button>
-              </div>
-            </>
-          );
-        case "REQUEST":
-          return (
-            <span className="text-grey-300 leading-8">{`${noti.friendName}님에게 친구요청을 보냈어요`}</span>
-          );
-        case "ACCEPT":
-        case "ACCEPTED":
-          return (
-            <>
-              <span className="text-grey-300 leading-8 mb-[14px]">{`${noti.friendName}님과 친구가 매칭되었어요`}</span>
-              <Link
-                className="btn-orange text-xs !rounded-xl text-center"
-                href={"/chat"}
-              >
-                싱크루 채팅으로 이동하기
-              </Link>
-            </>
-          );
-        case "REFUSE":
-          return (
-            <span className="text-grey-300 leading-8">{`${noti.friendName}님의 친구요청을 거절했어요`}</span>
-          );
-        case "REFUSED":
-          return (
-            <span className="text-grey-300 leading-8">{`${noti.friendName}님이 친구요청을 거절했어요`}</span>
-          );
-      }
-    },
-    [acceptFriend, refuseFriend]
-  );
-
   return (
     <div className="relative">
       <Dialog.Root
@@ -179,7 +83,22 @@ const Notification = () => {
                     <div className="w-2 h-2 rounded-full bg-orange" />
                   )}
                 </div>
-                {getNotiElement(noti)}
+                {
+                  {
+                    REQUESTED: <Notification.REQUESTED {...{ noti }} />,
+                    REQUEST: (
+                      <span className="text-grey-300 leading-8">{`${noti.friendName}님에게 친구요청을 보냈어요`}</span>
+                    ),
+                    ACCEPT: <Notification.MATCHED {...{ noti }} />,
+                    ACCEPTED: <Notification.MATCHED {...{ noti }} />,
+                    REFUSE: (
+                      <span className="text-grey-300 leading-8">{`${noti.friendName}님의 친구요청을 거절했어요`}</span>
+                    ),
+                    REFUSED: (
+                      <span className="text-grey-300 leading-8">{`${noti.friendName}님이 친구요청을 거절했어요`}</span>
+                    ),
+                  }[noti.status]
+                }
               </div>
             ))}
           </div>
@@ -188,5 +107,94 @@ const Notification = () => {
     </div>
   );
 };
+
+const RequestedContent = ({
+  noti,
+}: {
+  noti: GetNotificationsResponse["notifications"][0];
+}) => {
+  const { genrateChannel } = useGenerateChannel();
+  const queryClinet = useQueryClient();
+  const acceptFriend = useMutation({
+    mutationFn: async ({
+      friendRequestId,
+      notificationId,
+    }: PostFriendRequest) =>
+      await FriendApis.acceptFriend({ friendRequestId, notificationId }),
+    onSuccess: (res: any) => {
+      const friendRequestId = JSON.parse(res.config.data).data.friendRequestId;
+      genrateChannel.mutate({ friend: res.data, friendRequestId });
+      queryClinet.invalidateQueries(["getNotifications"]);
+    },
+    onError: (e) => {
+      console.error(e);
+    },
+  });
+
+  const refuseFriend = useMutation({
+    mutationFn: async ({
+      friendRequestId,
+      notificationId,
+    }: PostFriendRequest) =>
+      await FriendApis.refuseFriend({ friendRequestId, notificationId }),
+    onSuccess: () => {
+      queryClinet.invalidateQueries(["getNotifications"]);
+    },
+    onError: (e) => {
+      console.error(e);
+    },
+  });
+  return (
+    <>
+      <span className="text-grey-300 leading-8 mb-[14px]">{`${noti.friendName}님이 친구요청을 보냈어요`}</span>
+      <div className="flex justify-between gap-3">
+        <Button
+          onClick={() =>
+            refuseFriend.mutate({
+              friendRequestId: noti.friendRequestId,
+              notificationId: noti.id,
+            })
+          }
+          className="btn-orange-border flex-1 text-xs py-2 !rounded-xl"
+          disabled={acceptFriend.isLoading || refuseFriend.isLoading}
+        >
+          거절하기
+        </Button>
+        <Button
+          onClick={() =>
+            acceptFriend.mutate({
+              friendRequestId: noti.friendRequestId,
+              notificationId: noti.id,
+            })
+          }
+          className="btn-orange flex-1 text-xs py-2 !rounded-xl"
+          disabled={acceptFriend.isLoading || refuseFriend.isLoading}
+        >
+          수락하기
+        </Button>
+      </div>
+    </>
+  );
+};
+Notification.REQUESTED = RequestedContent;
+
+const MatchedContent = ({
+  noti,
+}: {
+  noti: GetNotificationsResponse["notifications"][0];
+}) => {
+  return (
+    <>
+      <span className="text-grey-300 leading-8 mb-[14px]">{`${noti.friendName}님과 친구가 매칭되었어요`}</span>
+      <Link
+        className="btn-orange text-xs !rounded-xl text-center"
+        href={"/chat"}
+      >
+        싱크루 채팅으로 이동하기
+      </Link>
+    </>
+  );
+};
+Notification.MATCHED = MatchedContent;
 
 export default Notification;

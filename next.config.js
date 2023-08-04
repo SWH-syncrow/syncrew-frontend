@@ -4,6 +4,7 @@ const nextConfig = {
     styledComponents: true,
     removeConsole: process.env.NODE_ENV === "production",
   },
+  transpilePackages: ["jotai-devtools"],
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
