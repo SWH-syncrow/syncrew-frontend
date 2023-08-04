@@ -65,7 +65,7 @@ const useGenerateChannel = () => {
         }),
       ]);
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 

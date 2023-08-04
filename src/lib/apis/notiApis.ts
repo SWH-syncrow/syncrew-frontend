@@ -7,7 +7,7 @@ const getNotifications = async () => {
     return res;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 };
 
@@ -18,7 +18,7 @@ const readNotifications = async (ids: number[]) => {
     return res;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 };
 export const NotiApis = { getNotifications, readNotifications };

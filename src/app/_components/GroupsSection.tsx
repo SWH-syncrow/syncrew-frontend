@@ -14,10 +14,10 @@ const GroupsSection = () => {
   const [selectedCategory, setSelectedCategory] =
     useState<GroupCategory>("ALL");
 
-  useQuery(["getGroup"], {
+  useQuery(["getGroup", { selectedCategory }], {
     queryFn: async () => GroupsApis.getGroups(selectedCategory),
     onSuccess: (res: AxiosResponse) => {
-      setGroups(res.data.groups);
+      setGroups(res.data);
     },
     onError: (e) => {
       console.error(e);

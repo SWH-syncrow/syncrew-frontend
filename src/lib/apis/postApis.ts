@@ -3,12 +3,12 @@ import { CreatePostRequest } from "./_models/PostsDto";
 
 const createPost = async (post: CreatePostRequest) => {
   try {
-    const res = await authInstance.post("/notifications", { data: post });
+    const res = await authInstance.post("/posts", { ...post });
 
     return res;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 };
 const deletePost = async (postId: number) => {
@@ -18,7 +18,7 @@ const deletePost = async (postId: number) => {
     return res;
   } catch (error) {
     console.error(error);
-    return error;
+    throw error;
   }
 };
 export const PostApis = { createPost, deletePost };

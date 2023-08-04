@@ -5,18 +5,27 @@ import { useRouter } from "next/navigation";
 import { GroupsApis } from "src/lib/apis/groupsApis";
 import AuthCheckButton from "./AuthCheckButton";
 import { Group } from "@app/_types";
+import { AxiosError } from "axios";
 
 const GroupCard = ({ id, name, memberCount, postCount }: Group) => {
   const router = useRouter();
+  /**
+   * @todo 입장 처리 고도화
+   */
   const enterGroup = useMutation({
     mutationFn: async (groupdId: number) =>
       await GroupsApis.enterGroup(groupdId),
     onSuccess: () => {
       router.push(`/group?id=${id}`);
     },
-    onError: (e) => {
-      console.error(e);
+    onError: (e: AxiosError) => {
+      if (e.response?.status === 400) {
+        router.push(`/group?id=${id}`);
+      } else {
+        alert("입장 오류");
+      }
     },
+    retry: false,
   });
   return (
     <>
@@ -24,7 +33,7 @@ const GroupCard = ({ id, name, memberCount, postCount }: Group) => {
       <div className=" h-[293px] border border-grey-50 flex flex-col rounded-xl overflow-hidden">
         <div className="flex-1 flex items-center justify-center bg-grey-0">
           <Image
-            src={`/assets/illusts/${name.replaceAll(" ", "_")}.svg`}
+            src={`/assets/illusts/group_${id}.svg`}
             alt="home"
             width={0}
             height={0}

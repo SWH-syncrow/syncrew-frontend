@@ -1,40 +1,42 @@
 import { userAtom } from "@app/GlobalProvider";
 import PostCard from "@components/PostCard";
-import { useQuery } from "@tanstack/react-query";
+import CreatePostModal from "@components/modal/CreatePostModal";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 import { GetGroupPostsResponse } from "src/lib/apis/_models/GroupsDto";
 import { GroupsApis } from "src/lib/apis/groupsApis";
-import CreatePostModal from "../../../components/modal/CreatePostModal";
 import useObserver from "../hooks/useObserver";
 
 const PostsSection = () => {
   const userId = useAtomValue(userAtom).id;
   const groupId = useSearchParams()?.get("id") || "";
   const [posts, setPosts] = useState<GetGroupPostsResponse["posts"] | []>([]);
-  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
   const infiniteScrollTarget = useRef<HTMLDivElement | null>(null);
 
-  useObserver({
-    target: infiniteScrollTarget,
-    onIsIntersectingHandler: () =>
-      !isLoading && setPagination((p) => ({ ...p, page: p.page + 1 })),
-  });
-
-  const { isLoading } = useQuery(["getGroupPosts", { groupId, pagination }], {
-    queryFn: async () =>
+  const { fetchNextPage } = useInfiniteQuery(["getGroupPosts", { groupId }], {
+    queryFn: async ({ pageParam = 0 }) =>
       await GroupsApis.getGroupPosts({
         groupId: parseInt(groupId),
-        pagination,
+        pagination: { page: pageParam, size: 10 },
       }),
-    onSuccess: ({ data }) => {
-      setPosts((p) => [...p, ...data.posts]);
+    getNextPageParam: (lastPage) => {
+      if (lastPage.data.last) return undefined;
+      return lastPage.data.number + 1;
+    },
+    onSuccess: (res) => {
+      setPosts(() => res.pages.map((page) => page.data.content).flat());
     },
     onError: (e) => {
       console.error(e);
     },
     enabled: groupId !== "",
+  });
+
+  useObserver({
+    target: infiniteScrollTarget,
+    onIsIntersectingHandler: fetchNextPage,
   });
 
   return (

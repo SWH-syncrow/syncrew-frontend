@@ -4,7 +4,6 @@ import GlobalModal from "@components/modal/GlobalModal";
 import localFont from "next/font/local";
 import "src/styles/globals.css";
 import GlobalProvider from "./GlobalProvider";
-import MswProvider from "./MswProvider";
 import ReactQueryProvider from "./ReactQueryProvider";
 import RootStyleRegistry from "./RootStyleRegistry";
 import GNB from "./_components/GNB";
@@ -35,15 +34,13 @@ export default async function RootLayout({
       <body>
         <ReactQueryProvider>
           <RootStyleRegistry>
-            <MswProvider>
-              <GlobalProvider>
-                <main className="flex w-full">
-                  <GlobalModal />
-                  <GNB />
-                  {children}
-                </main>
-              </GlobalProvider>
-            </MswProvider>
+            <GlobalProvider>
+              <main className="flex w-full">
+                <GlobalModal />
+                <GNB />
+                {children}
+              </main>
+            </GlobalProvider>
           </RootStyleRegistry>
         </ReactQueryProvider>
       </body>
