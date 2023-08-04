@@ -1,7 +1,7 @@
 "use client";
 
-import ChannelSection from "./components/ChannelSection";
-import ChatSection from "./components/ChatSection";
+import ChannelSection from "./_components/ChannelSection";
+import ChatSection from "./_components/ChatSection";
 
 const Page = () => {
   return (

@@ -1,5 +1,5 @@
 import { userAtom } from "@app/GlobalProvider";
-import { ChatUser } from "@app/chat/components/types";
+import { ChatUser } from "@app/chat/_components/types";
 import { useMutation } from "@tanstack/react-query";
 import {
   addDoc,

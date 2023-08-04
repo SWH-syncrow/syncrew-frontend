@@ -1,6 +1,6 @@
 "use client";
 
-import PageContent from "./components/PageContent";
+import PageContent from "./_components/PageContent";
 
 const Page = () => {
   return (

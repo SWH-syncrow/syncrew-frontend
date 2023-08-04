@@ -1,5 +1,5 @@
 import { userAtom } from "@app/GlobalProvider";
-import { Message } from "@app/chat/components/types";
+import { Message } from "@app/chat/_components/types";
 import {
   Unsubscribe,
   collection,

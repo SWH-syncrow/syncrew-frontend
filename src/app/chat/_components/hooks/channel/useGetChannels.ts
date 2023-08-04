@@ -1,5 +1,5 @@
 import { channelsAtom, userAtom } from "@app/GlobalProvider";
-import { Channel, ChannelsObj } from "@app/chat/components/types";
+import { Channel, ChannelsObj } from "@app/chat/_components/types";
 import {
   Unsubscribe,
   collection,
@@ -35,7 +35,7 @@ const useGetChannels = () => {
       async (querySnapshot) => {
         const channelsOfUser = querySnapshot.data()?.channels;
         if (!channelsOfUser || channelsOfUser.length === 0) return;
-        
+
         const channelsQuery = query(
           collection(db, "channel"),
           where(documentId(), "in", channelsOfUser)
