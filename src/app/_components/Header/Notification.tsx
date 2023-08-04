@@ -1,4 +1,4 @@
-import useGenerateChannel from "@app/chat/_components/hooks/channel/useGenerateChannel";
+import useGenerateChannel from "@components/_hooks/useGenerateChannel";
 import { Button } from "@components/Button";
 import { Dialog } from "@components/Dialog";
 import Ping from "@components/Ping";

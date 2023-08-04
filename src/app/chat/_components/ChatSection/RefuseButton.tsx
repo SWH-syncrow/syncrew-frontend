@@ -8,7 +8,7 @@ import { FriendApis } from "src/lib/apis/friendApis";
 import { db } from "src/lib/firebase/firebase";
 
 const RefuseButton = ({ friendRequestId }: { friendRequestId: number }) => {
-  const channelID = useSearchParams()?.get("channel") || "";
+  const channelId = useSearchParams()?.get("channel") || "";
   const router = useRouter();
   const { setModalState, resetState } = useGlobalModal();
 
@@ -17,7 +17,7 @@ const RefuseButton = ({ friendRequestId }: { friendRequestId: number }) => {
       await FriendApis.refuseFriend({ friendRequestId }),
     onSuccess: async () => {
       resetState();
-      await deleteDoc(doc(db, "channel", channelID));
+      await deleteDoc(doc(db, "channel", channelId));
       router.push("/chat");
     },
     onError: (e) => {

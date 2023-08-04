@@ -5,66 +5,65 @@ import Delete from "public/assets/icons/Delete.svg";
 import Photo from "public/assets/icons/image.svg";
 import Send from "public/assets/icons/send.svg";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import useUploadMessage from "./hooks/chat/useUploadMessage";
+import useUploadMessage from "./hooks/useUploadMessage";
 
-const ChatForm = () => {
-  const channelID = useSearchParams()?.get("channel") || "";
+const MessageForm = () => {
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const channelId = useSearchParams()?.get("channel") || "";
   const [newMessage, setNewMessage] = useState("");
-  const [chatImgSrc, setChatImgSrc] = useState<ArrayBuffer | string>();
-  const [chatImg, setChatImg] = useState<File>();
+  const [messageImgSrc, setMessageImgSrc] = useState<ArrayBuffer | string>();
+  const [messageImg, setMessageImg] = useState<File>();
 
   const { uploadHandler } = useUploadMessage({
-    channelID,
+    channelId,
     message: newMessage,
-    chatImg,
+    messageImg,
   });
-
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-    }
-  }, [channelID]);
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    setChatImg(file);
-    if (file) {
-      const fileReader = new FileReader();
-      fileReader.onloadend = (e) => {
-        setChatImgSrc(e.target?.result || "");
-      };
-      fileReader.readAsDataURL(file);
-    }
-    e.target.value = "";
-  };
 
   const handleOnSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     uploadHandler(e);
     setNewMessage("");
-    setChatImgSrc("");
-    setChatImg(undefined);
+    setMessageImgSrc("");
+    setMessageImg(undefined);
   };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    setMessageImg(file);
+    if (file) {
+      const fileReader = new FileReader();
+      fileReader.onloadend = (e) => {
+        setMessageImgSrc(e.target?.result || "");
+      };
+      fileReader.readAsDataURL(file);
+    }
+    e.target.value = "";
+  };
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [channelId]);
 
   return (
     <div className="relative px-11">
-      {chatImgSrc && (
+      {messageImgSrc && (
         <div className="absolute bottom-[100%]">
           <div className="relative max-w-[400px] max-h-[50vh] w-fit rounded-3xl overflow-hidden">
             <Button
               onClick={() => {
-                setChatImg(undefined);
-                setChatImgSrc("");
+                setMessageImg(undefined);
+                setMessageImgSrc("");
               }}
               className="absolute m-1 !p-2 duration-300 bg-orange opacity-50 hover:opacity-100 rounded-full z-20"
             >
               <Delete />
             </Button>
             <img
-              src={chatImgSrc + ""}
+              src={messageImgSrc + ""}
               alt="첨부 이미지"
               className="relative z-10 object-contain max-h-[50vh]"
             />
@@ -102,7 +101,7 @@ const ChatForm = () => {
         </div>
         <Button
           type="submit"
-          disabled={!newMessage && !chatImgSrc}
+          disabled={!newMessage && !messageImgSrc}
           className="btn-orange w-[46px] h-[46px] rounded-full !p-0 flex items-center justify-center"
         >
           <Send />
@@ -111,4 +110,4 @@ const ChatForm = () => {
     </div>
   );
 };
-export default ChatForm;
+export default MessageForm;

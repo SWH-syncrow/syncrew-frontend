@@ -14,7 +14,7 @@ const GroupInfoSection = () => {
     postCount: 0,
   });
   /**
-   * @todo enter api
+   * @todo 참여된 사용자가 아닐 경우에 처리
    */
   useQuery(["getGroupInfo", { groupId }], {
     queryFn: async () => await GroupsApis.getGroupInfo(parseInt(groupId)),

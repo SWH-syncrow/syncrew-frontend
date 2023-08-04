@@ -1,6 +1,6 @@
 "use client";
 
-import ChannelSection from "./_components/ChannelSection";
+import ChannelSection from "./_components/ChannelsSection";
 import ChatSection from "./_components/ChatSection";
 
 const Page = () => {
