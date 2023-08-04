@@ -17,11 +17,12 @@ const useAuth = () => {
   const resetUserAtom = useResetAtom(userAtom);
   const setIsLoggedInAtom = useSetAtom(isLoggedInAtom);
   const resetIsLoggedInAtom = useResetAtom(userAtom);
-
   useEffect(() => {
     (async () => {
       const refresh = (await getRefreshTokenFromCookie()) || "";
-      if (refresh !== "") reissueToken.mutate(refresh);
+      if (refresh !== "") {
+        reissueToken.mutate(refresh);
+      }
     })();
   }, []);
 
@@ -44,7 +45,7 @@ const useAuth = () => {
     },
   });
 
-  useQuery(["getUser"], {
+  const { isFetching } = useQuery(["getUser"], {
     queryFn: async () => await AuthUserApis.getUser(),
     onSuccess: ({ data }) => {
       setUserAtom(data);
@@ -58,7 +59,7 @@ const useAuth = () => {
     enabled: accessToken !== "",
   });
 
-  return;
+  return { isFetching };
 };
 
 export default useAuth;
