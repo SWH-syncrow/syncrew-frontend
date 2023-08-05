@@ -10,23 +10,23 @@ import Modal from "src/components/Modal";
 import TextArea from "src/components/TextArea";
 import { PostApis } from "src/lib/apis/postApis";
 
-interface Group {
-  groupId: number;
-  groupName: string;
+interface GroupInfo {
+  id: number;
+  name: string;
 }
 const modalOpenAtom = atom<boolean>(false);
 modalOpenAtom.debugLabel = "createPostModalAtom";
 
-const modalGroupAtom = atom<Group>({
-  groupId: 0,
-  groupName: "",
+const modalGroupAtom = atom<GroupInfo>({
+  id: 0,
+  name: "",
 });
 modalGroupAtom.debugLabel = "createPostModalGroupAtom";
 
 const CreatePostModal = () => {
   const queryClient = useQueryClient();
   const [openAtom, setOpenAtom] = useAtom(modalOpenAtom);
-  const { groupId, groupName } = useAtomValue(modalGroupAtom);
+  const { id, name } = useAtomValue(modalGroupAtom);
   const [post, setPost] = useState({
     title: "",
     content: "",
@@ -34,7 +34,7 @@ const CreatePostModal = () => {
 
   const createPost = useMutation({
     mutationFn: async (post: { title: string; content: string }) =>
-      await PostApis.createPost({ ...post, groupId }),
+      await PostApis.createPost({ ...post, groupId: id }),
     onSuccess: () => {
       setOpenAtom(false);
       setPost({
@@ -88,7 +88,7 @@ const CreatePostModal = () => {
           <Prev />
         </Modal.Close>
         <Modal.Title>
-          <div className="text-center">{groupName} 친구 신청</div>
+          <div className="text-center">{name} 친구 신청</div>
         </Modal.Title>
         <form onSubmit={onSubmit} className="flex flex-col mt-[60px] flex-1">
           <div className="flex flex-col mb-3 flex-1">
@@ -133,8 +133,8 @@ const CreatePostModalTrigger = ({
 }: {
   className?: string;
   group: {
-    groupId: number;
-    groupName: string;
+    id: number;
+    name: string;
   };
 }) => {
   const setOpenAtom = useSetAtom(modalOpenAtom);

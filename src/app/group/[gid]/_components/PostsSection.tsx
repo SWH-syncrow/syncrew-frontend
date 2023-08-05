@@ -1,24 +1,26 @@
+"use client";
 import { userAtom } from "@app/GlobalProvider";
 import PostCard from "@components/PostCard";
 import CreatePostModal from "@components/modal/CreatePostModal";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
-import { useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 import { GetGroupPostsResponse } from "src/lib/apis/_models/GroupsDto";
 import { GroupsApis } from "src/lib/apis/groupsApis";
-import useObserver from "../hooks/useObserver";
+import useObserver from "../../hooks/useObserver";
+import { groupInfoAtom } from "./GroupProvider";
 
 const PostsSection = () => {
+  const { id, name } = useAtomValue(groupInfoAtom);
   const userId = useAtomValue(userAtom).id;
-  const groupId = useSearchParams()?.get("id") || "";
+
   const [posts, setPosts] = useState<GetGroupPostsResponse["posts"] | []>([]);
   const infiniteScrollTarget = useRef<HTMLDivElement | null>(null);
 
-  const { fetchNextPage } = useInfiniteQuery(["getGroupPosts", { groupId }], {
+  const { fetchNextPage } = useInfiniteQuery(["getGroupPosts", { id }], {
     queryFn: async ({ pageParam = 0 }) =>
       await GroupsApis.getGroupPosts({
-        groupId: parseInt(groupId),
+        groupId: id,
         pagination: { page: pageParam, size: 10 },
       }),
     getNextPageParam: (lastPage) => {
@@ -31,7 +33,7 @@ const PostsSection = () => {
     onError: (e) => {
       console.error(e);
     },
-    enabled: groupId !== "",
+    enabled: id !== -1,
   });
 
   useObserver({
@@ -47,7 +49,7 @@ const PostsSection = () => {
             아직 글이 작성되지 않았어요
           </span>
           <span className="mb-[45px]">첫 신청글을 작성 해볼까요?</span>
-          <CreatePostModal.Trigger />
+          <CreatePostModal.Trigger group={{ id, name }} />
         </div>
       )}
       {posts.length > 0 && (

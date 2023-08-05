@@ -16,11 +16,11 @@ const GroupCard = ({ id, name, memberCount, postCount }: Group) => {
     mutationFn: async (groupdId: number) =>
       await GroupsApis.enterGroup(groupdId),
     onSuccess: () => {
-      router.push(`/group?id=${id}`);
+      router.push(`/group/${id}`);
     },
     onError: (e: AxiosError) => {
       if (e.response?.status === 400) {
-        router.push(`/group?id=${id}`);
+        router.push(`/group/${id}`);
       } else {
         alert("입장 오류");
       }
@@ -60,10 +60,7 @@ const GroupCard = ({ id, name, memberCount, postCount }: Group) => {
               입장
             </AuthCheckButton>
 
-            <CreatePostModal.Trigger
-              className="flex-1"
-              group={{ groupId: id, groupName: name }}
-            />
+            <CreatePostModal.Trigger className="flex-1" group={{ id, name }} />
           </div>
         </div>
       </div>
