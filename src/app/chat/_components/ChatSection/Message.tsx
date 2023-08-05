@@ -12,7 +12,7 @@ const Message = ({
     <div
       className={clsx(
         isMine ? "self-end" : "self-start items-start",
-        "flex flex-col max-w-[80%]"
+        "flex flex-col max-w-[80%] gap-2"
       )}
     >
       {photoURL && (
