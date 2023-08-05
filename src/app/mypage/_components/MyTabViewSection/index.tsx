@@ -4,6 +4,7 @@ import { atom, useAtom, useAtomValue } from "jotai";
 import MyGroupTabView from "./MyGroupTabView";
 import MyPostTabView from "./MyPostTabView";
 import MyRequestPostTabView from "./MyRequestPostTabView";
+import { userAtom } from "@app/GlobalProvider";
 
 const selectedTabAtom = atom<MYPATE_TAB>("MY_POST");
 selectedTabAtom.debugLabel = "selectedTabAtom";
@@ -42,6 +43,9 @@ const MyTab = () => {
 
 const MyTabViewSection = () => {
   const selectedTab = useAtomValue(selectedTabAtom);
+  const isLoading = useAtomValue(userAtom).id === -1;
+
+  if (isLoading) return;
   return (
     <div className="w-[900px]">
       <MyTab />

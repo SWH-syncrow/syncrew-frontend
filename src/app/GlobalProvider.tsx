@@ -10,6 +10,7 @@ import React, { useEffect } from "react";
 import { GetUserResponse } from "src/lib/apis/_models/AuthDto";
 import { ChannelsObj } from "./chat/_components/types";
 import LoadingScreen from "@components/LoadingScreen";
+import clsx from "clsx";
 
 export const userAtom = atomWithReset<GetUserResponse>({
   id: -1,
@@ -39,12 +40,19 @@ export default function GlobalProvider(props: { children: React.ReactNode }) {
 
   useEffect(() => storePathValues, [path]);
 
-  if (isLoading) return <LoadingScreen />;
+  // if (isLoading) return <LoadingScreen />;
 
   return (
     <>
+      {isLoading && (
+        <div className="absolute bg-white">
+          <LoadingScreen />
+        </div>
+      )}
       <DevTools />
-      {props.children}
+      <div className={clsx(isLoading ? "hidden" : "visible")}>
+        {props.children}
+      </div>
     </>
   );
 }
