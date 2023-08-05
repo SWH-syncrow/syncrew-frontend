@@ -2,7 +2,6 @@ import clsx from "clsx";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import Prev from "public/assets/icons/left.svg";
-import LevelSVG from "public/assets/illusts/levelTest.svg";
 import { useMemo } from "react";
 import { Button } from "src/components/Button";
 import Modal from "src/components/Modal";
@@ -61,7 +60,7 @@ const LevelTestContent = () => {
   }, [deviceItems, swItems]);
 
   return (
-    <Modal.Content className="w-[550px] h-[70%] flex flex-col py-10 px-8">
+    <Modal.Content className="w-[550px] h-[70%] flex flex-col py-10 px-8 max-h-[581px]">
       <Modal.Close className="absolute z-10 cursor-pointer">
         <Prev />
       </Modal.Close>
@@ -170,7 +169,7 @@ const LevelResultContent = () => {
             <br />
             <span className="text-orange">{LEVEL[level - 1].value}</span>이에요
           </span>
-          <LevelSVG />
+          <img src={`/assets/illusts/level_${level}.svg`} />
           <span className="text-lg font-medium text-center">
             테스트 결과,
             <br />
