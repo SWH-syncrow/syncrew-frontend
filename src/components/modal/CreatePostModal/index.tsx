@@ -31,6 +31,11 @@ const CreatePostModal = ({ groupId, groupName }: CreatePostModalProps) => {
       await PostApis.createPost(post),
     onSuccess: () => {
       setOpenAtom(false);
+      setPost({
+        title: "",
+        content: "",
+        groupId: parseInt(groupId),
+      });
       queryClient.invalidateQueries(["getGroupPosts"]);
     },
     onError: (e) => {
