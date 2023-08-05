@@ -12,7 +12,7 @@ const getMyPosts = async () => {
 };
 const getMyRequestPosts = async () => {
   try {
-    const res = await authInstance.get("/user/posts?status=ACCEPTED");
+    const res = await authInstance.get("/user/requests");
 
     return res;
   } catch (error) {
