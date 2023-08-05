@@ -45,8 +45,10 @@ const GNB = () => {
           onClick={() => router.push("/chat")}
         >
           <Ping condition={isChannelsNoti} className="-right-6">
-            <Chat />
-            싱크루 채팅
+            <div className="flex gap-2 items-center">
+              <Chat />
+              싱크루 채팅
+            </div>
           </Ping>
         </StyledAuthCheckButton>
         <StyledAuthCheckButton
