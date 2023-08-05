@@ -2,17 +2,15 @@ import { channelsAtom, userAtom } from "@app/GlobalProvider";
 import UserAvatar from "@components/UserAvatar";
 import clsx from "clsx";
 import { useAtomValue } from "jotai";
-import { useRouter, useSearchParams } from "next/navigation";
+import { notFound, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
+import Message from "./Message";
 import MessageForm from "./MessageForm";
 import RefuseButton from "./RefuseButton";
 import useChat from "./hooks/useChat";
-import Message from "./Message";
 
 const ChatSection = () => {
-  const router = useRouter();
   const channelId = useSearchParams()?.get("channel") || "";
-
   const channels = useAtomValue(channelsAtom);
   const userId = useAtomValue(userAtom).id;
 
@@ -21,19 +19,14 @@ const ChatSection = () => {
   const messageEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (
-      channelId !== "" &&
-      Object.keys(channels).length !== 0 &&
-      !channels[channelId]
-    )
-      router.replace("/404");
+    if (channelId !== "" && channels && !channels[channelId]) notFound();
   }, [channelId, channels]);
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  if (!channels[channelId]) return <></>;
+  if (!channels || !channels[channelId]) return <></>;
   return (
     <div
       className={clsx(

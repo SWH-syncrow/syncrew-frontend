@@ -29,7 +29,7 @@ isFetchingAuthAtom.debugLabel = "isFetchingAuthAtom";
 export const enteredGroupsAtom = atom<number[]>([0]);
 enteredGroupsAtom.debugLabel = "userEnteredGroupsAtom";
 
-export const channelsAtom = atom<ChannelsObj>({});
+export const channelsAtom = atom<ChannelsObj | null>(null);
 channelsAtom.debugLabel = "channelsAtom";
 
 export default function GlobalProvider({ children }: PropsWithChildren) {

@@ -20,6 +20,7 @@ const GNB = () => {
   const channels = useAtomValue(channelsAtom);
 
   const isChannelsNoti = useMemo(() => {
+    if (!channels) return false;
     return (
       Object.values(channels).filter(
         (ch) => (channelId !== ch.id && ch.isUnread) || ch.status === "READY"

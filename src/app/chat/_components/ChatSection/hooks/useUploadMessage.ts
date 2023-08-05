@@ -63,7 +63,7 @@ const useUploadMessage = ({
         lastChatUser: userId.toString(),
       });
 
-      if (channels[channelId].status === "READY") {
+      if (channels?.[channelId].status === "READY") {
         updateDoc(doc(db, "channel", channelId), { status: "DOING" });
       }
     } catch (error) {
