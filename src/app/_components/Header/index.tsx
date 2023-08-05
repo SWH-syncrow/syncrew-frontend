@@ -35,12 +35,15 @@ const Header = () => {
     >
       <div
         className={clsx(
-          "w-[918px] flex justify-end duration-300",
+          "w-[918px] h-9 flex justify-end items-center duration-300",
           isFetchingAuth ? "opacity-0" : "opacity-100"
         )}
       >
         {!isLoggedIn ? (
-          <Link className="btn-orange rounded-full" href={"/login"}>
+          <Link
+            className="btn-orange h-9 !py-0 flex items-center rounded-full"
+            href={"/login"}
+          >
             로그인
           </Link>
         ) : (
