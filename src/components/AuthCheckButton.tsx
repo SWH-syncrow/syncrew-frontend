@@ -25,7 +25,7 @@ const AuthCheckButton = ({
               <Link
                 href={"/login"}
                 onClick={() => resetState()}
-                className="btn-orange rounded-none rounded-br-xl flex items-center justify-center whitespace-nowrap"
+                className="btn-orange rounded-none rounded-br-2xl flex items-center justify-center whitespace-nowrap"
               >
                 로그인 이동
               </Link>
