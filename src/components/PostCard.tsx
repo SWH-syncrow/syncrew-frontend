@@ -7,7 +7,7 @@ import Vector from "public/assets/icons/Vector.svg";
 import Down from "public/assets/icons/down_sm.svg";
 import Requested from "public/assets/icons/친구_신청_완료.svg";
 import Request from "public/assets/icons/친구신청.svg";
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "src/components/Button";
 import { FriendApis } from "src/lib/apis/friendApis";
 import { GetGroupPostsResponse } from "src/lib/apis/_models/GroupsDto";
@@ -23,6 +23,14 @@ const PostCard = ({
   type = "NORMAL",
 }: PostCardProps) => {
   const [isFullView, setIsFullView] = useState(false);
+  const [isOverflow, setIsOverflow] = useState(false);
+  const contentRef = useRef<HTMLParagraphElement | null>(null);
+  useEffect(() => {
+    setIsOverflow(
+      (contentRef.current?.clientHeight as number) <
+        (contentRef.current?.scrollHeight as number)
+    );
+  }, [contentRef.current]);
 
   const ButtonByType = () => {
     switch (type) {
@@ -70,12 +78,18 @@ const PostCard = ({
                   "text-ellipsis line-clamp-2 h-[48px] text-grey-500",
                 "leading-6 break-words min-h-[48px] text-lg"
               )}
-            >
-              {content}
-            </p>
+              dangerouslySetInnerHTML={{
+                __html: content.replace(/\n/g, "<br />"),
+              }}
+              ref={contentRef}
+            />
           </div>
+
           <Button
-            className="text-xs flex gap-1 items-center h-[33px] px-3 flex-shrink-0 translate-y-[calc(91px/2-50%)] btn-grey-border rounded-full"
+            className={clsx(
+              "text-xs flex gap-1 items-center h-[33px] px-3 flex-shrink-0 translate-y-[calc(91px/2-50%)] btn-grey-border rounded-full",
+              isOverflow ? "visible" : "hidden"
+            )}
             onClick={() => setIsFullView((p) => !p)}
           >
             글 더보기
@@ -100,6 +114,7 @@ const DeleteButton = ({ postId }: { postId: number }) => {
     onSuccess: () => {
       resetState();
       queryClient.invalidateQueries(["getGroupPosts"]);
+      queryClient.invalidateQueries(["getMyPosts"]);
     },
     onError: (e) => {
       console.error(e);
@@ -134,7 +149,7 @@ const AcceptButton = ({
   id,
   rejectedUsers,
 }: GetGroupPostsResponse["posts"][0]) => {
-  const { id: userId } = useAtomValue(userAtom);
+  const userId = useAtomValue(userAtom).id;
   const { setModalState } = useGlobalModal();
   const queryClient = useQueryClient();
 

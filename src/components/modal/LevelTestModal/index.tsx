@@ -71,7 +71,7 @@ const LevelTestContent = () => {
           <br /> 첫 걸음을 내딛어보세요!
         </div>
       </Modal.Title>
-      <div className="flex flex-col mt-[60px] flex-1 px-3">
+      <div className="flex flex-col mt-[60px] flex-1 px-3 overflow-auto">
         <div className="flex flex-col mb-3 flex-1">
           <div className="flex flex-col gap-10">
             <div className="flex flex-col gap-4">
@@ -163,7 +163,7 @@ const LevelResultContent = () => {
       <Modal.Title>
         <div className="text-center">싱크루 테스트 결과</div>
       </Modal.Title>
-      <div className="flex flex-col mt-[60px] flex-1 px-3">
+      <div className="flex flex-col mt-[60px] flex-1 px-3 overflow-auto">
         <div className="flex flex-col items-center gap-6 flex-1">
           <span className="text-xl font-medium text-center">
             싱크루 테스트 결과는

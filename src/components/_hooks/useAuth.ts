@@ -1,5 +1,5 @@
 "use client";
-import { isLoggedInAtom, userAtom } from "@app/GlobalProvider";
+import { userAtom } from "@app/GlobalProvider";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { useResetAtom } from "jotai/utils";
@@ -11,18 +11,19 @@ import {
   getRefreshTokenFromCookie,
   setRefreshTokenToCookie,
 } from "../_server/serverAuth";
+
 const useAuth = () => {
+  const [checkTokenLoading, setCheckTokenLoading] = useState(true);
   const [accessToken, setAccessToken] = useState("");
   const setUserAtom = useSetAtom(userAtom);
   const resetUserAtom = useResetAtom(userAtom);
-  const setIsLoggedInAtom = useSetAtom(isLoggedInAtom);
-  const resetIsLoggedInAtom = useResetAtom(userAtom);
+
   useEffect(() => {
     (async () => {
-      const refresh = (await getRefreshTokenFromCookie()) || "";
-      if (refresh !== "") {
-        reissueToken.mutate(refresh);
-      }
+      const refresh = await getRefreshTokenFromCookie();
+      if (refresh) reissueToken.mutate(refresh);
+
+      setCheckTokenLoading(false);
     })();
   }, []);
 
@@ -41,7 +42,6 @@ const useAuth = () => {
       console.error(err);
       deleteRefreshTokenFromCookie();
       resetUserAtom();
-      resetIsLoggedInAtom();
     },
   });
 
@@ -49,17 +49,17 @@ const useAuth = () => {
     queryFn: async () => await AuthUserApis.getUser(),
     onSuccess: ({ data }) => {
       setUserAtom(data);
-      setIsLoggedInAtom(true);
     },
     onError: (err) => {
       console.error(err);
       resetUserAtom();
-      resetIsLoggedInAtom();
     },
     enabled: accessToken !== "",
   });
 
-  return { isFetching };
+  return {
+    isLoading: checkTokenLoading || reissueToken.isLoading || isFetching,
+  };
 };
 
 export default useAuth;

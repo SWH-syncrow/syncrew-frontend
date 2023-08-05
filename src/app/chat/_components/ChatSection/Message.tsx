@@ -33,14 +33,10 @@ const Message = ({
               : "self-start bg-grey-0",
             "py-2 px-4 rounded-3xl first:mt-auto leading-8 "
           )}
-        >
-          {text.split("\n").map((line) => (
-            <>
-              {line}
-              <br />
-            </>
-          ))}
-        </div>
+          dangerouslySetInnerHTML={{
+            __html: text.replace(/\n/g, "<br />"),
+          }}
+        />
       )}
     </div>
   );

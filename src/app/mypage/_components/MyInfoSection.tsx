@@ -1,27 +1,24 @@
 "use client";
-import { isLoggedInAtom, userAtom } from "@app/GlobalProvider";
+import { userAtom } from "@app/GlobalProvider";
 import { Button } from "@components/Button";
 import ToolTip from "@components/Tooltip";
 import UserAvatar from "@components/UserAvatar";
-import { useAtomValue } from "jotai";
-import React from "react";
-import Question from "public/assets/icons/question.svg";
 import { useMutation } from "@tanstack/react-query";
-import { AuthUserApis } from "src/lib/apis/authUserApis";
+import { useAtomValue } from "jotai";
 import { useResetAtom } from "jotai/utils";
 import { useRouter } from "next/navigation";
+import Question from "public/assets/icons/question.svg";
+import { AuthUserApis } from "src/lib/apis/authUserApis";
 
 const MyInfoSection = () => {
   const router = useRouter();
   const user = useAtomValue(userAtom);
-  const resetIsLoggedIn = useResetAtom(isLoggedInAtom);
   const resetUser = useResetAtom(userAtom);
 
   const logout = useMutation({
     mutationFn: async () => await AuthUserApis.kakaoLogout(),
     onSuccess: () => {
       resetUser();
-      resetIsLoggedIn();
       router.push("/");
     },
     onError: (e) => {
