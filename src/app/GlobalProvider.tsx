@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 import { GetUserResponse } from "src/lib/apis/_models/AuthDto";
 import { ChannelsObj } from "./chat/_components/types";
+import LoadingScreen from "@components/LoadingScreen";
 
 export const userAtom = atomWithReset<GetUserResponse>({
   id: -1,
@@ -27,7 +28,7 @@ channelsAtom.debugLabel = "channelsAtom";
 
 export default function GlobalProvider(props: { children: React.ReactNode }) {
   const path = usePathname();
-  const { isFetching } = useAuth();
+  const { isLoading } = useAuth();
   useGetChannels();
 
   const storePathValues = () => {
@@ -40,10 +41,12 @@ export default function GlobalProvider(props: { children: React.ReactNode }) {
 
   useEffect(() => storePathValues, [path]);
 
+  if (isLoading) return <LoadingScreen />;
+
   return (
     <>
       <DevTools />
-      {!isFetching && props.children}
+      {props.children}
     </>
   );
 }

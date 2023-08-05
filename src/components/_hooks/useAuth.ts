@@ -11,18 +11,21 @@ import {
   getRefreshTokenFromCookie,
   setRefreshTokenToCookie,
 } from "../_server/serverAuth";
+
 const useAuth = () => {
+  const [checkTokenLoading, setCheckTokenLoading] = useState(true);
   const [accessToken, setAccessToken] = useState("");
   const setUserAtom = useSetAtom(userAtom);
   const resetUserAtom = useResetAtom(userAtom);
   const setIsLoggedInAtom = useSetAtom(isLoggedInAtom);
   const resetIsLoggedInAtom = useResetAtom(userAtom);
+
   useEffect(() => {
     (async () => {
-      const refresh = (await getRefreshTokenFromCookie()) || "";
-      if (refresh !== "") {
-        reissueToken.mutate(refresh);
-      }
+      const refresh = await getRefreshTokenFromCookie();
+      if (refresh) reissueToken.mutate(refresh);
+
+      setCheckTokenLoading(false);
     })();
   }, []);
 
@@ -59,7 +62,9 @@ const useAuth = () => {
     enabled: accessToken !== "",
   });
 
-  return { isFetching };
+  return {
+    isLoading: checkTokenLoading || reissueToken.isLoading || isFetching,
+  };
 };
 
 export default useAuth;
