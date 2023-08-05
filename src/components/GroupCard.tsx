@@ -68,4 +68,24 @@ const GroupCard = ({ id, name, memberCount, postCount }: Group) => {
     </>
   );
 };
+
+const GroupCardSkeleton = () => {
+  return (
+    <div className="border border-grey-50 h-[293px] animate-pulse rounded-xl overflow-hidden">
+      <div className="h-[50%] flex items-center justify-center bg-grey-0"></div>
+      <div className="h-[50%] flex flex-col justify-between py-4 px-3 ">
+        <div className="bg-grey-50 h-6 rounded-md"></div>
+        <div className="flex gap-2.5 mb-[25px]">
+          <div className="text-xs h-4 py-0.5 px-2.5 rounded-3xl bg-grey-50"></div>
+          <div className="text-xs h-4 py-0.5 px-2.5 rounded-3xl bg-grey-50"></div>
+        </div>
+        <div className="flex justify-between gap-1.5">
+          <div className="text-center text-sm bg-grey-50 flex-1 h-9 rounded-xl"></div>
+          <div className="text-center text-sm bg-grey-50 flex-1 h-9 rounded-xl"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+GroupCard.Skeleton = GroupCardSkeleton;
 export default GroupCard;

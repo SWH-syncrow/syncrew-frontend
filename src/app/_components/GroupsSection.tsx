@@ -14,7 +14,7 @@ const GroupsSection = () => {
   const [selectedCategory, setSelectedCategory] =
     useState<GroupCategory>("ALL");
 
-  useQuery(["getGroup", { selectedCategory }], {
+  const { isFetching } = useQuery(["getGroup", { selectedCategory }], {
     queryFn: async () => GroupsApis.getGroups(selectedCategory),
     onSuccess: (res: AxiosResponse) => {
       setGroups(res.data);
@@ -40,9 +40,12 @@ const GroupsSection = () => {
         ))}
       </div>
       <div className="grid grid-cols-3 gap-8">
-        {groups.map((group) => (
-          <GroupCard key={group.id} {...{ ...group }} />
-        ))}
+        {isFetching &&
+          Array.from({ length: 12 }, (_, i) => i + 1).map((g) => (
+            <GroupCard.Skeleton key={g} />
+          ))}
+        {!isFetching &&
+          groups.map((group) => <GroupCard key={group.id} {...{ ...group }} />)}
       </div>
     </div>
   );
