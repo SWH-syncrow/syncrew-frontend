@@ -1,17 +1,17 @@
 "use client";
+import { userAtom } from "@app/GlobalProvider";
 import useAuthKakao from "@components/_hooks/useAuthKakao";
+import { useAtomValue } from "jotai";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Kakao from "public/assets/kakao.svg";
 import Prev from "public/assets/icons/left.svg";
-import { useAtomValue } from "jotai";
-import { isLoggedInAtom } from "@app/GlobalProvider";
+import Kakao from "public/assets/kakao.svg";
 import { useEffect } from "react";
 
 const Page = () => {
   useAuthKakao();
   const router = useRouter();
-  const isLoggedIn = useAtomValue(isLoggedInAtom);
+  const isLoggedIn = useAtomValue(userAtom).id !== -1;
 
   useEffect(() => {
     isLoggedIn && router.replace("/");

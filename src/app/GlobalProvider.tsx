@@ -20,8 +20,6 @@ export const userAtom = atomWithReset<GetUserResponse>({
   isTestTarget: false,
 });
 userAtom.debugLabel = "userAtom";
-export const isLoggedInAtom = atomWithReset<boolean>(false);
-isLoggedInAtom.debugLabel = "isLoggedInAtom";
 
 export const channelsAtom = atom<ChannelsObj>({});
 channelsAtom.debugLabel = "channelsAtom";

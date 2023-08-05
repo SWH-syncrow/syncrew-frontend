@@ -1,11 +1,11 @@
+import { userAtom } from "@app/GlobalProvider";
+import { useAtomValue } from "jotai";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import Notification from "./Notification";
-import { useAtomValue } from "jotai";
-import { isLoggedInAtom } from "@app/GlobalProvider";
 
 const Header = () => {
-  const isLoggedIn = useAtomValue(isLoggedInAtom);
+  const isLoggedIn = useAtomValue(userAtom).id !== -1;
   const headerRef = useRef<HTMLHeadElement | null>(null);
 
   const handleScroll = () => {

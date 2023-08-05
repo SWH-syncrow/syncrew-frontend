@@ -1,4 +1,4 @@
-import { isLoggedInAtom, userAtom } from "@app/GlobalProvider";
+import { userAtom } from "@app/GlobalProvider";
 import { setRefreshTokenToCookie } from "@components/_server/serverAuth";
 import { useMutation } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
@@ -13,7 +13,6 @@ const useAuthKakao = () => {
   const searchParams = useSearchParams();
   const query = searchParams?.get("code");
   const setUserAtom = useSetAtom(userAtom);
-  const setIsLoggedInAtom = useSetAtom(isLoggedInAtom);
 
   const getKakaoToken = useMutation({
     mutationFn: async (code: string) => {
@@ -52,7 +51,6 @@ const useAuthKakao = () => {
       ] = `Bearer ${accessToken}`;
       setRefreshTokenToCookie(refreshToken);
       setUserAtom(user);
-      setIsLoggedInAtom(true);
       const storage = globalThis?.sessionStorage;
       const prevPath = storage.getItem("prevPath") || "";
       prevPath === "" ? router.push("/") : router.push(prevPath);

@@ -1,11 +1,11 @@
-import { isLoggedInAtom } from "@app/GlobalProvider";
+import { userAtom } from "@app/GlobalProvider";
 import ToolTip from "@components/Tooltip";
 import LevelTestModal from "@components/modal/LevelTestModal";
 import { useAtomValue } from "jotai";
 import GroupsSection from "./GroupsSection";
 
 const PageContent = () => {
-  const isLoggedIn = useAtomValue(isLoggedInAtom);
+  const isLoggedIn = useAtomValue(userAtom).id !== -1;
 
   return (
     <>

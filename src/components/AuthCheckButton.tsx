@@ -1,16 +1,16 @@
-import React, { ComponentProps, PropsWithChildren } from "react";
-import { Button } from "./Button";
+import { userAtom } from "@app/GlobalProvider";
 import { useAtomValue } from "jotai";
-import { isLoggedInAtom } from "@app/GlobalProvider";
-import { useGlobalModal } from "./modal/GlobalModal";
 import Link from "next/link";
+import { ComponentProps, PropsWithChildren } from "react";
+import { Button } from "./Button";
+import { useGlobalModal } from "./modal/GlobalModal";
 
 const AuthCheckButton = ({
   children,
   onClick,
   ...props
 }: PropsWithChildren<ComponentProps<typeof Button>>) => {
-  const isLoggedIn = useAtomValue(isLoggedInAtom);
+  const isLoggedIn = useAtomValue(userAtom).id !== -1;
   const { setModalState, resetState } = useGlobalModal();
 
   return (
