@@ -1,10 +1,12 @@
-import { userAtom } from "@app/GlobalProvider";
+import { isFetchingAuthAtom, userAtom } from "@app/GlobalProvider";
 import { useAtomValue } from "jotai";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import Notification from "./Notification";
+import clsx from "clsx";
 
 const Header = () => {
+  const isFetchingAuth = useAtomValue(isFetchingAuthAtom);
   const isLoggedIn = useAtomValue(userAtom).id !== -1;
   const headerRef = useRef<HTMLHeadElement | null>(null);
 
@@ -31,7 +33,12 @@ const Header = () => {
       ref={headerRef}
       className="py-8 w-full flex justify-center sticky top-0 bg-white z-10"
     >
-      <div className="w-[918px] flex justify-end">
+      <div
+        className={clsx(
+          "w-[918px] flex justify-end duration-300",
+          isFetchingAuth ? "opacity-0" : "opacity-100"
+        )}
+      >
         {!isLoggedIn ? (
           <Link className="btn-orange rounded-full" href={"/login"}>
             로그인
