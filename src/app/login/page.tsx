@@ -15,7 +15,7 @@ const Page = () => {
 
   useEffect(() => {
     isLoggedIn && router.replace("/");
-  }, [isLoggedIn]);
+  }, []);
 
   return (
     <div className="flex flex-col items-center  w-full h-screen">

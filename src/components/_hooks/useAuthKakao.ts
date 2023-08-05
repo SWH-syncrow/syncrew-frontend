@@ -52,7 +52,7 @@ const useAuthKakao = () => {
       setRefreshTokenToCookie(refreshToken);
       setUserAtom(user);
       const storage = globalThis?.sessionStorage;
-      const prevPath = storage.getItem("prevPath") || "";
+      const prevPath = storage.getItem("currentPath") || "";
       prevPath === "" ? router.push("/") : router.push(prevPath);
     },
     onError: (e) => {
