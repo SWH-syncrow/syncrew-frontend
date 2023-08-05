@@ -38,6 +38,7 @@ const GroupCard = ({ id, name, memberCount, postCount }: Group) => {
             width={0}
             height={0}
             className="w-auto h-[110px]"
+            loading="eager"
           />
         </div>
         <div className="flex-1 flex flex-col justify-between py-4 px-3">
