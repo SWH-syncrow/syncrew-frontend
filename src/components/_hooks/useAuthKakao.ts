@@ -52,8 +52,8 @@ const useAuthKakao = () => {
       setRefreshTokenToCookie(refreshToken);
       setUserAtom(user);
       const storage = globalThis?.sessionStorage;
-      const prevPath = storage.getItem("currentPath") || "";
-      prevPath === "" ? router.push("/") : router.push(prevPath);
+      const currentPath = storage.getItem("currentPath") || "";
+      currentPath === "/login" ? router.push("/") : router.push(currentPath);
     },
     onError: (e) => {
       alert("로그인에 실패했어요");
