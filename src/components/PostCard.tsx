@@ -70,9 +70,10 @@ const PostCard = ({
                   "text-ellipsis line-clamp-2 h-[48px] text-grey-500",
                 "leading-6 break-words min-h-[48px] text-lg"
               )}
-            >
-              {content}
-            </p>
+              dangerouslySetInnerHTML={{
+                __html: content.replace(/\n/g, "<br />"),
+              }}
+            />
           </div>
           <Button
             className="text-xs flex gap-1 items-center h-[33px] px-3 flex-shrink-0 translate-y-[calc(91px/2-50%)] btn-grey-border rounded-full"
@@ -134,7 +135,7 @@ const AcceptButton = ({
   id,
   rejectedUsers,
 }: GetGroupPostsResponse["posts"][0]) => {
-  const { id: userId } = useAtomValue(userAtom);
+  const userId = useAtomValue(userAtom).id;
   const { setModalState } = useGlobalModal();
   const queryClient = useQueryClient();
 
