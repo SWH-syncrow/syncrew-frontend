@@ -101,6 +101,7 @@ const DeleteButton = ({ postId }: { postId: number }) => {
     onSuccess: () => {
       resetState();
       queryClient.invalidateQueries(["getGroupPosts"]);
+      queryClient.invalidateQueries(["getMyPosts"]);
     },
     onError: (e) => {
       console.error(e);
