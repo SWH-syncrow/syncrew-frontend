@@ -1,40 +1,45 @@
+import AuthCheckButton from "@components/AuthCheckButton";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
-import { atom, useAtom, useSetAtom } from "jotai";
+import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
+import Prev from "public/assets/icons/left.svg";
+import { FormEvent, useState } from "react";
 import { Button } from "src/components/Button";
 import { Input } from "src/components/Input";
 import Modal from "src/components/Modal";
 import TextArea from "src/components/TextArea";
-import Prev from "public/assets/icons/left.svg";
-import AuthCheckButton from "@components/AuthCheckButton";
-import { FormEvent, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PostApis } from "src/lib/apis/postApis";
-import { CreatePostRequest } from "src/lib/apis/_models/PostsDto";
 
-interface CreatePostModalProps {
-  groupId: string;
+interface Group {
+  groupId: number;
   groupName: string;
 }
 const modalOpenAtom = atom<boolean>(false);
 modalOpenAtom.debugLabel = "createPostModalAtom";
-const CreatePostModal = ({ groupId, groupName }: CreatePostModalProps) => {
+
+const modalGroupAtom = atom<Group>({
+  groupId: 0,
+  groupName: "",
+});
+modalGroupAtom.debugLabel = "createPostModalGroupAtom";
+
+const CreatePostModal = () => {
+  const queryClient = useQueryClient();
   const [openAtom, setOpenAtom] = useAtom(modalOpenAtom);
-  const [post, setPost] = useState<CreatePostRequest>({
+  const { groupId, groupName } = useAtomValue(modalGroupAtom);
+  const [post, setPost] = useState({
     title: "",
     content: "",
-    groupId: parseInt(groupId),
   });
-  const queryClient = useQueryClient();
 
   const createPost = useMutation({
-    mutationFn: async (post: CreatePostRequest) =>
-      await PostApis.createPost(post),
+    mutationFn: async (post: { title: string; content: string }) =>
+      await PostApis.createPost({ ...post, groupId }),
     onSuccess: () => {
       setOpenAtom(false);
       setPost({
         title: "",
         content: "",
-        groupId: parseInt(groupId),
       });
       queryClient.invalidateQueries(["getGroupPosts"]);
       queryClient.invalidateQueries(["getMyPosts"]);
@@ -64,7 +69,6 @@ const CreatePostModal = ({ groupId, groupName }: CreatePostModalProps) => {
         setPost({
           title: "",
           content: "",
-          groupId: parseInt(groupId),
         });
       }}
     >
@@ -123,11 +127,24 @@ const CreatePostModal = ({ groupId, groupName }: CreatePostModalProps) => {
     </Modal>
   );
 };
-const CreatePostModalTrigger = ({ className }: { className?: string }) => {
+const CreatePostModalTrigger = ({
+  className,
+  group,
+}: {
+  className?: string;
+  group: {
+    groupId: number;
+    groupName: string;
+  };
+}) => {
   const setOpenAtom = useSetAtom(modalOpenAtom);
+  const setGroupAtom = useSetAtom(modalGroupAtom);
   return (
     <AuthCheckButton
-      onClick={() => setOpenAtom(true)}
+      onClick={() => {
+        setGroupAtom(group);
+        setOpenAtom(true);
+      }}
       className={clsx("btn-orange", className)}
     >
       신청 글쓰기

@@ -27,9 +27,10 @@ const GroupCard = ({ id, name, memberCount, postCount }: Group) => {
     },
     retry: false,
   });
+
   return (
     <>
-      <CreatePostModal groupId={id.toString()} groupName={name} />
+      <CreatePostModal />
       <div className=" h-[293px] border border-grey-50 flex flex-col rounded-xl overflow-hidden">
         <div className="flex-1 flex items-center justify-center bg-grey-0">
           <Image
@@ -59,7 +60,10 @@ const GroupCard = ({ id, name, memberCount, postCount }: Group) => {
               입장
             </AuthCheckButton>
 
-            <CreatePostModal.Trigger className="flex-1" />
+            <CreatePostModal.Trigger
+              className="flex-1"
+              group={{ groupId: id, groupName: name }}
+            />
           </div>
         </div>
       </div>
