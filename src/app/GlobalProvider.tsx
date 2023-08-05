@@ -1,10 +1,8 @@
 "use client";
 
-import LoadingScreen from "@components/LoadingScreen";
 import useAuth from "@components/_hooks/useAuth";
 import useGetChannels from "@components/_hooks/useGetChannels";
 import { useQuery } from "@tanstack/react-query";
-import clsx from "clsx";
 import { atom, useAtomValue, useSetAtom } from "jotai";
 import { DevTools } from "jotai-devtools";
 import { atomWithReset } from "jotai/utils";
@@ -25,6 +23,9 @@ export const userAtom = atomWithReset<GetUserResponse>({
 });
 userAtom.debugLabel = "userAtom";
 
+export const isFetchingAuthAtom = atom<boolean>(true);
+isFetchingAuthAtom.debugLabel = "isFetchingAuthAtom";
+
 export const enteredGroupsAtom = atom<number[]>([0]);
 enteredGroupsAtom.debugLabel = "userEnteredGroupsAtom";
 
@@ -35,7 +36,7 @@ export default function GlobalProvider({ children }: PropsWithChildren) {
   const setEnteredGroups = useSetAtom(enteredGroupsAtom);
   const isLoggedIn = useAtomValue(userAtom).id !== -1;
   const path = usePathname();
-  const { isLoading } = useAuth();
+  useAuth();
   useGetChannels();
 
   useQuery(["getEnteredGroups"], {
@@ -58,15 +59,11 @@ export default function GlobalProvider({ children }: PropsWithChildren) {
   };
 
   useEffect(() => storePathValues, [path]);
+
   return (
     <>
-      {isLoading && (
-        <div className="absolute bg-white">
-          <LoadingScreen />
-        </div>
-      )}
-      <DevTools />
-      <div className={clsx(isLoading ? "hidden" : "visible")}>{children}</div>
+      {/* <DevTools /> */}
+      {children}
     </>
   );
 }
