@@ -14,8 +14,6 @@ const useAuthKakao = () => {
   const query = searchParams?.get("code");
   const setUserAtom = useSetAtom(userAtom);
   const setIsLoggedInAtom = useSetAtom(isLoggedInAtom);
-  const storage = globalThis?.sessionStorage;
-  const prevPath = storage.getItem("prevPath") || "";
 
   const getKakaoToken = useMutation({
     mutationFn: async (code: string) => {
@@ -55,6 +53,8 @@ const useAuthKakao = () => {
       setRefreshTokenToCookie(refreshToken);
       setUserAtom(user);
       setIsLoggedInAtom(true);
+      const storage = globalThis?.sessionStorage;
+      const prevPath = storage.getItem("prevPath") || "";
       prevPath === "" ? router.push("/") : router.push(prevPath);
     },
     onError: (e) => {
