@@ -1,3 +1,4 @@
+import { enteredGroupsAtom } from "@app/GlobalProvider";
 import AuthCheckButton from "@components/AuthCheckButton";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
@@ -9,6 +10,7 @@ import { Input } from "src/components/Input";
 import Modal from "src/components/Modal";
 import TextArea from "src/components/TextArea";
 import { PostApis } from "src/lib/apis/postApis";
+import { useGlobalModal } from "../GlobalModal";
 
 interface GroupInfo {
   id: number;
@@ -137,11 +139,18 @@ const CreatePostModalTrigger = ({
     name: string;
   };
 }) => {
+  const enteredGroups = useAtomValue(enteredGroupsAtom);
+  const { setModalState } = useGlobalModal();
   const setOpenAtom = useSetAtom(modalOpenAtom);
   const setGroupAtom = useSetAtom(modalGroupAtom);
   return (
     <AuthCheckButton
       onClick={() => {
+        if (!enteredGroups.includes(group.id))
+          return setModalState({
+            contents: "참여 중인 그룹만 신청 글쓰기가 가능해요!",
+          });
+
         setGroupAtom(group);
         setOpenAtom(true);
       }}

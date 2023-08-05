@@ -7,7 +7,7 @@ import { useAtomValue } from "jotai";
 import { useRef, useState } from "react";
 import { GetGroupPostsResponse } from "src/lib/apis/_models/GroupsDto";
 import { GroupsApis } from "src/lib/apis/groupsApis";
-import useObserver from "../../hooks/useObserver";
+import useObserver from "./hooks/useObserver";
 import { groupInfoAtom } from "./GroupProvider";
 
 const PostsSection = () => {

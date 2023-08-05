@@ -27,11 +27,10 @@ export interface GetUserRequestsResponse {
 }
 
 export interface GetUserGroupsResponse {
-  groups: {
-    id: number;
-    name: string;
-    category: "SMARTPHONE" | "PPT" | "VIDEO" | "PS";
-    memberCount: number;
-    postCount: number;
-  }[];
+  id: number;
+  name: string;
+  category: "SMARTPHONE" | "PPT" | "VIDEO" | "PS";
+  memberCount: number;
+  postCount: number;
 }
+[];
