@@ -37,6 +37,7 @@ const CreatePostModal = ({ groupId, groupName }: CreatePostModalProps) => {
         groupId: parseInt(groupId),
       });
       queryClient.invalidateQueries(["getGroupPosts"]);
+      queryClient.invalidateQueries(["getMyPosts"]);
     },
     onError: (e) => {
       console.error(e);
