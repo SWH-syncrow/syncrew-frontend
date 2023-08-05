@@ -6,7 +6,7 @@ import { GetUserGroupsResponse } from "src/lib/apis/_models/UserDto";
 import { MypageApis } from "src/lib/apis/mypageApis";
 
 const MyGroupTabView = () => {
-  const [groups, setGroups] = useState<GetUserGroupsResponse["groups"]>([]);
+  const [groups, setGroups] = useState<GetUserGroupsResponse[]>([]);
 
   useQuery(["getMyGroups"], {
     queryFn: async () => await MypageApis.getMyGropus(),

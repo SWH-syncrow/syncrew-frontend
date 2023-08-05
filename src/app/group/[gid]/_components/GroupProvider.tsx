@@ -1,7 +1,8 @@
-import { userAtom } from "@app/GlobalProvider";
+import { enteredGroupsAtom, userAtom } from "@app/GlobalProvider";
 import { useQuery } from "@tanstack/react-query";
 import { atom, useAtomValue, useSetAtom } from "jotai";
-import { PropsWithChildren } from "react";
+import { notFound } from "next/navigation";
+import { PropsWithChildren, useEffect } from "react";
 import { GetGroupInfoResponse } from "src/lib/apis/_models/GroupsDto";
 import { GroupsApis } from "src/lib/apis/groupsApis";
 
@@ -18,7 +19,8 @@ const GroupProvider = ({
   gid,
 }: PropsWithChildren<{ gid: string }>) => {
   const setGroupInfo = useSetAtom(groupInfoAtom);
-  const isLoading = useAtomValue(userAtom).id === -1;
+  const isLoggedIn = useAtomValue(userAtom).id !== -1;
+  const enteredGroups = useAtomValue(enteredGroupsAtom);
 
   useQuery(["getGroupInfo", { gid }], {
     queryFn: async () => await GroupsApis.getGroupInfo(parseInt(gid)),
@@ -28,10 +30,15 @@ const GroupProvider = ({
     onError: (e) => {
       console.error(e);
     },
-    enabled: !isLoading,
+    enabled: isLoggedIn,
   });
 
-  if (isLoading) return;
+  useEffect(() => {
+    if (!enteredGroups.includes(0) && !enteredGroups.includes(parseInt(gid)))
+      notFound();
+  }, [enteredGroups]);
+
+  if (!isLoggedIn) return;
   return <>{children}</>;
 };
 

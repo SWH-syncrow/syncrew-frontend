@@ -1,17 +1,18 @@
+import { enteredGroupsAtom } from "@app/GlobalProvider";
+import { Group } from "@app/_types";
 import CreatePostModal from "@components/modal/CreatePostModal";
 import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { useAtomValue } from "jotai";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { GroupsApis } from "src/lib/apis/groupsApis";
 import AuthCheckButton from "./AuthCheckButton";
-import { Group } from "@app/_types";
-import { AxiosError } from "axios";
 
 const GroupCard = ({ id, name, memberCount, postCount }: Group) => {
   const router = useRouter();
-  /**
-   * @todo 입장 처리 고도화
-   */
+  const enteredGroups = useAtomValue(enteredGroupsAtom);
+
   const enterGroup = useMutation({
     mutationFn: async (groupdId: number) =>
       await GroupsApis.enterGroup(groupdId),
@@ -19,11 +20,7 @@ const GroupCard = ({ id, name, memberCount, postCount }: Group) => {
       router.push(`/group/${id}`);
     },
     onError: (e: AxiosError) => {
-      if (e.response?.status === 400) {
-        router.push(`/group/${id}`);
-      } else {
-        alert("입장 오류");
-      }
+      console.error(e);
     },
     retry: false,
   });
@@ -54,7 +51,11 @@ const GroupCard = ({ id, name, memberCount, postCount }: Group) => {
           </div>
           <div className="flex justify-between gap-1.5">
             <AuthCheckButton
-              onClick={() => enterGroup.mutate(id)}
+              onClick={() => {
+                enteredGroups.includes(id)
+                  ? router.push(`/group/${id}`)
+                  : enterGroup.mutate(id);
+              }}
               className="text-center text-sm btn-orange-border flex-1"
             >
               입장
