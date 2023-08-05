@@ -1,16 +1,19 @@
 "use client";
 
+import LoadingScreen from "@components/LoadingScreen";
 import useAuth from "@components/_hooks/useAuth";
 import useGetChannels from "@components/_hooks/useGetChannels";
-import { atom } from "jotai";
+import { useQuery } from "@tanstack/react-query";
+import clsx from "clsx";
+import { atom, useAtomValue, useSetAtom } from "jotai";
 import { DevTools } from "jotai-devtools";
 import { atomWithReset } from "jotai/utils";
 import { usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+import { PropsWithChildren, useEffect } from "react";
 import { GetUserResponse } from "src/lib/apis/_models/AuthDto";
+import { GetUserGroupsResponse } from "src/lib/apis/_models/UserDto";
+import { MypageApis } from "src/lib/apis/mypageApis";
 import { ChannelsObj } from "./chat/_components/types";
-import LoadingScreen from "@components/LoadingScreen";
-import clsx from "clsx";
 
 export const userAtom = atomWithReset<GetUserResponse>({
   id: -1,
@@ -22,13 +25,29 @@ export const userAtom = atomWithReset<GetUserResponse>({
 });
 userAtom.debugLabel = "userAtom";
 
+export const enteredGroupsAtom = atom<number[]>([0]);
+enteredGroupsAtom.debugLabel = "userEnteredGroupsAtom";
+
 export const channelsAtom = atom<ChannelsObj>({});
 channelsAtom.debugLabel = "channelsAtom";
 
-export default function GlobalProvider(props: { children: React.ReactNode }) {
+export default function GlobalProvider({ children }: PropsWithChildren) {
+  const setEnteredGroups = useSetAtom(enteredGroupsAtom);
+  const isLoggedIn = useAtomValue(userAtom).id !== -1;
   const path = usePathname();
   const { isLoading } = useAuth();
   useGetChannels();
+
+  useQuery(["getEnteredGroups"], {
+    queryFn: async () => await MypageApis.getMyGropus(),
+    onSuccess: ({ data }: { data: GetUserGroupsResponse[] }) => {
+      setEnteredGroups(data.map((g) => g.id));
+    },
+    onError: (e) => {
+      console.error(e);
+    },
+    enabled: isLoggedIn,
+  });
 
   const storePathValues = () => {
     const storage = globalThis?.sessionStorage;
@@ -39,9 +58,6 @@ export default function GlobalProvider(props: { children: React.ReactNode }) {
   };
 
   useEffect(() => storePathValues, [path]);
-
-  // if (isLoading) return <LoadingScreen />;
-
   return (
     <>
       {isLoading && (
@@ -50,9 +66,7 @@ export default function GlobalProvider(props: { children: React.ReactNode }) {
         </div>
       )}
       <DevTools />
-      <div className={clsx(isLoading ? "hidden" : "visible")}>
-        {props.children}
-      </div>
+      <div className={clsx(isLoading ? "hidden" : "visible")}>{children}</div>
     </>
   );
 }
