@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { Message } from "../types";
+import Image from "next/image";
 
 const Message = ({
   message: { photoURL, text },
@@ -12,14 +13,16 @@ const Message = ({
     <div
       className={clsx(
         isMine ? "self-end" : "self-start items-start",
-        "flex flex-col max-w-[80%]"
+        "flex flex-col max-w-[80%] gap-2"
       )}
     >
       {photoURL && (
         <div className="relative max-w-[400px] w-fit rounded-3xl overflow-hidden">
-          <img
+          <Image
             src={photoURL}
             alt="첨부 이미지"
+            width={300}
+            height={300}
             className="relative object-contain max-h-[50vh] !z-0"
           />
           <div className="absolute top-0 w-full h-full bg-grey-50 !-z-10"></div>

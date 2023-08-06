@@ -1,12 +1,9 @@
 "use client";
 
-import LoadingScreen from "@components/LoadingScreen";
 import useAuth from "@components/_hooks/useAuth";
 import useGetChannels from "@components/_hooks/useGetChannels";
 import { useQuery } from "@tanstack/react-query";
-import clsx from "clsx";
-import { atom, useAtomValue, useSetAtom } from "jotai";
-import { DevTools } from "jotai-devtools";
+import { atom, useSetAtom } from "jotai";
 import { atomWithReset } from "jotai/utils";
 import { usePathname } from "next/navigation";
 import { PropsWithChildren, useEffect } from "react";
@@ -14,6 +11,7 @@ import { GetUserResponse } from "src/lib/apis/_models/AuthDto";
 import { GetUserGroupsResponse } from "src/lib/apis/_models/UserDto";
 import { MypageApis } from "src/lib/apis/mypageApis";
 import { ChannelsObj } from "./chat/_components/types";
+import { authInstance } from "src/lib/axios/instance";
 
 export const userAtom = atomWithReset<GetUserResponse>({
   id: -1,
@@ -25,17 +23,19 @@ export const userAtom = atomWithReset<GetUserResponse>({
 });
 userAtom.debugLabel = "userAtom";
 
+export const isSettledAuthAtom = atom<boolean>(false);
+isSettledAuthAtom.debugLabel = "isSettledAuthAtom";
+
 export const enteredGroupsAtom = atom<number[]>([0]);
 enteredGroupsAtom.debugLabel = "userEnteredGroupsAtom";
 
-export const channelsAtom = atom<ChannelsObj>({});
+export const channelsAtom = atom<ChannelsObj | null>(null);
 channelsAtom.debugLabel = "channelsAtom";
 
 export default function GlobalProvider({ children }: PropsWithChildren) {
   const setEnteredGroups = useSetAtom(enteredGroupsAtom);
-  const isLoggedIn = useAtomValue(userAtom).id !== -1;
   const path = usePathname();
-  const { isLoading } = useAuth();
+  useAuth();
   useGetChannels();
 
   useQuery(["getEnteredGroups"], {
@@ -46,7 +46,7 @@ export default function GlobalProvider({ children }: PropsWithChildren) {
     onError: (e) => {
       console.error(e);
     },
-    enabled: isLoggedIn,
+    enabled: !!authInstance.defaults.headers.common["Authorization"],
   });
 
   const storePathValues = () => {
@@ -58,15 +58,6 @@ export default function GlobalProvider({ children }: PropsWithChildren) {
   };
 
   useEffect(() => storePathValues, [path]);
-  return (
-    <>
-      {isLoading && (
-        <div className="absolute bg-white">
-          <LoadingScreen />
-        </div>
-      )}
-      <DevTools />
-      <div className={clsx(isLoading ? "hidden" : "visible")}>{children}</div>
-    </>
-  );
+
+  return <>{children}</>;
 }

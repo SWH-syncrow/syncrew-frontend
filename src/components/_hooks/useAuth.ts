@@ -1,5 +1,5 @@
 "use client";
-import { userAtom } from "@app/GlobalProvider";
+import { isSettledAuthAtom, userAtom } from "@app/GlobalProvider";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { useResetAtom } from "jotai/utils";
@@ -11,19 +11,21 @@ import {
   getRefreshTokenFromCookie,
   setRefreshTokenToCookie,
 } from "../_server/serverAuth";
+import { redirect } from "next/navigation";
+import { AxiosError } from "axios";
 
 const useAuth = () => {
-  const [checkTokenLoading, setCheckTokenLoading] = useState(true);
   const [accessToken, setAccessToken] = useState("");
   const setUserAtom = useSetAtom(userAtom);
   const resetUserAtom = useResetAtom(userAtom);
+
+  const setIsSettledAuth = useSetAtom(isSettledAuthAtom);
 
   useEffect(() => {
     (async () => {
       const refresh = await getRefreshTokenFromCookie();
       if (refresh) reissueToken.mutate(refresh);
-
-      setCheckTokenLoading(false);
+      else setIsSettledAuth(true);
     })();
   }, []);
 
@@ -38,14 +40,17 @@ const useAuth = () => {
       setRefreshTokenToCookie(refreshToken);
       setAccessToken(accessToken);
     },
-    onError: (err) => {
+    onError: (err: AxiosError) => {
       console.error(err);
       deleteRefreshTokenFromCookie();
       resetUserAtom();
+      setIsSettledAuth(true);
+
+      if (err.response?.status === 401) redirect("/login");
     },
   });
 
-  const { isFetching } = useQuery(["getUser"], {
+  useQuery(["getUser"], {
     queryFn: async () => await AuthUserApis.getUser(),
     onSuccess: ({ data }) => {
       setUserAtom(data);
@@ -54,12 +59,11 @@ const useAuth = () => {
       console.error(err);
       resetUserAtom();
     },
+    onSettled: () => setIsSettledAuth(true),
     enabled: accessToken !== "",
   });
 
-  return {
-    isLoading: checkTokenLoading || reissueToken.isLoading || isFetching,
-  };
+  return;
 };
 
 export default useAuth;

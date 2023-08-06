@@ -9,7 +9,7 @@ import Kakao from "public/assets/kakao.svg";
 import { useEffect } from "react";
 
 const Page = () => {
-  useAuthKakao();
+  const { isLoading } = useAuthKakao();
   const router = useRouter();
   const isLoggedIn = useAtomValue(userAtom).id !== -1;
 
@@ -31,17 +31,28 @@ const Page = () => {
           <span className="text-sm mb-4 text-grey-200">
             먼저 로그인이 필요해요 :)
           </span>
-          <Link
-            href={`https://kauth.kakao.com/oauth/authorize?client_id=${
-              process.env.NEXT_PUBLIC_KAKAO_REST_KEY
-            }&redirect_uri=${
-              process.env.NODE_ENV === "production"
-                ? process.env.NEXT_PUBLIC_PROD_DOMAIN
-                : process.env.NEXT_PUBLIC_DOMAIN
-            }/login&response_type=code`}
-          >
-            <Kakao />
-          </Link>
+          {isLoading && (
+            <div className="bg-[#FEE500] rounded-[6px] w-full h-[45px] flex items-center justify-center">
+              <div className="flex justify-center gap-2">
+                <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-grey-500" />
+                <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-grey-500" />
+                <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-grey-500" />
+              </div>
+            </div>
+          )}
+          {!isLoading && (
+            <Link
+              href={`https://kauth.kakao.com/oauth/authorize?client_id=${
+                process.env.NEXT_PUBLIC_KAKAO_REST_KEY
+              }&redirect_uri=${
+                process.env.NODE_ENV === "production"
+                  ? process.env.NEXT_PUBLIC_PROD_DOMAIN
+                  : process.env.NEXT_PUBLIC_DOMAIN
+              }/login&response_type=code`}
+            >
+              <Kakao />
+            </Link>
+          )}
         </div>
         <div className="border-t border-grey-100 text-grey-200 pt-4 text-sm whitespace-nowrap">
           회원가입 시 syncrew의

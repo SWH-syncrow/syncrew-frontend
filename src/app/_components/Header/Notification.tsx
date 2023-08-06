@@ -1,10 +1,11 @@
-import useGenerateChannel from "@components/_hooks/useGenerateChannel";
 import { Button } from "@components/Button";
 import { Dialog } from "@components/Dialog";
 import Ping from "@components/Ping";
+import useGenerateChannel from "@components/_hooks/useGenerateChannel";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import Bell from "public/assets/icons/알림_inactive.svg";
+import Logo_LG from "public/assets/logos/LG_01.svg";
 import { useRef, useState } from "react";
 import { GetNotificationsResponse } from "src/lib/apis/_models/NotificationsDto";
 import { FriendApis } from "src/lib/apis/friendApis";
@@ -37,9 +38,7 @@ const Notification = () => {
       console.error(e);
     },
   });
-  /**
-   * @todo 알림 없음 UI
-   */
+
   return (
     <div className="relative">
       <Dialog.Root
@@ -78,6 +77,14 @@ const Notification = () => {
           }
         >
           <div className="max-h-[500px] overflow-auto flex flex-col gap-6 px-8">
+            {notiList.length === 0 && (
+              <div className="flex w-full justify-center flex-col items-center gap-8 p-10">
+                <Logo_LG />
+                <span className="text-grey-300 text-lg">
+                  알림 내역이 없어요
+                </span>
+              </div>
+            )}
             {notiList.map((noti) => (
               <div
                 key={noti.id}
@@ -128,7 +135,7 @@ const RequestedContent = ({
     }: PostFriendRequest) =>
       await FriendApis.acceptFriend({ friendRequestId, notificationId }),
     onSuccess: (res: any) => {
-      const friendRequestId = JSON.parse(res.config.data).data.friendRequestId;
+      const friendRequestId = JSON.parse(res.config.data).friendRequestId;
       genrateChannel.mutate({ friend: res.data, friendRequestId });
       queryClinet.invalidateQueries(["getNotifications"]);
     },

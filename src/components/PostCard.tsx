@@ -189,4 +189,31 @@ const AcceptButton = ({
 AcceptButton.displayName = "acceptButton";
 PostCard.AcceptButton = AcceptButton;
 
+const PostCardSkeleton = () => {
+  return (
+    <div className="flex flex-col gap-4 animate-pulse">
+      <div className="flex justify-between">
+        <div
+          className={
+            "flex justify-center gap-2.5 items-center py-1 w-[170px] h-8 rounded-lg bg-grey-0"
+          }
+        >
+          <div className="bg-grey-50 h-4 w-12 rounded-md"></div>
+          <Vector className="[&>path]:stroke-grey-50" />
+          <div className="bg-grey-50 h-4 w-12 rounded-md"></div>
+        </div>
+        <div className="btn-orange bg-grey-50 h-9 mr-9 w-[126px]"></div>
+      </div>
+      <div className="bg-grey-0 flex gap-12 justify-between w-[816px] py-9 px-10 shadow-normal rounded-2xl">
+        <div className="flex flex-col gap-[15px] min-w-0">
+          <div className="h-7 bg-grey-50 w-1/2"></div>
+          <div className={"h-[48px] bg-grey-50 w-full"} />
+        </div>
+      </div>
+    </div>
+  );
+};
+PostCardSkeleton.displayName = "PostCardSkeleton";
+PostCard.Skeleton = PostCardSkeleton;
+
 export default PostCard;

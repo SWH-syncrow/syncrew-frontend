@@ -8,13 +8,14 @@ import { Button } from "src/components/Button";
 import { GetGroupsResponse } from "src/lib/apis/_models/GroupsDto";
 import { GroupsApis } from "src/lib/apis/groupsApis";
 import { GroupCategory } from "../_types";
+import ComponentWithSkeleton from "@components/ComponentWithSkeleton";
 
 const GroupsSection = () => {
   const [groups, setGroups] = useState<GetGroupsResponse["groups"]>([]);
   const [selectedCategory, setSelectedCategory] =
     useState<GroupCategory>("ALL");
 
-  useQuery(["getGroup", { selectedCategory }], {
+  const { isFetched } = useQuery(["getGroup", { selectedCategory }], {
     queryFn: async () => GroupsApis.getGroups(selectedCategory),
     onSuccess: (res: AxiosResponse) => {
       setGroups(res.data);
@@ -40,9 +41,15 @@ const GroupsSection = () => {
         ))}
       </div>
       <div className="grid grid-cols-3 gap-8">
-        {groups.map((group) => (
-          <GroupCard key={group.id} {...{ ...group }} />
-        ))}
+        <ComponentWithSkeleton
+          isSkeletonUI={!isFetched}
+          Skeleton={<GroupCard.Skeleton />}
+          skeletonLength={12}
+        >
+          {groups.map((group) => (
+            <GroupCard key={group.id} {...{ ...group }} />
+          ))}
+        </ComponentWithSkeleton>
       </div>
     </div>
   );

@@ -41,7 +41,7 @@ const RefuseButton = ({ friendRequestId }: { friendRequestId: number }) => {
           closeButton: "취소",
           button: (
             <Button
-              className="btn-orange rounded-none rounded-br-xl"
+              className="btn-orange rounded-none rounded-br-2xl"
               onClick={() => refuseFriend.mutate(friendRequestId)}
             >
               확인

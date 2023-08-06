@@ -1,4 +1,4 @@
-import { enteredGroupsAtom, userAtom } from "@app/GlobalProvider";
+import { enteredGroupsAtom } from "@app/GlobalProvider";
 import { useQuery } from "@tanstack/react-query";
 import { atom, useAtomValue, useSetAtom } from "jotai";
 import { notFound } from "next/navigation";
@@ -19,7 +19,6 @@ const GroupProvider = ({
   gid,
 }: PropsWithChildren<{ gid: string }>) => {
   const setGroupInfo = useSetAtom(groupInfoAtom);
-  const isLoggedIn = useAtomValue(userAtom).id !== -1;
   const enteredGroups = useAtomValue(enteredGroupsAtom);
 
   useQuery(["getGroupInfo", { gid }], {
@@ -30,7 +29,6 @@ const GroupProvider = ({
     onError: (e) => {
       console.error(e);
     },
-    enabled: isLoggedIn,
   });
 
   useEffect(() => {
@@ -38,7 +36,6 @@ const GroupProvider = ({
       notFound();
   }, [enteredGroups]);
 
-  if (!isLoggedIn) return;
   return <>{children}</>;
 };
 
