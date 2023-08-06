@@ -1,13 +1,9 @@
 "use client";
 import clsx from "clsx";
-import { atom, useAtom, useAtomValue } from "jotai";
+import { useRouter, useSearchParams } from "next/navigation";
 import MyGroupTabView from "./MyGroupTabView";
 import MyPostTabView from "./MyPostTabView";
 import MyRequestPostTabView from "./MyRequestPostTabView";
-import { userAtom } from "@app/GlobalProvider";
-
-const selectedTabAtom = atom<MYPATE_TAB>("MY_POST");
-selectedTabAtom.debugLabel = "selectedTabAtom";
 
 type MYPATE_TAB = "MY_POST" | "REQUESTED_POST" | "GROUP";
 
@@ -20,7 +16,8 @@ const MY_TABS = [
   { key: "GROUP", value: "참여 그룹" },
 ];
 const MyTab = () => {
-  const [selectedTab, setSelectedTab] = useAtom(selectedTabAtom);
+  const selectedTab = (useSearchParams().get("tab") || "MY_POST") as MYPATE_TAB;
+  const router = useRouter();
   return (
     <div className="flex w-full justify-between">
       {MY_TABS.map((tab) => (
@@ -32,7 +29,7 @@ const MyTab = () => {
               ? "border-orange"
               : "border-grey-50 text-grey-300 hover:border-orange-100"
           )}
-          onClick={() => setSelectedTab(tab.key as MYPATE_TAB)}
+          onClick={() => router.push(`/mypage?tab=${tab.key}`)}
         >
           {tab.value}
         </div>
@@ -42,10 +39,8 @@ const MyTab = () => {
 };
 
 const MyTabViewSection = () => {
-  const selectedTab = useAtomValue(selectedTabAtom);
-  const isLoading = useAtomValue(userAtom).id === -1;
+  const selectedTab = (useSearchParams().get("tab") || "MY_POST") as MYPATE_TAB;
 
-  if (isLoading) return;
   return (
     <div className="w-[900px]">
       <MyTab />
