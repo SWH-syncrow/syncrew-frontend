@@ -1,4 +1,5 @@
 import axios from "axios";
+import { redirect } from "next/navigation";
 
 export const authInstance = axios.create({
   baseURL: "/api",
@@ -12,7 +13,7 @@ authInstance.interceptors.response.use(
 
   (error) => {
     if (error.response.status === 401 || error.response.status === 403) {
-      window.location.replace("/login");
+      redirect("/login");
     }
     return Promise.reject(error);
   }

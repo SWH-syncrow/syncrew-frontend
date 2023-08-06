@@ -11,6 +11,8 @@ import {
   getRefreshTokenFromCookie,
   setRefreshTokenToCookie,
 } from "../_server/serverAuth";
+import { redirect } from "next/navigation";
+import { AxiosError } from "axios";
 
 const useAuth = () => {
   const [accessToken, setAccessToken] = useState("");
@@ -38,11 +40,13 @@ const useAuth = () => {
       setRefreshTokenToCookie(refreshToken);
       setAccessToken(accessToken);
     },
-    onError: (err) => {
+    onError: (err: AxiosError) => {
       console.error(err);
       deleteRefreshTokenFromCookie();
       resetUserAtom();
       setIsFetchingAuth(false);
+
+      if (err.response?.status === 401) redirect("/login");
     },
   });
 
