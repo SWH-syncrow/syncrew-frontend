@@ -1,5 +1,5 @@
 import { Button } from "@components/Button";
-import { useGlobalModal } from "@components/modal/GlobalModal";
+import { useGlobalModal } from "@components/Modal/GlobalModal";
 import { useMutation } from "@tanstack/react-query";
 import { deleteDoc, doc } from "firebase/firestore";
 import { useRouter, useSearchParams } from "next/navigation";

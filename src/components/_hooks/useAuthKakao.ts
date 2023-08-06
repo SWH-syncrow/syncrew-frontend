@@ -1,5 +1,4 @@
 import { userAtom } from "@app/GlobalProvider";
-import { setRefreshTokenToCookie } from "@components/_server/serverAuth";
 import { useMutation } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -13,6 +12,10 @@ const useAuthKakao = () => {
   const searchParams = useSearchParams();
   const query = searchParams?.get("code");
   const setUserAtom = useSetAtom(userAtom);
+
+  useEffect(() => {
+    if (query) getKakaoToken.mutate(query);
+  }, [query]);
 
   const getKakaoToken = useMutation({
     mutationFn: async (code: string) => {
@@ -44,15 +47,14 @@ const useAuthKakao = () => {
     onSuccess: (res: any) => {
       const {
         user,
-        token: { accessToken, refreshToken },
+        token: { accessToken },
       } = res.data;
       authInstance.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${accessToken}`;
-      setRefreshTokenToCookie(refreshToken);
       setUserAtom(user);
-      const storage = globalThis?.sessionStorage;
-      const currentPath = storage.getItem("currentPath") || "";
+      const currentPath =
+        globalThis?.sessionStorage.getItem("currentPath") || "/login";
       currentPath === "/login" ? router.push("/") : router.push(currentPath);
     },
     onError: (e) => {
@@ -60,12 +62,6 @@ const useAuthKakao = () => {
       console.error(e);
     },
   });
-
-  useEffect(() => {
-    if (query) {
-      getKakaoToken.mutate(query);
-    }
-  }, [query]);
 
   return {
     isLoading: getKakaoToken.isLoading || kakaoLogin.isLoading,

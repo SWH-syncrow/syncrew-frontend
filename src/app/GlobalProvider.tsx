@@ -2,12 +2,12 @@
 
 import useAuth from "@components/_hooks/useAuth";
 import useGetChannels from "@components/_hooks/useGetChannels";
+import useStorePath from "@components/_hooks/useStorePath";
 import { useQuery } from "@tanstack/react-query";
 import { atom, useSetAtom } from "jotai";
 import { DevTools } from "jotai-devtools";
 import { atomWithReset } from "jotai/utils";
-import { usePathname } from "next/navigation";
-import { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren } from "react";
 import { GetUserResponse } from "src/lib/apis/_models/AuthDto";
 import { GetUserGroupsResponse } from "src/lib/apis/_models/UserDto";
 import { MypageApis } from "src/lib/apis/mypageApis";
@@ -34,10 +34,11 @@ export const channelsAtom = atom<ChannelsObj | null>(null);
 channelsAtom.debugLabel = "channelsAtom";
 
 export default function GlobalProvider({ children }: PropsWithChildren) {
-  const setEnteredGroups = useSetAtom(enteredGroupsAtom);
-  const path = usePathname();
   useAuth();
   useGetChannels();
+  useStorePath();
+
+  const setEnteredGroups = useSetAtom(enteredGroupsAtom);
 
   useQuery(["getEnteredGroups"], {
     queryFn: async () => await MypageApis.getMyGropus(),
@@ -49,16 +50,6 @@ export default function GlobalProvider({ children }: PropsWithChildren) {
     },
     enabled: !!authInstance.defaults.headers.common["Authorization"],
   });
-
-  const storePathValues = () => {
-    const storage = globalThis?.sessionStorage;
-    if (!storage) return;
-    const prevPath = storage.getItem("currentPath") || "";
-    storage.setItem("prevPath", prevPath);
-    storage.setItem("currentPath", globalThis.location.pathname);
-  };
-
-  useEffect(() => storePathValues, [path]);
 
   return (
     <>

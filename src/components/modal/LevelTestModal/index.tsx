@@ -3,8 +3,8 @@ import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import Prev from "public/assets/icons/left.svg";
 import { useMemo } from "react";
-import { Button } from "src/components/Button";
-import Modal from "src/components/Modal";
+import { Button } from "@components/Button";
+import Modal from "@components/Modal";
 import { DEVICE_ITEMS, LEVEL, SW_ITEMS } from "./constants";
 import Image from "next/image";
 

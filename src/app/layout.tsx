@@ -1,6 +1,6 @@
 import React from "react";
 
-import GlobalModal from "@components/modal/GlobalModal";
+import GlobalModal from "@components/Modal/GlobalModal";
 import localFont from "next/font/local";
 import "src/styles/globals.css";
 import GlobalProvider from "./GlobalProvider";

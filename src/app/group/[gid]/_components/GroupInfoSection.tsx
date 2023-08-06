@@ -1,4 +1,4 @@
-import CreatePostModal from "@components/modal/CreatePostModal";
+import CreatePostModal from "@components/Modal/CreatePostModal";
 import { useAtomValue } from "jotai";
 import { groupInfoAtom } from "./GroupProvider";
 import clsx from "clsx";

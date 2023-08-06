@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React, { PropsWithChildren } from "react";
-import { Button } from "./Button";
-import { Dialog, DialogProps } from "./Dialog";
+import { Button } from "../Button";
+import { Dialog, DialogProps } from "@components/Dialog";
 
 const ModalTrigger = React.forwardRef<HTMLButtonElement, PropsWithChildren>(
   ({ children }, ref) => {
