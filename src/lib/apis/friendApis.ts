@@ -19,7 +19,7 @@ const acceptFriend = async ({
   notificationId,
 }: PostFriendRequest) => {
   try {
-    const res = await authInstance.post("/friend?q=accept", {
+    const res = await authInstance.post("/friend/accept", {
       friendRequestId,
       notificationId,
     });
@@ -36,7 +36,7 @@ const refuseFriend = async ({
   notificationId,
 }: PostFriendRequest) => {
   try {
-    const res = await authInstance.post("/friend?q=refuse", {
+    const res = await authInstance.post("/friend/refuse", {
       friendRequestId,
       notificationId,
     });
