@@ -29,14 +29,13 @@ const GNB = () => {
   }, [channels]);
 
   if (pathname === "/login") return;
-
   return (
     <div className="flex flex-col justify-between items-center h-screen min-w-[248px] py-8 border-r border-grey-50 sticky top-0 left-0 bg-white z-10">
       <div className="flex flex-col gap-5 px-8 w-full">
         <MenuIcon className="mb-3" />
         <StyledLink
           href={"/"}
-          isvisit={["/", "/group"].includes(pathname).toString()}
+          isvisit={["", "group"].includes(pathname.split("/")[1]).toString()}
         >
           <Search className="duration-300" />
           싱크루 탐색
