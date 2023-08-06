@@ -1,5 +1,5 @@
-import { Button } from "@components/Button";
-import { Dialog } from "@components/Dialog";
+import Button from "@components/button";
+import { Dialog } from "@components/dialog";
 import Ping from "@components/Ping";
 import useGenerateChannel from "@components/_hooks/useGenerateChannel";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

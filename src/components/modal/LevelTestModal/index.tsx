@@ -3,10 +3,10 @@ import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import Prev from "public/assets/icons/left.svg";
 import { useMemo } from "react";
-import { Button } from "@components/Button";
-import Modal from "@components/Modal";
+import Modal from "@components/modal";
 import { DEVICE_ITEMS, LEVEL, SW_ITEMS } from "./constants";
 import Image from "next/image";
+import Button from "@components/button";
 
 interface Items {
   [key: string]: { value: string; isSelected: boolean };

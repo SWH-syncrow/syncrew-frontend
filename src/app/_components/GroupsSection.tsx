@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import clsx from "clsx";
 import { useState } from "react";
-import { Button } from "@components/Button";
+import Button from "@components/button";
 import { GetGroupsResponse } from "src/lib/apis/_models/GroupsDto";
 import { GroupsApis } from "src/lib/apis/groupsApis";
 import { GroupCategory } from "../_types";

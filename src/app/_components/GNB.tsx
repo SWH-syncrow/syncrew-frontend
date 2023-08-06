@@ -1,6 +1,6 @@
 "use client";
 import { channelsAtom } from "@app/GlobalProvider";
-import AuthCheckButton from "@components/Button/AuthCheckButton";
+import AuthCheckButton from "@components/button/AuthCheckButton";
 import Ping from "@components/Ping";
 import { useAtomValue } from "jotai";
 import Link from "next/link";

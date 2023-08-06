@@ -8,11 +8,11 @@ import Down from "public/assets/icons/down_sm.svg";
 import Requested from "public/assets/icons/친구_신청_완료.svg";
 import Request from "public/assets/icons/친구신청.svg";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@components/Button";
+import Button from "@components/button";
 import { GetGroupPostsResponse } from "src/lib/apis/_models/GroupsDto";
 import { FriendApis } from "src/lib/apis/friendApis";
 import { PostApis } from "src/lib/apis/postApis";
-import { useGlobalModal } from "./Modal/GlobalModal";
+import { useGlobalModal } from "./modal/GlobalModal";
 
 interface PostCardProps {
   post: GetGroupPostsResponse["posts"][0];

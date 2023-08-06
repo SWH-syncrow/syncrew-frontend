@@ -1,7 +1,7 @@
 "use client";
 import { isSettledAuthAtom, userAtom } from "@app/GlobalProvider";
-import { Button } from "@components/Button";
-import ToolTip from "@components/Tooltip";
+import Button from "@components/button";
+import ToolTip from "@components/tooltip";
 import UserAvatar from "@components/UserAvatar";
 import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";

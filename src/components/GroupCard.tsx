@@ -1,13 +1,13 @@
 import { enteredGroupsAtom } from "@app/GlobalProvider";
 import { Group } from "@app/_types";
-import CreatePostModal from "@components/Modal/CreatePostModal";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useAtomValue } from "jotai";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { GroupsApis } from "src/lib/apis/groupsApis";
-import AuthCheckButton from "./Button/AuthCheckButton";
+import AuthCheckButton from "./button/AuthCheckButton";
+import CreatePostModal from "./modal/CreatePostModal";
 
 const GroupCard = ({ id, name, memberCount, postCount }: Group) => {
   const router = useRouter();

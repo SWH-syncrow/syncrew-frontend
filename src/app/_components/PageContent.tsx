@@ -1,6 +1,6 @@
 import { userAtom } from "@app/GlobalProvider";
-import ToolTip from "@components/Tooltip";
-import LevelTestModal from "@components/Modal/LevelTestModal";
+import ToolTip from "@components/tooltip";
+import LevelTestModal from "@components/modal/LevelTestModal";
 import { useAtomValue } from "jotai";
 import GroupsSection from "./GroupsSection";
 
