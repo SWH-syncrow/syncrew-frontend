@@ -1,4 +1,4 @@
-import { Button } from "@components/Button";
+import Button from "@components/Button";
 import { Dialog } from "@components/Dialog";
 import Ping from "@components/Ping";
 import useGenerateChannel from "@components/_hooks/useGenerateChannel";

@@ -7,12 +7,12 @@ import Vector from "public/assets/icons/Vector.svg";
 import Down from "public/assets/icons/down_sm.svg";
 import Requested from "public/assets/icons/친구_신청_완료.svg";
 import Request from "public/assets/icons/친구신청.svg";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Button } from "src/components/Button";
-import { FriendApis } from "src/lib/apis/friendApis";
+import { useEffect, useRef, useState } from "react";
+import Button from "@components/Button";
 import { GetGroupPostsResponse } from "src/lib/apis/_models/GroupsDto";
+import { FriendApis } from "src/lib/apis/friendApis";
 import { PostApis } from "src/lib/apis/postApis";
-import { useGlobalModal } from "./modal/GlobalModal";
+import { useGlobalModal } from "./modals/GlobalModal";
 
 interface PostCardProps {
   post: GetGroupPostsResponse["posts"][0];
@@ -177,7 +177,7 @@ const AcceptButton = ({
           return setModalState({
             contents: "아쉽지만 거절된 친구 신청글이에요.",
           });
-        requestFriend.mutate({ userId, postId: id });
+        requestFriend.mutate({ userId: 5, postId: id });
       }}
       className="btn-orange flex items-center gap-1 font-medium h-9 w-[126px] mr-9"
     >

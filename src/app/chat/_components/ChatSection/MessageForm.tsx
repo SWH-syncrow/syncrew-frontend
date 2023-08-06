@@ -1,4 +1,4 @@
-import { Button } from "@components/Button";
+import Button from "@components/Button";
 import TextArea from "@components/TextArea";
 import { useSearchParams } from "next/navigation";
 import Delete from "public/assets/icons/Delete.svg";

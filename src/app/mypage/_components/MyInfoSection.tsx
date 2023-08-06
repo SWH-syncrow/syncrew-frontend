@@ -1,6 +1,6 @@
 "use client";
 import { isSettledAuthAtom, userAtom } from "@app/GlobalProvider";
-import { Button } from "@components/Button";
+import Button from "@components/Button";
 import ToolTip from "@components/Tooltip";
 import UserAvatar from "@components/UserAvatar";
 import { useMutation } from "@tanstack/react-query";

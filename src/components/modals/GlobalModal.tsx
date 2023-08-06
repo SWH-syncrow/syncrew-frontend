@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@components/Button";
-import Modal from "@components/Modal";
+import Button from "@components/Button";
+import Modal from "@components/modals";
 import { useAtom, useAtomValue } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import React, { useMemo } from "react";

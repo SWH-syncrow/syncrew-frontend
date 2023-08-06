@@ -1,6 +1,6 @@
 "use client";
 import { channelsAtom } from "@app/GlobalProvider";
-import AuthCheckButton from "@components/AuthCheckButton";
+import AuthCheckButton from "@components/Button/AuthCheckButton";
 import Ping from "@components/Ping";
 import { useAtomValue } from "jotai";
 import Link from "next/link";
@@ -26,7 +26,7 @@ const GNB = () => {
         (ch) => (channelId !== ch.id && ch.isUnread) || ch.status === "READY"
       ).length > 0
     );
-  }, [channels]);
+  }, [channels, channelId]);
 
   if (pathname === "/login") return;
   return (

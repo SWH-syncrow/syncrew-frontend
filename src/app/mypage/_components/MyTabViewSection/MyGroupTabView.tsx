@@ -1,12 +1,15 @@
+import { isSettledAuthAtom } from "@app/GlobalProvider";
 import ComponentWithSkeleton from "@components/ComponentWithSkeleton";
 import GroupCard from "@components/GroupCard";
 import { useQuery } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
 import Link from "next/link";
 import React, { useState } from "react";
 import { GetUserGroupsResponse } from "src/lib/apis/_models/UserDto";
 import { MypageApis } from "src/lib/apis/mypageApis";
 
 const MyGroupTabView = () => {
+  const isSettledAuth = useAtomValue(isSettledAuthAtom);
   const [groups, setGroups] = useState<GetUserGroupsResponse[]>([]);
 
   const { isFetched } = useQuery(["getMyGroups"], {
@@ -17,6 +20,7 @@ const MyGroupTabView = () => {
     onError: (e) => {
       console.error(e);
     },
+    enabled: isSettledAuth,
   });
 
   return (
