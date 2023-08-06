@@ -1,12 +1,15 @@
+import { isSettledAuthAtom } from "@app/GlobalProvider";
 import ComponentWithSkeleton from "@components/ComponentWithSkeleton";
 import PostCard from "@components/PostCard";
 import { useQuery } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
 import Link from "next/link";
 import { useState } from "react";
 import { GetUserPostsResponse } from "src/lib/apis/_models/UserDto";
 import { MypageApis } from "src/lib/apis/mypageApis";
 
 const MyPostTabView = () => {
+  const isSettledAuth = useAtomValue(isSettledAuthAtom);
   const [posts, setPosts] = useState<GetUserPostsResponse["posts"]>([]);
 
   const { isFetched } = useQuery(["getMyPosts"], {
@@ -17,6 +20,7 @@ const MyPostTabView = () => {
     onError: (e) => {
       console.error(e);
     },
+    enabled:isSettledAuth
   });
 
   return (

@@ -5,7 +5,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { useAtom, useSetAtom } from "jotai";
 import { useResetAtom } from "jotai/utils";
 import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { AuthUserApis } from "src/lib/apis/authUserApis";
 import { authInstance } from "src/lib/axios/instance";
 import {
@@ -14,7 +14,6 @@ import {
 } from "../_server/serverAuth";
 
 const useAuth = () => {
-  const [accessToken, setAccessToken] = useState("");
   const [user, setUser] = useAtom(userAtom);
   const resetUserAtom = useResetAtom(userAtom);
 
@@ -30,12 +29,10 @@ const useAuth = () => {
 
   const reissueToken = useMutation({
     mutationFn: async () => await AuthUserApis.reissueToken(),
-    onSuccess: (res: AxiosResponse) => {
-      const { accessToken } = res.data;
+    onSuccess: ({ data: { accessToken } }: AxiosResponse) => {
       authInstance.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${accessToken}`;
-      setAccessToken(accessToken);
     },
     onError: (err: AxiosError) => {
       console.error(err);
@@ -57,7 +54,7 @@ const useAuth = () => {
       resetUserAtom();
     },
     onSettled: () => setIsSettledAuth(true),
-    enabled: accessToken !== "",
+    enabled: !!authInstance.defaults.headers.common["Authorization"],
   });
 
   return;

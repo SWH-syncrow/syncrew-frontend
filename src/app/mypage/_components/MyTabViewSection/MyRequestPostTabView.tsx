@@ -1,12 +1,15 @@
+import { isSettledAuthAtom } from "@app/GlobalProvider";
 import ComponentWithSkeleton from "@components/ComponentWithSkeleton";
 import PostCard from "@components/PostCard";
 import { useQuery } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
 import Link from "next/link";
 import { useState } from "react";
 import { GetUserRequestsResponse } from "src/lib/apis/_models/UserDto";
 import { MypageApis } from "src/lib/apis/mypageApis";
 
 const MyRequestPostTabView = () => {
+  const isSettledAuth = useAtomValue(isSettledAuthAtom);
   const [posts, setPosts] = useState<GetUserRequestsResponse["posts"]>([]);
 
   const { isFetched } = useQuery(["getMyRequestPosts"], {
@@ -17,6 +20,7 @@ const MyRequestPostTabView = () => {
     onError: (e) => {
       console.error(e);
     },
+    enabled:isSettledAuth
   });
   return (
     <div className={"mt-[50px] flex flex-col gap-[25px]"}>

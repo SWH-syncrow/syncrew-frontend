@@ -4,14 +4,15 @@ import useAuth from "@components/_hooks/useAuth";
 import useGetChannels from "@components/_hooks/useGetChannels";
 import { useQuery } from "@tanstack/react-query";
 import { atom, useSetAtom } from "jotai";
+import { DevTools } from "jotai-devtools";
 import { atomWithReset } from "jotai/utils";
 import { usePathname } from "next/navigation";
 import { PropsWithChildren, useEffect } from "react";
 import { GetUserResponse } from "src/lib/apis/_models/AuthDto";
 import { GetUserGroupsResponse } from "src/lib/apis/_models/UserDto";
 import { MypageApis } from "src/lib/apis/mypageApis";
-import { ChannelsObj } from "./chat/_components/types";
 import { authInstance } from "src/lib/axios/instance";
+import { ChannelsObj } from "./chat/_components/types";
 
 export const userAtom = atomWithReset<GetUserResponse>({
   id: -1,
@@ -59,5 +60,10 @@ export default function GlobalProvider({ children }: PropsWithChildren) {
 
   useEffect(() => storePathValues, [path]);
 
-  return <>{children}</>;
+  return (
+    <>
+      {process.env.NODE_ENV === "development" && <DevTools />}
+      {children}
+    </>
+  );
 }
