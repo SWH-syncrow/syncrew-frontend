@@ -1,4 +1,4 @@
-import { enteredGroupsAtom, isFetchingAuthAtom } from "@app/GlobalProvider";
+import { enteredGroupsAtom } from "@app/GlobalProvider";
 import { useQuery } from "@tanstack/react-query";
 import { atom, useAtomValue, useSetAtom } from "jotai";
 import { notFound } from "next/navigation";

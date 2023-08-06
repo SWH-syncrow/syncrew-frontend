@@ -1,5 +1,5 @@
 "use client";
-import { isFetchingAuthAtom, userAtom } from "@app/GlobalProvider";
+import { isSettledAuthAtom, userAtom } from "@app/GlobalProvider";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { useResetAtom } from "jotai/utils";
@@ -19,13 +19,13 @@ const useAuth = () => {
   const setUserAtom = useSetAtom(userAtom);
   const resetUserAtom = useResetAtom(userAtom);
 
-  const setIsFetchingAuth = useSetAtom(isFetchingAuthAtom);
+  const setIsSettledAuth = useSetAtom(isSettledAuthAtom);
 
   useEffect(() => {
     (async () => {
       const refresh = await getRefreshTokenFromCookie();
       if (refresh) reissueToken.mutate(refresh);
-      else setIsFetchingAuth(false);
+      else setIsSettledAuth(true);
     })();
   }, []);
 
@@ -44,7 +44,7 @@ const useAuth = () => {
       console.error(err);
       deleteRefreshTokenFromCookie();
       resetUserAtom();
-      setIsFetchingAuth(false);
+      setIsSettledAuth(true);
 
       if (err.response?.status === 401) redirect("/login");
     },
@@ -59,7 +59,7 @@ const useAuth = () => {
       console.error(err);
       resetUserAtom();
     },
-    onSettled: () => setIsFetchingAuth(false),
+    onSettled: () => setIsSettledAuth(true),
     enabled: accessToken !== "",
   });
 

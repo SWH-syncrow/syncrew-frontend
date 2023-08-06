@@ -1,5 +1,5 @@
 "use client";
-import { isFetchingAuthAtom, userAtom } from "@app/GlobalProvider";
+import { isSettledAuthAtom, userAtom } from "@app/GlobalProvider";
 import { Button } from "@components/Button";
 import ToolTip from "@components/Tooltip";
 import UserAvatar from "@components/UserAvatar";
@@ -15,7 +15,7 @@ const MyInfoSection = () => {
   const router = useRouter();
   const user = useAtomValue(userAtom);
   const resetUser = useResetAtom(userAtom);
-  const isFetchingAuth = useAtomValue(isFetchingAuthAtom);
+  const isSettledAuth = useAtomValue(isSettledAuthAtom);
 
   const logout = useMutation({
     mutationFn: async () => await AuthUserApis.kakaoLogout(),
@@ -38,7 +38,7 @@ const MyInfoSection = () => {
               <div
                 className={clsx(
                   "inline-block",
-                  isFetchingAuth &&
+                  !isSettledAuth &&
                     "animate-pulse bg-grey-50 w-14 h-7 rounded-md"
                 )}
               >
@@ -62,7 +62,7 @@ const MyInfoSection = () => {
           <div
             className={clsx(
               "text-grey-300",
-              isFetchingAuth &&
+              !isSettledAuth &&
                 "animate-pulse bg-grey-50 w-32 h-6 rounded-md mt-1"
             )}
           >
@@ -73,7 +73,7 @@ const MyInfoSection = () => {
       <Button
         onClick={() => logout.mutate()}
         className="btn-grey-border rounded-full text-sm h-9 !py-0"
-        disabled={isFetchingAuth}
+        disabled={!isSettledAuth}
       >
         로그아웃
       </Button>

@@ -1,4 +1,4 @@
-import { isFetchingAuthAtom, userAtom } from "@app/GlobalProvider";
+import { isSettledAuthAtom, userAtom } from "@app/GlobalProvider";
 import { useAtomValue } from "jotai";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
@@ -6,7 +6,7 @@ import Notification from "./Notification";
 import clsx from "clsx";
 
 const Header = () => {
-  const isFetchingAuth = useAtomValue(isFetchingAuthAtom);
+  const isSettledAuth = useAtomValue(isSettledAuthAtom);
   const isLoggedIn = useAtomValue(userAtom).id !== -1;
   const headerRef = useRef<HTMLHeadElement | null>(null);
 
@@ -36,7 +36,7 @@ const Header = () => {
       <div
         className={clsx(
           "w-[918px] h-9 flex justify-end items-center duration-300",
-          isFetchingAuth ? "opacity-0" : "opacity-100"
+          !isSettledAuth ? "opacity-0" : "opacity-100"
         )}
       >
         {!isLoggedIn ? (
