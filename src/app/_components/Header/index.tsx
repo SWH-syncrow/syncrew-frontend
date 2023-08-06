@@ -35,7 +35,7 @@ const Header = () => {
     >
       <div
         className={clsx(
-          "w-[918px] h-9 flex justify-end items-center duration-300",
+          "w-[918px] h-9 flex justify-end items-center duration-100",
           !isSettledAuth ? "opacity-0" : "opacity-100"
         )}
       >
