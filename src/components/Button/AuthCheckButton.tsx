@@ -2,7 +2,7 @@ import { userAtom } from "@app/GlobalProvider";
 import { useAtomValue } from "jotai";
 import Link from "next/link";
 import { ComponentProps, PropsWithChildren } from "react";
-import { useGlobalModal } from "@components/modal/GlobalModal";
+import { useGlobalModal } from "@components/modals/GlobalModal";
 import Button from ".";
 
 const AuthCheckButton = ({

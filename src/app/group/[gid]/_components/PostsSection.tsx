@@ -2,7 +2,7 @@
 import { userAtom } from "@app/GlobalProvider";
 import ComponentWithSkeleton from "@components/ComponentWithSkeleton";
 import PostCard from "@components/PostCard";
-import CreatePostModal from "@components/modal/CreatePostModal";
+import CreatePostModal from "@components/modals/CreatePostModal";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { useRef, useState } from "react";

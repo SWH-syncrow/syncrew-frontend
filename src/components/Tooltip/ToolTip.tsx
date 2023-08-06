@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import styled, { keyframes } from "styled-components";
 import usePortalTooltip from "./hooks/usePortalTooltip";
-import { Dialog } from "@components/dialog";
+import { Dialog } from "@components/Dialog";
 
 interface TooltipChildPosition {
   position: "static" | "absolute" | "relative";

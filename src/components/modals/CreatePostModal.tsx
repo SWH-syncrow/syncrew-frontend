@@ -1,15 +1,15 @@
 import { enteredGroupsAtom } from "@app/GlobalProvider";
-import AuthCheckButton from "@components/button/AuthCheckButton";
+import AuthCheckButton from "@components/Button/AuthCheckButton";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import Prev from "public/assets/icons/left.svg";
 import { FormEvent, useState } from "react";
 import { Input } from "src/components/Input";
-import Modal from "@components/modal";
+import Modal from "@components/modals";
 import TextArea from "src/components/TextArea";
 import { PostApis } from "src/lib/apis/postApis";
-import Button from "@components/button";
+import Button from "@components/Button";
 import { useGlobalModal } from "./GlobalModal";
 
 interface GroupInfo {
