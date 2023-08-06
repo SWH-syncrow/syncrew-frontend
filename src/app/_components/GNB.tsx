@@ -26,7 +26,7 @@ const GNB = () => {
         (ch) => (channelId !== ch.id && ch.isUnread) || ch.status === "READY"
       ).length > 0
     );
-  }, [channels]);
+  }, [channels, channelId]);
 
   if (pathname === "/login") return;
   return (

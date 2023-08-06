@@ -1,6 +1,8 @@
+import LoadingUI from "@components/LoadingUI";
 import clsx from "clsx";
-import { Message } from "../types";
 import Image from "next/image";
+import { useState } from "react";
+import { Message } from "../types";
 
 const Message = ({
   message: { photoURL, text },
@@ -9,6 +11,7 @@ const Message = ({
   message: Message;
   isMine: boolean;
 }) => {
+  const [loading, setLoading] = useState(true);
   return (
     <div
       className={clsx(
@@ -17,15 +20,25 @@ const Message = ({
       )}
     >
       {photoURL && (
-        <div className="relative max-w-[400px] w-fit rounded-3xl overflow-hidden">
-          <Image
-            src={photoURL}
-            alt="첨부 이미지"
-            width={300}
-            height={300}
-            className="relative object-contain max-h-[50vh] !z-0"
-          />
-          <div className="absolute top-0 w-full h-full bg-grey-50 !-z-10"></div>
+        <div
+          className={"relative max-w-[400px] w-fit rounded-3xl overflow-hidden"}
+        >
+          {loading && (
+            <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-10">
+              <LoadingUI className="w-10 h-10" />
+            </div>
+          )}
+          <div className={clsx(loading && "blur-sm")}>
+            <Image
+              src={photoURL}
+              alt="첨부 이미지"
+              width={300}
+              height={300}
+              className="relative object-contain max-h-[50vh] !z-0"
+              onLoadingComplete={() => setLoading(false)}
+            />
+          </div>
+          <div className="absolute top-0 w-full h-full bg-grey-0 !-z-10"></div>
         </div>
       )}
       {text && (
