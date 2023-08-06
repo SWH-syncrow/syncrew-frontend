@@ -11,6 +11,7 @@ import { GetUserResponse } from "src/lib/apis/_models/AuthDto";
 import { GetUserGroupsResponse } from "src/lib/apis/_models/UserDto";
 import { MypageApis } from "src/lib/apis/mypageApis";
 import { ChannelsObj } from "./chat/_components/types";
+import { authInstance } from "src/lib/axios/instance";
 
 export const userAtom = atomWithReset<GetUserResponse>({
   id: -1,
@@ -22,8 +23,8 @@ export const userAtom = atomWithReset<GetUserResponse>({
 });
 userAtom.debugLabel = "userAtom";
 
-export const isFetchingAuthAtom = atom<boolean>(true);
-isFetchingAuthAtom.debugLabel = "isFetchingAuthAtom";
+export const isSettledAuthAtom = atom<boolean>(false);
+isSettledAuthAtom.debugLabel = "isSettledAuthAtom";
 
 export const enteredGroupsAtom = atom<number[]>([0]);
 enteredGroupsAtom.debugLabel = "userEnteredGroupsAtom";
@@ -45,6 +46,7 @@ export default function GlobalProvider({ children }: PropsWithChildren) {
     onError: (e) => {
       console.error(e);
     },
+    enabled: !!authInstance.defaults.headers.common["Authorization"],
   });
 
   const storePathValues = () => {
