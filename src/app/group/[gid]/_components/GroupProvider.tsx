@@ -19,7 +19,6 @@ const GroupProvider = ({
   gid,
 }: PropsWithChildren<{ gid: string }>) => {
   const setGroupInfo = useSetAtom(groupInfoAtom);
-  const isFethcingAuth = useAtomValue(isFetchingAuthAtom);
   const enteredGroups = useAtomValue(enteredGroupsAtom);
 
   useQuery(["getGroupInfo", { gid }], {
@@ -30,7 +29,6 @@ const GroupProvider = ({
     onError: (e) => {
       console.error(e);
     },
-    enabled: !isFethcingAuth,
   });
 
   useEffect(() => {

@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React from "react";
+import { authInstance } from "src/lib/axios/instance";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,6 +17,13 @@ export default function ReactQueryProvider({
 }: {
   children: React.ReactNode;
 }) {
+  queryClient.setDefaultOptions({
+    queries: {
+      ...queryClient.getDefaultOptions().queries,
+      enabled: !!authInstance.defaults.headers.common["Authorization"],
+    },
+  });
+  queryClient.setQueryDefaults(["getGroup"], { enabled: true });
   return (
     <QueryClientProvider client={queryClient}>
       {children}

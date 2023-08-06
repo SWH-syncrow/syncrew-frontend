@@ -3,8 +3,7 @@
 import useAuth from "@components/_hooks/useAuth";
 import useGetChannels from "@components/_hooks/useGetChannels";
 import { useQuery } from "@tanstack/react-query";
-import { atom, useAtomValue, useSetAtom } from "jotai";
-import { DevTools } from "jotai-devtools";
+import { atom, useSetAtom } from "jotai";
 import { atomWithReset } from "jotai/utils";
 import { usePathname } from "next/navigation";
 import { PropsWithChildren, useEffect } from "react";
@@ -34,7 +33,6 @@ channelsAtom.debugLabel = "channelsAtom";
 
 export default function GlobalProvider({ children }: PropsWithChildren) {
   const setEnteredGroups = useSetAtom(enteredGroupsAtom);
-  const isLoggedIn = useAtomValue(userAtom).id !== -1;
   const path = usePathname();
   useAuth();
   useGetChannels();
@@ -47,7 +45,6 @@ export default function GlobalProvider({ children }: PropsWithChildren) {
     onError: (e) => {
       console.error(e);
     },
-    enabled: isLoggedIn,
   });
 
   const storePathValues = () => {
@@ -60,10 +57,5 @@ export default function GlobalProvider({ children }: PropsWithChildren) {
 
   useEffect(() => storePathValues, [path]);
 
-  return (
-    <>
-      {/* <DevTools /> */}
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }
