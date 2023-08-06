@@ -1,18 +1,17 @@
 "use client";
 import { isSettledAuthAtom, userAtom } from "@app/GlobalProvider";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { AxiosError, AxiosResponse } from "axios";
 import { useSetAtom } from "jotai";
 import { useResetAtom } from "jotai/utils";
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AuthUserApis } from "src/lib/apis/authUserApis";
 import { authInstance } from "src/lib/axios/instance";
 import {
   deleteRefreshTokenFromCookie,
   getRefreshTokenFromCookie,
-  setRefreshTokenToCookie,
 } from "../_server/serverAuth";
-import { redirect } from "next/navigation";
-import { AxiosError } from "axios";
 
 const useAuth = () => {
   const [accessToken, setAccessToken] = useState("");
@@ -22,22 +21,18 @@ const useAuth = () => {
   const setIsSettledAuth = useSetAtom(isSettledAuthAtom);
 
   useEffect(() => {
-    (async () => {
-      const refresh = await getRefreshTokenFromCookie();
-      if (refresh) reissueToken.mutate(refresh);
-      else setIsSettledAuth(true);
-    })();
+    getRefreshTokenFromCookie().then((refresh) =>
+      refresh ? reissueToken.mutate() : setIsSettledAuth(true)
+    );
   }, []);
 
   const reissueToken = useMutation({
-    mutationFn: async (refreshToken: string) =>
-      await AuthUserApis.reissueToken(refreshToken),
-    onSuccess: (res: any) => {
-      const { accessToken, refreshToken } = res.data;
+    mutationFn: async () => await AuthUserApis.reissueToken(),
+    onSuccess: (res: AxiosResponse) => {
+      const { accessToken } = res.data;
       authInstance.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${accessToken}`;
-      setRefreshTokenToCookie(refreshToken);
       setAccessToken(accessToken);
     },
     onError: (err: AxiosError) => {

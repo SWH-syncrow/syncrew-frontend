@@ -10,11 +10,9 @@ const kakaoLogin = async (accessToken: string) => {
     throw error;
   }
 };
-const reissueToken = async (refreshToken: string) => {
+const reissueToken = async () => {
   try {
-    const res = await unAuthInstance.post("/auth/reissue", {
-      refreshToken,
-    });
+    const res = await unAuthInstance.post("/auth/reissue");
 
     return res;
   } catch (error) {
