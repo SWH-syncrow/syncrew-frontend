@@ -6,6 +6,7 @@ import { useMemo } from "react";
 import { Button } from "src/components/Button";
 import Modal from "src/components/Modal";
 import { DEVICE_ITEMS, LEVEL, SW_ITEMS } from "./constants";
+import Image from "next/image";
 
 interface Items {
   [key: string]: { value: string; isSelected: boolean };
@@ -169,7 +170,13 @@ const LevelResultContent = () => {
             <br />
             <span className="text-orange">{LEVEL[level - 1].value}</span>이에요
           </span>
-          <img src={`/assets/illusts/level_${level}.svg`} />
+          <Image
+            src={`/assets/illusts/level_${level}.svg`}
+            alt="레벨 일러스트"
+            loading="eager"
+            width={300}
+            height={300}
+          />
           <span className="text-lg font-medium text-center">
             테스트 결과,
             <br />
