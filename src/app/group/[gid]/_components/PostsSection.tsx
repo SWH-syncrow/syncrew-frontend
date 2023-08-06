@@ -1,28 +1,29 @@
 "use client";
 import { userAtom } from "@app/GlobalProvider";
+import ComponentWithSkeleton from "@components/ComponentWithSkeleton";
 import PostCard from "@components/PostCard";
 import CreatePostModal from "@components/modal/CreatePostModal";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { GetGroupPostsResponse } from "src/lib/apis/_models/GroupsDto";
 import { GroupsApis } from "src/lib/apis/groupsApis";
-import useObserver from "./hooks/useObserver";
 import { groupInfoAtom } from "./GroupProvider";
+import useObserver from "./hooks/useObserver";
 
 const PostsSection = () => {
-  const { id, name } = useAtomValue(groupInfoAtom);
+  const { id: groupId, name } = useAtomValue(groupInfoAtom);
   const userId = useAtomValue(userAtom).id;
 
   const [posts, setPosts] = useState<GetGroupPostsResponse["posts"] | []>([]);
   const infiniteScrollTarget = useRef<HTMLDivElement | null>(null);
 
-  const { fetchNextPage, isFetching } = useInfiniteQuery(
-    ["getGroupPosts", { id }],
+  const { fetchNextPage, isFetched } = useInfiniteQuery(
+    ["getGroupPosts", { groupId }],
     {
       queryFn: async ({ pageParam = 0 }) =>
         await GroupsApis.getGroupPosts({
-          groupId: id,
+          groupId,
           pagination: { page: pageParam, size: 10 },
         }),
       getNextPageParam: (lastPage) => {
@@ -35,7 +36,7 @@ const PostsSection = () => {
       onError: (e) => {
         console.error(e);
       },
-      enabled: id !== -1,
+      enabled: groupId !== -1,
     }
   );
 
@@ -44,18 +45,12 @@ const PostsSection = () => {
     onIsIntersectingHandler: fetchNextPage,
   });
 
-  const isLoading = useMemo(() => isFetching || id === -1, [isFetching, id]);
-
   return (
-    <div className="flex flex-col items-center w-full">
-      {isLoading && (
-        <div className="mt-[50px] flex flex-col gap-[25px]">
-          {Array.from({ length: 5 }, (_, i) => i + 1).map((p) => (
-            <PostCard.Skeleton key={p} />
-          ))}
-        </div>
-      )}
-      {!isLoading && (
+    <div className="flex flex-col items-center w-full gap-[25px] mt-[50px]">
+      <ComponentWithSkeleton
+        isSkeletonUI={!isFetched}
+        Skeleton={<PostCard.Skeleton />}
+      >
         <>
           {posts.length === 0 && (
             <div className="flex flex-col items-center mt-[162px]">
@@ -63,11 +58,11 @@ const PostsSection = () => {
                 신청 가능한 글이 없어요
               </span>
               <span className="mb-[45px]">신청글을 작성 해볼까요?</span>
-              <CreatePostModal.Trigger group={{ id, name }} />
+              <CreatePostModal.Trigger group={{ id: groupId, name }} />
             </div>
           )}
           {posts.length > 0 && (
-            <div className="mt-[50px] flex flex-col gap-[25px]">
+            <>
               {posts.map((post) => (
                 <PostCard
                   key={post.id}
@@ -76,10 +71,10 @@ const PostsSection = () => {
                 />
               ))}
               <div ref={infiniteScrollTarget}></div>
-            </div>
+            </>
           )}
         </>
-      )}
+      </ComponentWithSkeleton>
     </div>
   );
 };

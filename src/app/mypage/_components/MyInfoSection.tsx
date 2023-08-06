@@ -1,9 +1,10 @@
 "use client";
-import { userAtom } from "@app/GlobalProvider";
+import { isFetchingAuthAtom, userAtom } from "@app/GlobalProvider";
 import { Button } from "@components/Button";
 import ToolTip from "@components/Tooltip";
 import UserAvatar from "@components/UserAvatar";
 import { useMutation } from "@tanstack/react-query";
+import clsx from "clsx";
 import { useAtomValue } from "jotai";
 import { useResetAtom } from "jotai/utils";
 import { useRouter } from "next/navigation";
@@ -14,6 +15,7 @@ const MyInfoSection = () => {
   const router = useRouter();
   const user = useAtomValue(userAtom);
   const resetUser = useResetAtom(userAtom);
+  const isFetchingAuth = useAtomValue(isFetchingAuthAtom);
 
   const logout = useMutation({
     mutationFn: async () => await AuthUserApis.kakaoLogout(),
@@ -32,8 +34,17 @@ const MyInfoSection = () => {
         <UserAvatar profileImage={user.profileImage} className="w-15 h-15" />
         <div className="flex flex-col font-medium">
           <div className="flex items-center gap-4">
-            <span className="text-lg">
-              {user.username}님, 현재 싱크루 온도는{" "}
+            <span className="text-lg flex items-center">
+              <div
+                className={clsx(
+                  "inline-block",
+                  isFetchingAuth &&
+                    "animate-pulse bg-grey-50 w-14 h-7 rounded-md"
+                )}
+              >
+                {user.username}
+              </div>
+              님, 현재 싱크루 온도는{" "}
               <span className="text-xl text-orange">{user.temp}˚C </span>
               예요!
             </span>
@@ -48,12 +59,21 @@ const MyInfoSection = () => {
               <Question className="" />
             </ToolTip>
           </div>
-          <span className="text-grey-300">{user.email}</span>
+          <div
+            className={clsx(
+              "text-grey-300",
+              isFetchingAuth &&
+                "animate-pulse bg-grey-50 w-32 h-6 rounded-md mt-1"
+            )}
+          >
+            {user.email}
+          </div>
         </div>
       </div>
       <Button
         onClick={() => logout.mutate()}
         className="btn-grey-border rounded-full text-sm h-9 !py-0"
+        disabled={isFetchingAuth}
       >
         로그아웃
       </Button>
