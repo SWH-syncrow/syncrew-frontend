@@ -2,7 +2,7 @@
 import { isSettledAuthAtom, userAtom } from "@app/GlobalProvider";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
-import { useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { useResetAtom } from "jotai/utils";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -15,16 +15,18 @@ import {
 
 const useAuth = () => {
   const [accessToken, setAccessToken] = useState("");
-  const setUserAtom = useSetAtom(userAtom);
+  const [user, setUser] = useAtom(userAtom);
   const resetUserAtom = useResetAtom(userAtom);
 
   const setIsSettledAuth = useSetAtom(isSettledAuthAtom);
 
   useEffect(() => {
+    if (user.id !== -1) return;
+
     getRefreshTokenFromCookie().then((refresh) =>
       refresh ? reissueToken.mutate() : setIsSettledAuth(true)
     );
-  }, []);
+  }, [user.id]);
 
   const reissueToken = useMutation({
     mutationFn: async () => await AuthUserApis.reissueToken(),
@@ -48,7 +50,7 @@ const useAuth = () => {
   useQuery(["getUser"], {
     queryFn: async () => await AuthUserApis.getUser(),
     onSuccess: ({ data }) => {
-      setUserAtom(data);
+      setUser(data);
     },
     onError: (err) => {
       console.error(err);
