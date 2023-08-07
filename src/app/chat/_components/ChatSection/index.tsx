@@ -44,7 +44,7 @@ const ChatSection = () => {
             {channels[channelId]?.chatUser?.username}
           </span>
           <span className="text-sm text-grey-300">
-            {channels[channelId]?.chatUser?.temp}
+            {channels[channelId]?.chatUser?.temp}˚C
           </span>
         </div>
         <RefuseButton

@@ -13,7 +13,7 @@ const Page = () => {
   if (isSettledAuth && userId === -1) return redirect("/login");
   return (
     <div className="w-full">
-      <div className="flex flex-row min-h-screen">
+      <div className="flex flex-row h-screen">
         <ChannelSection />
         <ChatSection />
       </div>
