@@ -2,7 +2,7 @@ import { enteredGroupsAtom } from "@app/GlobalProvider";
 import { Group } from "@app/_types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { GroupsApis } from "src/lib/apis/groupsApis";
@@ -11,12 +11,13 @@ import CreatePostModal from "./modals/CreatePostModal";
 
 const GroupCard = ({ id, name, memberCount, postCount }: Group) => {
   const router = useRouter();
-  const enteredGroups = useAtomValue(enteredGroupsAtom);
+  const [enteredGroups, setEnteredGroups] = useAtom(enteredGroupsAtom);
 
   const enterGroup = useMutation({
     mutationFn: async (groupdId: number) =>
       await GroupsApis.enterGroup(groupdId),
     onSuccess: () => {
+      setEnteredGroups((p) => [...p, id]);
       router.push(`/group/${id}`);
     },
     onError: (e: AxiosError) => {
