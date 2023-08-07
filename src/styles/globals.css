@@ -47,7 +47,7 @@ body {
     width: 5px;
   }
   *::-webkit-scrollbar-thumb {
-    @apply bg-grey-100 rounded-2xl
+    @apply bg-grey-0 rounded-2xl
   }
 
   *::-webkit-scrollbar-track {
