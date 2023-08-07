@@ -17,8 +17,8 @@ const RefuseButton = ({ friendRequestId }: { friendRequestId: number }) => {
       await FriendApis.refuseFriend({ friendRequestId }),
     onSuccess: async () => {
       resetState();
-      await deleteDoc(doc(db, "channel", channelId));
       router.push("/chat");
+      await deleteDoc(doc(db, "channel", channelId));
     },
     onError: (e) => {
       console.error(e);
