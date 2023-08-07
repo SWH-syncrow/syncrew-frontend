@@ -1,5 +1,5 @@
 export interface GetUserPostsResponse {
-  posts: {
+  content: {
     id: number;
     title: string;
     content: string;
@@ -13,7 +13,7 @@ export interface GetUserPostsResponse {
 }
 
 export interface GetUserRequestsResponse {
-  posts: {
+  content: {
     id: number;
     title: string;
     content: string;
@@ -26,11 +26,10 @@ export interface GetUserRequestsResponse {
   }[];
 }
 
-export interface GetUserGroupsResponse {
+export type GetUserGroupsResponse = {
   id: number;
   name: string;
   category: "SMARTPHONE" | "PPT" | "VIDEO" | "PS";
   memberCount: number;
   postCount: number;
-}
-[];
+}[];

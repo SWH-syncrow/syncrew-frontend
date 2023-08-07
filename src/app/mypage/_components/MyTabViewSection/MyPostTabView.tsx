@@ -10,7 +10,7 @@ import { MypageApis } from "src/lib/apis/mypageApis";
 
 const MyPostTabView = () => {
   const isSettledAuth = useAtomValue(isSettledAuthAtom);
-  const [posts, setPosts] = useState<GetUserPostsResponse["posts"]>([]);
+  const [posts, setPosts] = useState<GetUserPostsResponse["content"]>([]);
 
   const { isFetched } = useQuery(["getMyPosts"], {
     queryFn: async () => await MypageApis.getMyPosts(),

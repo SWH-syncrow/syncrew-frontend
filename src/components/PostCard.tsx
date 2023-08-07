@@ -13,6 +13,7 @@ import { GetGroupPostsResponse } from "src/lib/apis/_models/GroupsDto";
 import { FriendApis } from "src/lib/apis/friendApis";
 import { PostApis } from "src/lib/apis/postApis";
 import { useGlobalModal } from "./modals/GlobalModal";
+import { AxiosError } from "axios";
 
 interface PostCardProps {
   post: GetGroupPostsResponse["posts"][0];
@@ -116,8 +117,15 @@ const DeleteButton = ({ postId }: { postId: number }) => {
       queryClient.invalidateQueries(["getGroupPosts"]);
       queryClient.invalidateQueries(["getMyPosts"]);
     },
-    onError: (e) => {
-      console.error(e);
+    onError: (e: AxiosError) => {
+      return setModalState({
+        contents: (
+          <>
+            친구 매칭 중인 신청글은
+            <br /> 삭제가 불가합니다
+          </>
+        ),
+      });
     },
   });
   return (

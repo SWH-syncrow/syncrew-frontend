@@ -42,7 +42,7 @@ export default function GlobalProvider({ children }: PropsWithChildren) {
 
   useQuery(["getEnteredGroups"], {
     queryFn: async () => await MypageApis.getMyGropus(),
-    onSuccess: ({ data }: { data: GetUserGroupsResponse[] }) => {
+    onSuccess: ({ data }: { data: GetUserGroupsResponse }) => {
       setEnteredGroups(data.map((g) => g.id));
     },
     onError: (e) => {
