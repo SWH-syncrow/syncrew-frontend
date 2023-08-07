@@ -11,14 +11,14 @@ import { GroupCategory } from "../_types";
 import ComponentWithSkeleton from "@components/ComponentWithSkeleton";
 
 const GroupsSection = () => {
-  const [groups, setGroups] = useState<GetGroupsResponse["groups"]>([]);
+  const [groups, setGroups] = useState<GetGroupsResponse>([]);
   const [selectedCategory, setSelectedCategory] =
     useState<GroupCategory>("ALL");
 
   const { isFetched } = useQuery(["getGroup", { selectedCategory }], {
     queryFn: async () => GroupsApis.getGroups(selectedCategory),
-    onSuccess: (res: AxiosResponse) => {
-      setGroups(res.data);
+    onSuccess: ({ data }: AxiosResponse) => {
+      setGroups(data);
     },
     onError: (e) => {
       console.error(e);

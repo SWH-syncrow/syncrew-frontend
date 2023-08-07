@@ -13,9 +13,7 @@ export interface GetGroupInfoResponse {
   postCount: number;
 }
 
-export interface GetGroupsResponse {
-  groups: GetGroupInfoResponse[];
-}
+export type GetGroupsResponse = GetGroupInfoResponse[];
 
 export interface GetGroupPostsResponse {
   posts: {

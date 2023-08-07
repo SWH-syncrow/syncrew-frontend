@@ -10,7 +10,7 @@ import { MypageApis } from "src/lib/apis/mypageApis";
 
 const MyGroupTabView = () => {
   const isSettledAuth = useAtomValue(isSettledAuthAtom);
-  const [groups, setGroups] = useState<GetUserGroupsResponse[]>([]);
+  const [groups, setGroups] = useState<GetUserGroupsResponse>([]);
 
   const { isFetched } = useQuery(["getMyGroups"], {
     queryFn: async () => await MypageApis.getMyGropus(),
