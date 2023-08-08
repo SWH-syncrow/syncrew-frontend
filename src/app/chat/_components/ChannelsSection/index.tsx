@@ -12,7 +12,7 @@ const ChannelsSection = () => {
       <div className="pt-[107px] pb-[27px] pl-8 text-lg border-b-4 border-grey-50">
         전체 대화
       </div>
-      <div className="flex flex-col overflow-auto">
+      <div className="flex flex-col overflow-auto h-full">
         <ComponentWithSkeleton
           isSkeletonUI={!channels}
           Skeleton={<ChannelBox.Skeleton />}
