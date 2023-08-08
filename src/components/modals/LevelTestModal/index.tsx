@@ -153,7 +153,7 @@ const LevelResultContent = () => {
   const [level, setLevel] = useAtom(levelAtom);
 
   return (
-    <Modal.Content className="w-[550px] h-[70%] flex flex-col py-10 px-8">
+    <Modal.Content className="w-[550px] h-[75%] flex flex-col py-10 px-8">
       <Button
         className="absolute z-10 cursor-pointer !p-0"
         onClick={() => setLevel(0)}
