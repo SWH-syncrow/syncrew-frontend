@@ -116,6 +116,7 @@ const DeleteButton = ({ postId }: { postId: number }) => {
       resetState();
       queryClient.invalidateQueries(["getGroupPosts"]);
       queryClient.invalidateQueries(["getMyPosts"]);
+      queryClient.invalidateQueries(["getGroupInfo"]);
     },
     onError: (e: AxiosError) => {
       return setModalState({

@@ -61,7 +61,7 @@ const LevelTestContent = () => {
   }, [deviceItems, swItems]);
 
   return (
-    <Modal.Content className="w-[550px] h-[70%] flex flex-col py-10 px-8 max-h-[581px]">
+    <Modal.Content className="w-[550px] h-[75%] flex flex-col py-10 px-8 max-h-[581px]">
       <Modal.Close className="absolute z-10 cursor-pointer">
         <Prev />
       </Modal.Close>

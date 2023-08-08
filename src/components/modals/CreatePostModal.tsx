@@ -45,6 +45,7 @@ const CreatePostModal = () => {
       });
       queryClient.invalidateQueries(["getGroupPosts"]);
       queryClient.invalidateQueries(["getMyPosts"]);
+      queryClient.invalidateQueries(["getGroupInfo"]);
     },
     onError: (e) => {
       console.error(e);
