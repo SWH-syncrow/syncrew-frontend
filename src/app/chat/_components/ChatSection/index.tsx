@@ -18,9 +18,9 @@ const ChatSection = () => {
 
   const messageEndRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (channelId !== "" && channels && !channels[channelId]) notFound();
-  }, [channelId, channels]);
+  // useEffect(() => {
+  //   if (channelId !== "" && channels && !channels[channelId]) notFound();
+  // }, [channelId, channels]);
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
