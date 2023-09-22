@@ -14,7 +14,7 @@ jobs:
         uses: tj-actions/branch-names@v4.9
 
       - name: 버전 정보 추출(from Branch Name)
-        run: echo "TAG=$(echo '${{ steps.branch-name.outputs.current_branch }}' | egrep -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')" >> $GITHUB_ENV
+        run: echo "TAG=v$(echo '${{ steps.branch-name.outputs.current_branch }}' | egrep -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')" >> $GITHUB_ENV
 
       - name: Release & Tag 생성
         if: github.event.pull_request.merged == true
@@ -22,5 +22,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${v{ env.TAG }}
-          release_name: ${v{ env.TAG }}
+          tag_name: ${{ env.TAG }}
+          release_name: ${{ env.TAG }}
